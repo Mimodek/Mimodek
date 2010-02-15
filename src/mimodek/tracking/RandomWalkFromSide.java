@@ -1,4 +1,4 @@
-package mimodek.tracking.simulation;
+package mimodek.tracking;
 
 import java.util.ArrayList;
 
@@ -7,7 +7,7 @@ import processing.core.PVector;
 
 import mimodek.*;
 
-public class RandomWalk {
+public class RandomWalkFromSide {
 	
 	PVector directionChangeRange = new PVector(0.1f,6.1f);
 	float maxSpeed = 10;
@@ -16,10 +16,11 @@ public class RandomWalk {
 	  
 	ArrayList<Mimo> mimos;
 
-	public RandomWalk(int cellNum) {
+	public RandomWalkFromSide(int cellNum) {
 		mimos = new ArrayList<Mimo>();
-		for(int i = -1;++i<cellNum;)
+		for(int i = -1;++i<cellNum;){
 			addMimo(new PVector(Simulation1.screenWidth/2,Simulation1.screenHeight/2));
+		}
 	}
 
 	public void addMimo(PVector pos) {

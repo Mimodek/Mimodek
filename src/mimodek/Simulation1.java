@@ -6,10 +6,11 @@ import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import mimodek.tracking.Tracking;
+
 import controlP5.ControlEvent;
 import controlP5.ControlListener;
 import controlP5.ControlP5;
-import mimodek.tracking.simulation.RandomWalk;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
@@ -25,9 +26,11 @@ public class Simulation1 extends PApplet implements ControlListener {
 	public static Physics pSim;
 	public static Organism organism;
 
-	RandomWalk tracking;
+	MimosManager mimosManager;
 
 	Mimo underTheMouse;
+	
+	private Tracking tracking;
 
 	// information toggles
 	boolean showGUI = true;
@@ -59,7 +62,7 @@ public class Simulation1 extends PApplet implements ControlListener {
 		super();
 		Simulation1.screenWidth = screenWidth;
 		Simulation1.screenHeight = screenHeight;
-
+		tracking = new Tracking();
 	}
 
 	public void setup() {
@@ -76,8 +79,11 @@ public class Simulation1 extends PApplet implements ControlListener {
 
 		pSim = new Physics(0.2f, 0.1f, false);
 		organism = new Organism();
-		tracking = new RandomWalk(numMimos);
+		mimosManager = new MimosManager();
+		tracking.setListener(mimosManager);
 		setupGUI();
+		
+		tracking.start();
 	}
 
 	public void reset() {
@@ -89,7 +95,11 @@ public class Simulation1 extends PApplet implements ControlListener {
 		pSim = new Physics(0.2f, 0.1f, false);
 
 		organism = new Organism();
-		tracking = new RandomWalk(numMimos);
+		mimosManager = new MimosManager();
+		tracking.running = false;
+		tracking = new Tracking();
+		tracking.setListener(mimosManager);
+		tracking.start();
 	}
 
 	public void setupGUI() {
@@ -128,18 +138,18 @@ public class Simulation1 extends PApplet implements ControlListener {
 		background(0);
 		updateEnv();
 		pSim.update();
-		tracking.update();
+		mimosManager.update();
 
 		if (underTheMouse != null)
 			underTheMouse.draw();
 		if (showOrganism)
 			organism.draw();
 		if (showMimos)
-			tracking.draw();
+			mimosManager.draw();
 		if (showGUI)
 			showPhysicsData();
 		if (showSprings)
-			pSim.drawsprings(color(0, 0, 255), 1);
+			pSim.drawSprings(color(0, 0, 255), 1);
 	}
 
 	public void updateEnv() {
@@ -188,7 +198,7 @@ public class Simulation1 extends PApplet implements ControlListener {
 
 		if (underTheMouse != null) {
 			// organism.attachTo();
-			tracking.addMimo(underTheMouse.pos);
+			mimosManager.addMimo(underTheMouse.pos);
 			underTheMouse = null;
 		} else {
 			underTheMouse = new Mimo(new PVector(mouseX, mouseY));

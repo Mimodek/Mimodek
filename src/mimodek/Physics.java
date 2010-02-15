@@ -67,7 +67,7 @@ public class Physics {
 	/*
 	 * Draw all springs as lines
 	 */
-	public void drawsprings(int c, float strokeW){
+	public void drawSprings(int c, float strokeW){
 		Simulation1.gfx.pushStyle();
 		Simulation1.gfx.stroke(c);
 		Simulation1.gfx.strokeWeight(strokeW);
