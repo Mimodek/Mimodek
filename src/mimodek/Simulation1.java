@@ -62,7 +62,7 @@ public class Simulation1 extends PApplet implements ControlListener {
 		super();
 		Simulation1.screenWidth = screenWidth;
 		Simulation1.screenHeight = screenHeight;
-		tracking = new Tracking();
+		tracking = new Tracking(screenWidth, screenHeight);
 	}
 
 	public void setup() {
@@ -97,7 +97,7 @@ public class Simulation1 extends PApplet implements ControlListener {
 		organism = new Organism();
 		mimosManager = new MimosManager();
 		tracking.running = false;
-		tracking = new Tracking();
+		tracking = new Tracking(screenWidth, screenHeight);
 		tracking.setListener(mimosManager);
 		tracking.start();
 	}
@@ -198,7 +198,7 @@ public class Simulation1 extends PApplet implements ControlListener {
 
 		if (underTheMouse != null) {
 			// organism.attachTo();
-			mimosManager.addMimo(underTheMouse.pos);
+			//mimosManager.addMimo(underTheMouse.pos);
 			underTheMouse = null;
 		} else {
 			underTheMouse = new Mimo(new PVector(mouseX, mouseY));

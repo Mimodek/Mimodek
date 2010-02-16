@@ -1,6 +1,10 @@
 package mimodek;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.List;
 
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -10,25 +14,30 @@ import mimodek.tracking.TrackingInfo;
 import mimodek.tracking.TrackingListener;
 
 public class MimosManager implements TrackingListener {
+	private Object lock1 = new Object();
 
 	PVector directionChangeRange = new PVector(0.1f, 6.1f);
 	float maxSpeed = 10;
 
-	ArrayList<Mimo> mimos;
+	// thread safe list
+
+	Hashtable<Integer,Mimo> mimos;
 
 	public MimosManager() {
-		mimos = new ArrayList<Mimo>();
+		mimos = new Hashtable<Integer,Mimo>();
 	}
 
-	//TODO: remove if not needed
-	public void addMimo(PVector pos) {
-		mimos.add(new Mimo(pos));
+	// TODO: remove if not needed
+	/*
+		synchronized (mimos) {
+			mimos.add(new Mimo(pos));
+		}
 	}
+	*/
 
 	void randomWalk(Mimo m) {
 		Simulation1.app.noiseSeed(Simulation1.app.millis());
-		float speed = Simulation1.app.random(1)
-				* maxSpeed;
+		float speed = Simulation1.app.random(1) * maxSpeed;
 		if (Simulation1.app.random(1) < 0.99) {
 			return;
 		}
@@ -60,44 +69,52 @@ public class MimosManager implements TrackingListener {
 	}
 
 	public void update() {
-		for (int i = -1; ++i < mimos.size();) {
-			Mimo m = mimos.get(i);
+		Enumeration<Integer> e = mimos.keys();
+		while(e.hasMoreElements()){
+			int i = e.nextElement();
+				Mimo m = mimos.get(i);
 
-			if (!m.ancestor
-					&& (m.pos.x <= m.radius
-							|| m.pos.x >= Simulation1.screenWidth - m.radius
-							|| m.pos.y <= m.radius || m.pos.y >= Simulation1.screenHeight
-							- m.radius)) {
-				m.ancestor = true;
-				if (Simulation1.organism.cellCount() == 0) {
-					System.out.println("Seeded!");
-					Simulation1.organism.attachTo(m);
-					mimos.remove(m);
-					i--;
-				}
-			} else if (m.ancestor) {
-				update(m);
-				if (Simulation1.organism.attachTo(m)) {
-					mimos.remove(m);
-					i--;
+				if (!m.ancestor
+						&& (m.pos.x <= m.radius
+								|| m.pos.x >= Simulation1.screenWidth
+										- m.radius || m.pos.y <= m.radius || m.pos.y >= Simulation1.screenHeight
+								- m.radius)) {
+					m.ancestor = true;
+					if (Simulation1.organism.cellCount() == 0) {
+						System.out.println("Seeded!");
+						Simulation1.organism.attachTo(m);
+
+						mimos.remove(i);
+
+						i--;
+					}
+				} else if (m.ancestor) {
+					update(m);
+					if (Simulation1.organism.attachTo(m)) {
+
+						mimos.remove(i);
+						i--;
+					}
 				}
 			}
-		}
+
 	}
 
 	public void draw() {
-		for (int i = -1; ++i < mimos.size();) {
-			Mimo m = (Mimo) mimos.get(i);
-			m.draw();
-		}
+		Enumeration<Integer> e = mimos.keys();
+		while(e.hasMoreElements()){
+			int i = e.nextElement();
+				Mimo m = (Mimo) mimos.get(i);
+				m.draw();
+			}
 	}
 
 	public void trackingEvent(TrackingInfo info) {
-		if (info.id < mimos.size() && mimos.get(info.id) != null) {
-			mimos.get(info.id).pos = new PVector(info.x, info.y);
-		} else {
-			mimos.add(info.id, new Mimo(new PVector(info.x, info.y)));
-		}
+			if (mimos.containsKey(info.id)) {
+				mimos.get(info.id).pos = new PVector(info.x, info.y);
+			} else {
+				mimos.put(info.id, new Mimo(new PVector(info.x, info.y)));
+			}
 	}
 
 }

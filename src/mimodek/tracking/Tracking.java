@@ -11,6 +11,9 @@ public class Tracking extends Thread {
 
 	TrackingListener listener;
 
+	int screenHeight;
+	int screenWidth;
+	
 	PVector directionChangeRange = new PVector(0.1f, 6.1f);
 	float maxSpeed = 10;
 
@@ -18,7 +21,10 @@ public class Tracking extends Thread {
 
 	public boolean running;
 
-	public Tracking() {
+	public Tracking(int screenHeight, int screenWidth) {
+		this.screenHeight = screenHeight;
+		this.screenWidth = screenWidth;
+		
 		mimos = new ArrayList<Mimo>();
 		running = true;
 	}
@@ -35,13 +41,13 @@ public class Tracking extends Thread {
 	}
 
 	void randomWalk(Mimo m) {
-		Simulation1.app.noiseSeed(Simulation1.app.millis());
-		float speed = Simulation1.app.random(1)
+		//Simulation1.app.noiseSeed(System.currentTimeMillis());
+		float speed = (float)Math.random()
 				* maxSpeed;
-		if (Simulation1.app.random(1) < 0.99) {
+		if ((float)Math.random() < 0.99) {
 			return;
 		}
-		float a = PApplet.map(Simulation1.app.random(1), 0, 1,
+		float a = PApplet.map((float)Math.random(), 0, 1,
 				directionChangeRange.x, directionChangeRange.y);
 		m.vel = new PVector(PApplet.cos(a), PApplet.sin(a));
 		m.vel.mult(speed);
@@ -56,7 +62,7 @@ public class Tracking extends Thread {
 	// Thread run method
 	public void run() {
 		while (running) {
-			if (Simulation1.app.random(1) < 0.1 && mimos.size()<200) {
+			if ((float)Math.random() < 0.1 && mimos.size()<200) {
 				addMimo(new PVector(Simulation1.screenWidth / 2,
 						Simulation1.screenHeight / 2));
 
@@ -76,8 +82,8 @@ public class Tracking extends Thread {
 			Mimo m = mimos.get(i);
 			if (m != null) {
 				update(m);
-				if (m.pos.x <= m.radius || m.pos.x > Simulation1.screenWidth
-						|| m.pos.y < 0 || m.pos.y > Simulation1.screenHeight) {
+				if (m.pos.x <= m.radius || m.pos.x > screenWidth
+						|| m.pos.y < 0 || m.pos.y > screenHeight) {
 					mimos.set(i, null);
 				} else {
 					if(listener!=null)
