@@ -1,12 +1,9 @@
 package mimodek;
 
-import java.applet.Applet;
 import java.awt.DisplayMode;
 import java.awt.Frame;
 import java.awt.GraphicsDevice;
-import java.awt.GridLayout;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+
 
 import mimodek.texture.Texturizer;
 import mimodek.tracking.Tracking;
@@ -14,6 +11,7 @@ import mimodek.tracking.Tracking;
 import controlP5.ControlEvent;
 import controlP5.ControlListener;
 import controlP5.ControlP5;
+import controlP5.ListBox;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
@@ -123,6 +121,7 @@ public class Simulation1 extends PApplet implements ControlListener {
 		
 		tracking = new Tracking(screenWidth, screenHeight);
 		tracking.setListener(mimosManager);
+		texturizer = new Texturizer();
 		setupGUI();
 		texturizer = new Texturizer();
 		tracking.start();
@@ -217,16 +216,30 @@ public class Simulation1 extends PApplet implements ControlListener {
 		controlP5.addToggle("Show Organism", true, 200, controlOffsetY + 160,
 				10, 10);
 
-		// Reset Button
+		
 		controlP5.addSlider("Number of Mimos", 0, 500, 100, controlPositionX,
 				controlOffsetY + 200, controlWidth, controlHeight);
+		// Reset Button
 		controlP5.addButton("RESET", 0, controlPositionX, controlOffsetY + 220,
 				100, 30);
+		
+		//Texturize panel
+		ListBox listA = controlP5.addListBox("Ancestor Texture",controlPositionX,controlOffsetY + 300,120,120);
+		ListBox listB = controlP5.addListBox("Mimo Texture",controlPositionX,controlOffsetY + 355,120,120);
+		listA.valueLabel().style().marginTop = 1; // the +/- sign
+		listB.valueLabel().style().marginTop = 1; // the +/- sign
+		  //l.setBackgroundColor(color(100,0,0));
+		  for(int i=0;i<texturizer.textures.size();i++) {
+			  listA.addItem("Texture "+i,i);
+			  listB.addItem("Texture "+i,i);
+		  }
+		 // l.setColorBackground(color(255,128));
+		  //l.setColorActive(color(0,0,255,128));
+
 
 	}
 
 	public void draw() {
-		texturizer.loadTextures("images/");
 		background(0);
 		updateEnv();
 		pSim.update();
@@ -268,6 +281,9 @@ public class Simulation1 extends PApplet implements ControlListener {
 				60 + controlOffsetY);
 		text("Spring strength: " + springStrength + " | Spring damping: "
 				+ springDamping, 30, 110 + controlOffsetY);
+		
+		texturizer.drawTexture(texturizer.ancestor, controlPositionX+160,controlOffsetY + 310, 1);
+		texturizer.drawTexture(texturizer.active, controlPositionX+160,controlOffsetY + 365, 1);
 	}
 
 	public void showFrameRate() {
@@ -303,7 +319,7 @@ public class Simulation1 extends PApplet implements ControlListener {
 	public void keyPressed() {
 		if (key == ' ') {
 			showGUI = !showGUI;
-			texturizer.image = !showGUI;
+			//texturizer.image = !showGUI;
 			if (showGUI)
 				controlP5.show();
 			else
@@ -360,6 +376,19 @@ public class Simulation1 extends PApplet implements ControlListener {
 		if (crtlName == "Number of Mimos") {
 			float val = cEvent.value();
 			numMimos = (int) val;
+			return;
+		}
+		
+		//Texturizer controls
+		if (crtlName == "Ancestor Texture") {
+			float val = cEvent.group().value();
+			//println("Choosing texture "+val+" for ancestor");
+			texturizer.ancestor = (int)val;
+			return;
+		}
+		if (crtlName == "Mimo Texture") {
+			float val = cEvent.group().value();
+			texturizer.active = (int)val;
 			return;
 		}
 		if (crtlName == "RESET") {

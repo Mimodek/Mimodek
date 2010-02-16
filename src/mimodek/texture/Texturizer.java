@@ -1,29 +1,33 @@
 package mimodek.texture;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import mimodek.Mimo;
 import mimodek.Simulation1;
 
-public class Texturizer {
-	public boolean image = false;
+public class Texturizer{
+	public boolean image = true;
 	
-	SquareTexture texture;
+	public int ancestor = 0;
+	public int active = 1;
+	
+	public ArrayList<SquareTexture> textures;
+	
 
 	public Texturizer() {
-		System.out.println("Hello");
-		texture = new SquareTexture("images/seed.png", Mimo.maxRadius);
-		loadTextures("images/");
+		textures = new ArrayList<SquareTexture>();
+		loadTextures("./images/");
 	}
 	
 	public void loadTextures(String textureFolder){
-		texturizer
 		File folder = new File(textureFolder);
 	    File[] listOfFiles = folder.listFiles();
-	    x
+	    
 	    for (int i = 0; i < listOfFiles.length; i++) {
 	      if (listOfFiles[i].isFile()) {
 	        System.out.println("File " + listOfFiles[i].getName());
+	        textures.add(new SquareTexture(textureFolder+listOfFiles[i].getName(), Mimo.maxRadius));
 	      } else if (listOfFiles[i].isDirectory()) {
 	        System.out.println("Directory " + listOfFiles[i].getName());
 	      }
@@ -44,6 +48,16 @@ public class Texturizer {
 			;
 		}
 	}
+	
+	
+	public void drawTexture(int textureIndex, int x, int y, int size){
+		if(textureIndex>=textures.size())
+			return;
+		Simulation1.gfx.pushMatrix();
+		Simulation1.gfx.translate(x, y);
+		textures.get(textureIndex).draw(1);
+		Simulation1.gfx.popMatrix();
+	}
 
 	public void draw(Mimo m) {
 		Simulation1.gfx.pushMatrix();
@@ -51,11 +65,16 @@ public class Texturizer {
 		Simulation1.gfx.translate(m.pos.x, m.pos.y);
 		applyStyle(m);
 		if(image){
-			texture.draw(m.radius/Mimo.maxRadius);
+			if(m.ancestor){
+				textures.get(ancestor).draw(m.radius/Mimo.maxRadius);
+			}else{
+				textures.get(active).draw(m.radius/Mimo.maxRadius);
+			}
 		}else{
 			Simulation1.gfx.ellipse(0, 0, m.radius, m.radius);
 		}
 		Simulation1.gfx.popStyle();
 		Simulation1.gfx.popMatrix();
 	}
+	
 }
