@@ -226,6 +226,7 @@ public class Simulation1 extends PApplet implements ControlListener {
 	}
 
 	public void draw() {
+		texturizer.loadTextures("images/");
 		background(0);
 		updateEnv();
 		pSim.update();

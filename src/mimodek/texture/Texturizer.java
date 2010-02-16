@@ -11,14 +11,16 @@ public class Texturizer {
 	SquareTexture texture;
 
 	public Texturizer() {
+		System.out.println("Hello");
 		texture = new SquareTexture("images/seed.png", Mimo.maxRadius);
 		loadTextures("images/");
 	}
 	
-	private void loadTextures(String textureFolder){
+	public void loadTextures(String textureFolder){
+		texturizer
 		File folder = new File(textureFolder);
 	    File[] listOfFiles = folder.listFiles();
-	    System.out.println("Hello");
+	    x
 	    for (int i = 0; i < listOfFiles.length; i++) {
 	      if (listOfFiles[i].isFile()) {
 	        System.out.println("File " + listOfFiles[i].getName());
