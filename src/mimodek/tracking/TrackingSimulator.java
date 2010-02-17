@@ -7,7 +7,7 @@ import mimodek.MainHandler;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-public class Tracking extends Thread {
+public class TrackingSimulator extends Thread {
 
 	TrackingListener listener;
 
@@ -21,7 +21,7 @@ public class Tracking extends Thread {
 
 	public boolean running;
 
-	public Tracking(int screenWidth, int screenHeight) {
+	public TrackingSimulator(int screenWidth, int screenHeight) {
 		this.screenHeight = screenHeight;
 		this.screenWidth = screenWidth;
 
@@ -53,7 +53,7 @@ public class Tracking extends Thread {
 		m.vel.mult((float) Math.random() * maxSpeed);
 		mimos.add(m);
 		if (listener != null)
-			listener.trackingEvent(new TrackingInfo(mimos.size() - 1, pos.x,
+			listener.trackingEvent(new TrackingInfo(TrackingInfo.UPDATE, mimos.size() - 1, pos.x,
 					pos.y));
 
 	}
@@ -108,7 +108,7 @@ public class Tracking extends Thread {
 					mimos.set(i, null);
 				} else {
 					if (listener != null)
-						listener.trackingEvent(new TrackingInfo(i, m.pos.x,
+						listener.trackingEvent(new TrackingInfo(TrackingInfo.UPDATE,i, m.pos.x,
 								m.pos.y));
 				}
 			}

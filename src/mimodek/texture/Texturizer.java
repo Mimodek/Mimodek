@@ -71,7 +71,7 @@ public class Texturizer{
 		applyStyle(m);
 		if(mode == IMAGE){
 			//TODO: ask Lali if this is right
-			MainHandler.gfx.rotate((float) Math.atan(m.vel.y/m.vel.x));
+			//MainHandler.gfx.rotate((float) Math.atan(m.vel.y/m.vel.x));
 			if(m.ancestor){
 				textures.get(ancestor).draw(m.radius/Mimo.maxRadius);
 			}else{

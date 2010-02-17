@@ -5,7 +5,8 @@ import java.awt.GraphicsDevice;
 
 
 import mimodek.texture.Texturizer;
-import mimodek.tracking.Tracking;
+import mimodek.tracking.TUIOClient;
+import mimodek.tracking.TrackingSimulator;
 
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
@@ -44,8 +45,9 @@ public class MainHandler{
 	
 	
 	//the tracking module
-	private Tracking tracking;
-
+	//public TrackingSimulator tracking;
+	public TUIOClient tracking;
+	
 	// information toggles
 	boolean showGUI = true;
 	boolean showSprings = true;
@@ -120,12 +122,13 @@ public class MainHandler{
 		organism = new Organism();
 		mimosManager = new MimosManager();
 		
-		tracking = new Tracking(screenWidth, screenHeight);
+		tracking = new TUIOClient();
+		//tracking = new TrackingSimulator(screenWidth, screenHeight);
 		tracking.setListener(mimosManager);
 		texturizer = new Texturizer();
 		setupGUI();
-		texturizer = new Texturizer();
-		tracking.start();
+		//texturizer = new Texturizer();
+		//tracking.start();
 	}
 
 	public void reset() {
@@ -138,10 +141,10 @@ public class MainHandler{
 
 		organism = new Organism();
 		mimosManager = new MimosManager();
-		tracking.running = false;
-		tracking = new Tracking(screenWidth, screenHeight);
-		tracking.setListener(mimosManager);
-		tracking.start();
+		//tracking.running = false;
+		//tracking = new TrackingSimulator(screenWidth, screenHeight);
+		//tracking.setListener(mimosManager);
+		//tracking.start();
 	}
 	
 	//only do that is full screen is supported 

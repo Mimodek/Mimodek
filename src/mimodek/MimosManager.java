@@ -1,6 +1,5 @@
 package mimodek;
 
-
 import java.util.Enumeration;
 import java.util.Hashtable;
 
@@ -12,15 +11,16 @@ import mimodek.tracking.TrackingListener;
 
 public class MimosManager implements TrackingListener {
 
+	int edgeDetection = 35; //you have to love those magic numbers!
 	PVector directionChangeRange = new PVector(0.1f, 6.1f);
 	float maxSpeed = 10;
 
 	// thread safe list
 
-	Hashtable<Integer, Mimo> mimos;
+	Hashtable<Long, Mimo> mimos;
 
 	public MimosManager() {
-		mimos = new Hashtable<Integer, Mimo>();
+		mimos = new Hashtable<Long, Mimo>();
 	}
 
 	void randomWalk(Mimo m) {
@@ -57,28 +57,12 @@ public class MimosManager implements TrackingListener {
 	}
 
 	public void update() {
-		Enumeration<Integer> e = mimos.keys();
+		Enumeration<Long> e = mimos.keys();
 		while (e.hasMoreElements()) {
-			int i = e.nextElement();
+			long i = e.nextElement();
 			Mimo m = mimos.get(i);
 
-			if (!m.ancestor
-					&& (m.pos.x <= 0 || m.pos.x >= MainHandler.screenWidth
-							|| m.pos.y <= 0 || m.pos.y >= MainHandler.screenHeight)) {
-				if(m.entered){
-					m.ancestor = true;
-					if (MainHandler.organism.cellCount() == 0) {
-						System.out.println("Seeded!");
-						MainHandler.organism.attachTo(m);
-	
-						mimos.remove(i);
-	
-						i--;
-					}
-				}else{
-					m.entered = true;
-				}
-			} else if (m.ancestor) {
+			if (m.ancestor) {
 				update(m);
 				if (MainHandler.organism.attachTo(m)) {
 
@@ -91,19 +75,39 @@ public class MimosManager implements TrackingListener {
 	}
 
 	public void draw() {
-		Enumeration<Integer> e = mimos.keys();
+		Enumeration<Long> e = mimos.keys();
 		while (e.hasMoreElements()) {
-			int i = e.nextElement();
+			long i = e.nextElement();
 			Mimo m = (Mimo) mimos.get(i);
 			MainHandler.texturizer.draw(m);
 		}
 	}
 
 	public void trackingEvent(TrackingInfo info) {
-		if (mimos.containsKey(info.id) && !mimos.get(info.id).ancestor) {
-			mimos.get(info.id).pos = new PVector(info.x, info.y);
-		} else {
-			mimos.put(info.id, new Mimo(new PVector(info.x, info.y)));
+		if(info.type == TrackingInfo.UPDATE){
+			if (mimos.containsKey(info.id) && !mimos.get(info.id).ancestor) {
+				mimos.get(info.id).pos = new PVector(info.x, info.y);
+			} else {
+				mimos.put(info.id, new Mimo(new PVector(info.x, info.y)));
+			}
+		}else{
+			//For now, if we receive a remove event, we check if the mimo is near the edge and if it's the case change it to an ancestor
+			//if not, just remove it
+			Mimo m = mimos.get(info.id);
+			System.out.println("Mimo: "+m.pos);
+			System.out.println("Tracking: "+info.x+":"+info.y);
+			if (m.pos.x <= edgeDetection || m.pos.x >= MainHandler.screenWidth-edgeDetection || m.pos.y <= edgeDetection || m.pos.y >= MainHandler.screenHeight-edgeDetection) {
+				m.ancestor = true;
+				if (MainHandler.organism.cellCount() == 0) {
+					System.out.println("Seeded!");
+					MainHandler.organism.attachTo(m);
+					mimos.remove(info.id);
+				}
+				//we're done
+				return;
+			}
+			mimos.remove(info.id);
+			
 		}
 	}
 
