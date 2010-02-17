@@ -12,12 +12,12 @@ import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import controlP5.ListBox;
 import controlP5.RadioButton;
+import controlP5.Range;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
 
-@SuppressWarnings("serial")
 public class MainHandler{	
 	//Needed to go fullscreen
 	public GraphicsDevice graphicsDevice;
@@ -38,6 +38,7 @@ public class MainHandler{
 	
 	//texture handler
 	public static Texturizer texturizer;
+	boolean rescaleMimo = false;
 
 	//the mimos (active/ancestor) manager
 	MimosManager mimosManager;
@@ -45,12 +46,12 @@ public class MainHandler{
 	
 	
 	//the tracking module
-	//public TrackingSimulator tracking;
+	public TrackingSimulator trackingSimulator;//don't run it at the same time as real tracking input
 	public TUIOClient tracking;
 	
 	// information toggles
 	boolean showGUI = true;
-	boolean showSprings = true;
+	public static boolean showSprings = true;
 	boolean showMimos = true;
 	boolean showOrganism = true;
 
@@ -84,6 +85,7 @@ public class MainHandler{
 	int controlOffsetY = 30;
 	int controlWidth = 200;
 	int controlHeight = 10;
+	
 	
 	
 	//TODO: Remove?
@@ -123,12 +125,13 @@ public class MainHandler{
 		mimosManager = new MimosManager();
 		
 		tracking = new TUIOClient();
-		//tracking = new TrackingSimulator(screenWidth, screenHeight);
+		trackingSimulator = new TrackingSimulator(screenWidth, screenHeight);
 		tracking.setListener(mimosManager);
+		trackingSimulator.setListener(mimosManager);
 		texturizer = new Texturizer();
 		setupGUI();
 		//texturizer = new Texturizer();
-		//tracking.start();
+		trackingSimulator.on();
 	}
 
 	public void reset() {
@@ -141,60 +144,12 @@ public class MainHandler{
 
 		organism = new Organism();
 		mimosManager = new MimosManager();
-		//tracking.running = false;
-		//tracking = new TrackingSimulator(screenWidth, screenHeight);
-		//tracking.setListener(mimosManager);
-		//tracking.start();
+		
+		//TODO: This crash the tracking simulator... For now we'll have to restart 
+		trackingSimulator.off();
+		//trackingSimulator = new TrackingSimulator(screenWidth, screenHeight);
+		trackingSimulator.on();
 	}
-	
-	//only do that is full screen is supported 
-	public void setGraphicsDevice(GraphicsDevice graphicsDevice){
-		if(!graphicsDevice.isFullScreenSupported()){
-			System.out.println("Full-screen mode not supported for device "+graphicsDevice);
-			return;
-		}
-		System.out.println("*** Full screen mode available, press f to toggle on/off. ***");
-		this.graphicsDevice = graphicsDevice;
-		//store the original display mode so we can go back to it
-		origDisplayMode = graphicsDevice.getDisplayMode();
-	}
-	
-	/*public boolean enterFullScreen(boolean on){
-		if(graphicsDevice == null)
-			return false;
-		//pause the animation
-		noLoop();
-		if(on){
-			
-			//mimodekFrame.setVisible(false);
-			//mimodekFrame.removeNotify();
-			mimodekFrame.dispose();
-			mimodekFrame.setUndecorated(true);
-			graphicsDevice.setFullScreenWindow(mimodekFrame);
-			//mimodekFrame.validate();
-			//mimodekFrame.addNotify();
-			//mimodekFrame.setVisible(true);
-			app.background(0);
-			//restart the animation
-			loop();
-			return true;
-		}else{
-			//graphicsDevice.setDisplayMode(origDisplayMode);
-			mimodekFrame.dispose();
-			mimodekFrame.setUndecorated(false);
-			graphicsDevice.setFullScreenWindow(null);
-			
-			
-			//mimodekFrame.setVisible(false);
-			;
-			mimodekFrame.setSize(screenWidth, screenHeight);
-			//mimodekFrame.validate();
-			mimodekFrame.setVisible(true);
-			loop();
-			return false;
-		}
-
-	}*/
 
 	public void setupGUI() {
 
@@ -246,6 +201,8 @@ public class MainHandler{
 		r.addItem("Circles", 1).setState(false);
 		r.addItem("Image", 2).setState(true);
 		r.addItem("Generated", 3).setState(false);
+		
+		controlP5.addRange("Mimos' size",0f,255, Mimo.minRadius,Mimo.maxRadius, 500,200,200,12);
 
 		 // l.setColorBackground(color(255,128));
 		  //l.setColorActive(color(0,0,255,128));
@@ -259,8 +216,13 @@ public class MainHandler{
 		pSim.update();
 		mimosManager.update();
 		if(!preview){
+			app.noFill();
+			app.stroke(app.color(255));
+			
 			app.translate(outputOffsetX,outputOffsetY);
+			
 			app.scale(scaleFactor);
+			app.rect(-1,-1,screenWidth,screenHeight);
 		}
 		/*if (underTheMouse != null)
 			underTheMouse.draw();*/
@@ -311,8 +273,12 @@ public class MainHandler{
 	public void mouseReleased() {
 		if (updatePhysics) {
 			pSim.changeSprings(springStrength, springDamping);
+			updatePhysics = false;
+		}else if (rescaleMimo) {
+			texturizer.changeScale(Mimo.maxRadius);
+			rescaleMimo = false;
 		}
-		updatePhysics = false;
+		
 	}
 
 	/*public void mouseMoved() {
@@ -396,15 +362,12 @@ public class MainHandler{
 		//Texturizer controls
 		if(crtlName == "Graphics"){
 			float val = cEvent.group().value();
-			//println("Choosing texture "+val+" for ancestor");
 			texturizer.mode = (int)val;
-			//cEvent.group().close();
 			return;
 		}
 		
 		if (crtlName == "Ancestor Texture") {
 			float val = cEvent.group().value();
-			//println("Choosing texture "+val+" for ancestor");
 			texturizer.ancestor = (int)val;
 			cEvent.group().close();
 			return;
@@ -415,14 +378,16 @@ public class MainHandler{
 			cEvent.group().close();
 			return;
 		}
+		if (crtlName == "Mimos' size") {
+			Mimo.minRadius = cEvent.controller().arrayValue()[0];
+			Mimo.maxRadius = cEvent.controller().arrayValue()[1];
+			rescaleMimo = true;
+			return;
+		}
+		
 		if (crtlName == "RESET") {
 			reset();
 		}
 
 	}
-
-	/*public void setParentFrame(Frame appletFrame) {
-		this.mimodekFrame = appletFrame;
-		
-	}*/
 }

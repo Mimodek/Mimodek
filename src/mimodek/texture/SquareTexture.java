@@ -26,6 +26,11 @@ public class SquareTexture {
 		halfWidth = image.width/2;
 	}
 	
+	public void rescale(float maxWidth){
+		scaleFactor = maxWidth/image.width;
+		halfWidth = image.width/2;
+	}
+	
 	/*
 	 * Draw the texture
 	 * The size parameter controls how big to draw it relative to the maxWidth (see constructor)

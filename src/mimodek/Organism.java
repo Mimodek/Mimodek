@@ -15,6 +15,14 @@ public class Organism {
 	public int cellCount() {
 		return mimos.length;
 	}
+	
+	public void resolveCollision(Mimo m){
+		for (int i = -1; ++i < mimos.length;) {
+			if (mimos[i].pos.dist(m.pos) <= (mimos[i].radius + m.radius) / 2) {
+				mimos[i].collided = true;
+			}
+		}
+	}
 
 	public boolean attachTo(Mimo m) {
 		if (mimos.length == 0) {
@@ -103,11 +111,18 @@ public class Organism {
 			//update the position of the mimos according to the physics simulation particle they bound to
 			mimos[i].pos.x = mimos[i].particle.position().x();
 			mimos[i].pos.y = mimos[i].particle.position().y();
-			MainHandler.texturizer.draw(mimos[i]);
 			
-			//Simulation1.gfx.ellipse(mimos[i].pos.x, mimos[i].pos.y,
-			//		mimos[i].radius / 3, mimos[i].radius / 3);
-			// mimos[i].radius = orR;
+			if(mimos[i].collided){
+				//shake those mimo ancestor's particle a bit
+				 mimos[i].particle.position().add((float) (-4+Math.random()*8), 0, 0);
+				 mimos[i].pos.x = mimos[i].particle.position().x();
+				mimos[i].pos.y = mimos[i].particle.position().y();
+				if(MainHandler.showSprings)
+					MainHandler.gfx.ellipse(mimos[i].pos.x, mimos[i].pos.y,mimos[i].radius / 3, mimos[i].radius / 3);
+				//TODO: this information has to be consumed somewhere;
+				mimos[i].collided = false;
+			}
+			MainHandler.texturizer.draw(mimos[i]);
 		}
 	}
 }

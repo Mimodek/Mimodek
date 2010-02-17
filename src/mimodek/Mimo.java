@@ -20,7 +20,8 @@ public class Mimo {
 	ArrayList<Mimo> neighbours;
 
 	public boolean ancestor = false;
-	public boolean entered = false;
+	public boolean collided = false;
+
 
 	public Mimo(PVector pos) {
 		this.pos = pos;

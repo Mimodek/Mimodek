@@ -25,8 +25,33 @@ public class TrackingSimulator extends Thread {
 		this.screenHeight = screenHeight;
 		this.screenWidth = screenWidth;
 
-		mimos = new ArrayList<Mimo>();
+		
+		
+	}
+	
+	public void on(){
 		running = true;
+		mimos = new ArrayList<Mimo>();
+		super.start();
+	}
+	
+	public void off(){
+		running = false;
+		try {
+			this.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//remove all the fake blobs remaining
+		for (int i = -1; ++i < mimos.size();) {
+			Mimo m = mimos.get(i);
+			if (m != null) {
+				listener.trackingEvent(new TrackingInfo(TrackingInfo.REMOVE,i, m.pos.x,m.pos.y));
+			}
+		}
+		mimos = null;
+		
 	}
 
 	public void addMimo(PVector pos) {
@@ -79,6 +104,8 @@ public class TrackingSimulator extends Thread {
 		m.pos.add(m.vel);
 
 	}
+	
+	
 
 	// Thread run method
 	public void run() {
@@ -103,8 +130,10 @@ public class TrackingSimulator extends Thread {
 			Mimo m = mimos.get(i);
 			if (m != null) {
 				update(m);
-				if (m.pos.x < -10 || m.pos.x > screenWidth+10 || m.pos.y < -10
-						|| m.pos.y >screenHeight+10) {
+				if (m.pos.x <= 0 || m.pos.x >= screenWidth || m.pos.y <= 0
+						|| m.pos.y >= screenHeight) {
+					listener.trackingEvent(new TrackingInfo(TrackingInfo.REMOVE,i, m.pos.x,
+							m.pos.y));
 					mimos.set(i, null);
 				} else {
 					if (listener != null)

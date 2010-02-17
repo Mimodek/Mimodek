@@ -35,10 +35,13 @@ public class MimosManager implements TrackingListener {
 		m.vel.mult(speed);
 	}
 
-	// we only update ancestor mimos
 	private void update(Mimo m) {
-		if (!m.ancestor)
+		if (!m.ancestor){
+			//check for collision with the organism
+			MainHandler.organism.resolveCollision(m);
 			return;
+		}
+			
 
 		if (m.pos.x <= 0 || m.pos.x >= MainHandler.screenWidth || m.pos.y <= 0
 				|| m.pos.y >= MainHandler.screenHeight) {
@@ -61,9 +64,9 @@ public class MimosManager implements TrackingListener {
 		while (e.hasMoreElements()) {
 			long i = e.nextElement();
 			Mimo m = mimos.get(i);
-
+			update(m);
 			if (m.ancestor) {
-				update(m);
+				
 				if (MainHandler.organism.attachTo(m)) {
 
 					mimos.remove(i);

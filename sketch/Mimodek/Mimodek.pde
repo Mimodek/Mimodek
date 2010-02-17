@@ -1,6 +1,9 @@
 //Dependencies
 import traer.physics.*;
 import controlP5.*;
+import fullscreen.*; 
+
+
 
 //The mimodek code
 import mimodek.*;
@@ -15,8 +18,15 @@ import mimodek.*;
 
 MainHandler mimodek;
 
+//We'll deal with full screen here
+FullScreen fs;
+boolean fullScreen = false;
+
 void setup(){
   mimodek = new MainHandler(1024, 768,this);
+  
+  // Create the fullscreen object
+  fs = new FullScreen(this); 
 }
 
 void draw(){
@@ -29,6 +39,14 @@ public void mouseReleased() {
 }
 
 public void keyPressed() {
+  if(key == 'f'){
+    fullScreen = !fullScreen;
+    if(fullScreen){
+      fs.enter();
+    }else{
+      fs.leave();
+    }
+  }
   mimodek.keyPressed();
 }
 

@@ -53,6 +53,11 @@ public class Texturizer{
 		}
 	}
 	
+	public void changeScale(float maxSize){
+		for(int i =-1;++i<textures.size();)
+			textures.get(i).rescale(maxSize);
+	}
+	
 	
 	public void drawTexture(int textureIndex, int x, int y, int size){
 		if(textureIndex>=textures.size())
@@ -71,7 +76,7 @@ public class Texturizer{
 		applyStyle(m);
 		if(mode == IMAGE){
 			//TODO: ask Lali if this is right
-			//MainHandler.gfx.rotate((float) Math.atan(m.vel.y/m.vel.x));
+			MainHandler.gfx.rotate((float) Math.atan2(m.vel.y,m.vel.x));
 			if(m.ancestor){
 				textures.get(ancestor).draw(m.radius/Mimo.maxRadius);
 			}else{
