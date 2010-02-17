@@ -24,12 +24,12 @@ public class MimosManager implements TrackingListener {
 	}
 
 	void randomWalk(Mimo m) {
-		Simulation1.app.noiseSeed(Simulation1.app.millis());
-		float speed = Simulation1.app.random(1) * maxSpeed;
-		if (Simulation1.app.random(1) < 0.99) {
+		MainHandler.app.noiseSeed(MainHandler.app.millis());
+		float speed = MainHandler.app.random(1) * maxSpeed;
+		if (MainHandler.app.random(1) < 0.99) {
 			return;
 		}
-		float a = PApplet.map(Simulation1.app.random(1), 0, 1,
+		float a = PApplet.map(MainHandler.app.random(1), 0, 1,
 				directionChangeRange.x, directionChangeRange.y);
 		m.vel = new PVector(PApplet.cos(a), PApplet.sin(a));
 		m.vel.mult(speed);
@@ -40,14 +40,14 @@ public class MimosManager implements TrackingListener {
 		if (!m.ancestor)
 			return;
 
-		if (m.pos.x <= 0 || m.pos.x >= Simulation1.screenWidth || m.pos.y <= 0
-				|| m.pos.y >= Simulation1.screenHeight) {
+		if (m.pos.x <= 0 || m.pos.x >= MainHandler.screenWidth || m.pos.y <= 0
+				|| m.pos.y >= MainHandler.screenHeight) {
 			// orient the ancestor towards the center
-			float a = PApplet.atan2(Simulation1.screenHeight / 2 - m.pos.y,
-					Simulation1.screenWidth / 2 - m.pos.x);
+			float a = PApplet.atan2(MainHandler.screenHeight / 2 - m.pos.y,
+					MainHandler.screenWidth / 2 - m.pos.x);
 			m.vel = new PVector(PApplet.cos(a), PApplet.sin(a));
-			float speed = Simulation1.app
-					.noise(Simulation1.app.frameCount * 0.1f)
+			float speed = MainHandler.app
+					.noise(MainHandler.app.frameCount * 0.1f)
 					* maxSpeed;
 			m.vel.mult(speed);
 		} else {
@@ -63,13 +63,13 @@ public class MimosManager implements TrackingListener {
 			Mimo m = mimos.get(i);
 
 			if (!m.ancestor
-					&& (m.pos.x <= 0 || m.pos.x >= Simulation1.screenWidth
-							|| m.pos.y <= 0 || m.pos.y >= Simulation1.screenHeight)) {
+					&& (m.pos.x <= 0 || m.pos.x >= MainHandler.screenWidth
+							|| m.pos.y <= 0 || m.pos.y >= MainHandler.screenHeight)) {
 				if(m.entered){
 					m.ancestor = true;
-					if (Simulation1.organism.cellCount() == 0) {
+					if (MainHandler.organism.cellCount() == 0) {
 						System.out.println("Seeded!");
-						Simulation1.organism.attachTo(m);
+						MainHandler.organism.attachTo(m);
 	
 						mimos.remove(i);
 	
@@ -80,7 +80,7 @@ public class MimosManager implements TrackingListener {
 				}
 			} else if (m.ancestor) {
 				update(m);
-				if (Simulation1.organism.attachTo(m)) {
+				if (MainHandler.organism.attachTo(m)) {
 
 					mimos.remove(i);
 					i--;
@@ -95,7 +95,7 @@ public class MimosManager implements TrackingListener {
 		while (e.hasMoreElements()) {
 			int i = e.nextElement();
 			Mimo m = (Mimo) mimos.get(i);
-			Simulation1.texturizer.draw(m);
+			MainHandler.texturizer.draw(m);
 		}
 	}
 

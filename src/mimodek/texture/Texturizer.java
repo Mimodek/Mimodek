@@ -4,10 +4,14 @@ import java.io.File;
 import java.util.ArrayList;
 
 import mimodek.Mimo;
-import mimodek.Simulation1;
+import mimodek.MainHandler;
 
 public class Texturizer{
-	public boolean image = true;
+	public static int CIRCLE = 1;
+	public static int IMAGE = 2;
+	public static int GENERATED = 3;
+	
+	public int mode = IMAGE;
 	
 	public int ancestor = 0;
 	public int active = 1;
@@ -17,7 +21,7 @@ public class Texturizer{
 
 	public Texturizer() {
 		textures = new ArrayList<SquareTexture>();
-		loadTextures("./images/");
+		loadTextures(MainHandler.app.dataPath("images/"));
 	}
 	
 	public void loadTextures(String textureFolder){
@@ -35,14 +39,14 @@ public class Texturizer{
 	}
 
 	private void applyStyle(Mimo m) {
-		if(!image){
+		if(mode == CIRCLE){
 			if (m.ancestor) {
-				Simulation1.gfx.noFill();
-				Simulation1.gfx.strokeWeight((float) 0.5);
-				Simulation1.gfx.stroke(125);
+				MainHandler.gfx.noFill();
+				MainHandler.gfx.strokeWeight((float) 0.5);
+				MainHandler.gfx.stroke(125);
 			} else {
-				Simulation1.gfx.noStroke();
-				Simulation1.gfx.fill(255, 255, 255, 100);
+				MainHandler.gfx.noStroke();
+				MainHandler.gfx.fill(255, 255, 255, 100);
 			}
 		}else{
 			;
@@ -53,28 +57,31 @@ public class Texturizer{
 	public void drawTexture(int textureIndex, int x, int y, int size){
 		if(textureIndex>=textures.size())
 			return;
-		Simulation1.gfx.pushMatrix();
-		Simulation1.gfx.translate(x, y);
+		MainHandler.gfx.pushMatrix();
+		MainHandler.gfx.translate(x, y);
+
 		textures.get(textureIndex).draw(1);
-		Simulation1.gfx.popMatrix();
+		MainHandler.gfx.popMatrix();
 	}
 
 	public void draw(Mimo m) {
-		Simulation1.gfx.pushMatrix();
-		Simulation1.gfx.pushStyle();
-		Simulation1.gfx.translate(m.pos.x, m.pos.y);
+		MainHandler.gfx.pushMatrix();
+		MainHandler.gfx.pushStyle();
+		MainHandler.gfx.translate(m.pos.x, m.pos.y);
 		applyStyle(m);
-		if(image){
+		if(mode == IMAGE){
+			//TODO: ask Lali if this is right
+			MainHandler.gfx.rotate((float) Math.atan(m.vel.y/m.vel.x));
 			if(m.ancestor){
 				textures.get(ancestor).draw(m.radius/Mimo.maxRadius);
 			}else{
 				textures.get(active).draw(m.radius/Mimo.maxRadius);
 			}
 		}else{
-			Simulation1.gfx.ellipse(0, 0, m.radius, m.radius);
+			MainHandler.gfx.ellipse(0, 0, m.radius, m.radius);
 		}
-		Simulation1.gfx.popStyle();
-		Simulation1.gfx.popMatrix();
+		MainHandler.gfx.popStyle();
+		MainHandler.gfx.popMatrix();
 	}
 	
 }

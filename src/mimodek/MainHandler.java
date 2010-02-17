@@ -1,7 +1,6 @@
 package mimodek;
 
 import java.awt.DisplayMode;
-import java.awt.Frame;
 import java.awt.GraphicsDevice;
 
 
@@ -9,21 +8,21 @@ import mimodek.texture.Texturizer;
 import mimodek.tracking.Tracking;
 
 import controlP5.ControlEvent;
-import controlP5.ControlListener;
 import controlP5.ControlP5;
 import controlP5.ListBox;
+import controlP5.RadioButton;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
 
 @SuppressWarnings("serial")
-public class Simulation1 extends PApplet implements ControlListener {	
+public class MainHandler{	
 	//Needed to go fullscreen
 	public GraphicsDevice graphicsDevice;
 	DisplayMode origDisplayMode;
-	private Frame mimodekFrame;
-	boolean fullScreen  = false;
+	//private Frame mimodekFrame;
+
 
 	public static PGraphics gfx;
 	public static PApplet app;
@@ -88,32 +87,34 @@ public class Simulation1 extends PApplet implements ControlListener {
 	//TODO: Remove?
 	//Mimo underTheMouse;
 
-	public Simulation1(int screenWidth) {
-		super();
-		Simulation1.screenWidth = screenWidth;
+	public MainHandler(int screenWidth, PApplet app) {
+		MainHandler.app = app;
+		MainHandler.screenWidth = screenWidth;
 		//we want to have the same ratio as the output
-		Simulation1.screenHeight = (int)(Simulation1.screenWidth*((float)outputHeight/(float)outputWidth));
+		MainHandler.screenHeight = (int)(MainHandler.screenWidth*((float)outputHeight/(float)outputWidth));
+		setup();
 	}
 	
-	public Simulation1(int screenWidth,int screenHeight) {
-		super();
-		Simulation1.screenWidth = screenWidth;
-		Simulation1.screenHeight = screenHeight;
+	public MainHandler(int screenWidth,int screenHeight, PApplet app) {
+		MainHandler.app = app;
+		MainHandler.screenWidth = screenWidth;
+		MainHandler.screenHeight = screenHeight;
+		setup();
 	}
 
 	public void setup() {
-		size(Simulation1.screenWidth, Simulation1.screenHeight);
+		app.size(MainHandler.screenWidth, MainHandler.screenHeight);
 		//to switch from screen preview to output
 		scaleFactor = (float)outputWidth/(float)screenWidth;
 		
-		smooth();
-		frameRate(24);
-		PFont font = createFont("Verdana", 10, false);
-		hint(ENABLE_NATIVE_FONTS);
-		textFont(font);
+		app.smooth();
+		app.frameRate(24);
+		PFont font = app.createFont("Verdana", 10, false);
+		app.hint(PApplet.ENABLE_NATIVE_FONTS);
+		app.textFont(font);
 
-		app = this;
-		gfx = this.g;
+		//app = this;
+		gfx = app.g;
 
 		pSim = new Physics(0.2f, 0.1f, false);
 		organism = new Organism();
@@ -155,7 +156,7 @@ public class Simulation1 extends PApplet implements ControlListener {
 		origDisplayMode = graphicsDevice.getDisplayMode();
 	}
 	
-	public boolean enterFullScreen(boolean on){
+	/*public boolean enterFullScreen(boolean on){
 		if(graphicsDevice == null)
 			return false;
 		//pause the animation
@@ -170,7 +171,7 @@ public class Simulation1 extends PApplet implements ControlListener {
 			//mimodekFrame.validate();
 			//mimodekFrame.addNotify();
 			//mimodekFrame.setVisible(true);
-			background(0);
+			app.background(0);
 			//restart the animation
 			loop();
 			return true;
@@ -190,11 +191,11 @@ public class Simulation1 extends PApplet implements ControlListener {
 			return false;
 		}
 
-	}
+	}*/
 
 	public void setupGUI() {
 
-		controlP5 = new ControlP5(this);
+		controlP5 = new ControlP5(app);
 
 		// Gravity control
 		controlP5.addSlider("Gravity range: X", 0, 100, 2, controlPositionX,
@@ -225,14 +226,24 @@ public class Simulation1 extends PApplet implements ControlListener {
 		
 		//Texturize panel
 		ListBox listA = controlP5.addListBox("Ancestor Texture",controlPositionX,controlOffsetY + 300,120,120);
-		ListBox listB = controlP5.addListBox("Mimo Texture",controlPositionX,controlOffsetY + 355,120,120);
+		ListBox listB = controlP5.addListBox("Mimo Texture",controlPositionX+160,controlOffsetY + 300,120,120);
 		listA.valueLabel().style().marginTop = 1; // the +/- sign
 		listB.valueLabel().style().marginTop = 1; // the +/- sign
 		  //l.setBackgroundColor(color(100,0,0));
 		  for(int i=0;i<texturizer.textures.size();i++) {
-			  listA.addItem("Texture "+i,i);
-			  listB.addItem("Texture "+i,i);
+			  
+			  listA.addItem(texturizer.textures.get(i).fileName,i);
+			  listB.addItem(texturizer.textures.get(i).fileName,i);
 		  }
+		  listA.close();
+		  listB.close();
+		  
+		RadioButton r =controlP5.addRadioButton("Graphics", 500, 100);
+		r.setColorForeground(MainHandler.app.color(120));
+		r.addItem("Circles", 1).setState(false);
+		r.addItem("Image", 2).setState(true);
+		r.addItem("Generated", 3).setState(false);
+
 		 // l.setColorBackground(color(255,128));
 		  //l.setColorActive(color(0,0,255,128));
 
@@ -240,13 +251,13 @@ public class Simulation1 extends PApplet implements ControlListener {
 	}
 
 	public void draw() {
-		background(0);
+		app.background(0);
 		updateEnv();
 		pSim.update();
 		mimosManager.update();
 		if(!preview){
-			translate(outputOffsetX,outputOffsetY);
-			scale(scaleFactor);
+			app.translate(outputOffsetX,outputOffsetY);
+			app.scale(scaleFactor);
 		}
 		/*if (underTheMouse != null)
 			underTheMouse.draw();*/
@@ -254,41 +265,44 @@ public class Simulation1 extends PApplet implements ControlListener {
 			organism.draw();
 		if (showMimos)
 			mimosManager.draw();
+		if (showSprings)
+			pSim.drawSprings(app.color(0, 0, 255), 1);
 		if (showGUI)
 			showPhysicsData();
-		if (showSprings)
-			pSim.drawSprings(color(0, 0, 255), 1);
 	}
 
 	public void updateEnv() {
-		gravY = -gravY_Range + sin(noise(frameCount * 0.01f) * 2 * PI)
+		gravY = -gravY_Range + PApplet.sin(app.noise(app.frameCount * 0.01f) * 2 * PApplet.PI)
 				* gravY_Range * 2;
-		gravX = -gravX_Range + sin(noise(frameCount * 0.01f) * 2 * PI)
+		gravX = -gravX_Range + PApplet.sin(app.noise(app.frameCount * 0.01f) * 2 * PApplet.PI)
 				* gravX_Range * 2;
 		pSim.setGravity(gravX, gravY);
 
 	}
 
 	public void showPhysicsData() {
-		fill(0, 255, 0, 50);
-		rect(15, controlOffsetY, 310, 250);
-		fill(255);
-		text("Frame rate (fps): " + (int) frameRate + " | Particles: "
+		app.fill(0, 255, 0, 50);
+		app.rect(15, controlOffsetY, 310, 250);
+		app.fill(255);
+		app.text("Frame rate (fps): " + (int) app.frameRate + " | Particles: "
 				+ pSim.particleCount() + " | Springs: " + pSim.springCount(),
 				30, 30 + controlOffsetY);
-		text("Gravity (range): X[" + -gravX_Range + ";" + gravX_Range
+		app.text("Gravity (range): X[" + -gravX_Range + ";" + gravX_Range
 				+ "] / Y[" + -gravY_Range + ";" + gravY_Range + "]", 30,
 				60 + controlOffsetY);
-		text("Spring strength: " + springStrength + " | Spring damping: "
+		app.text("Spring strength: " + springStrength + " | Spring damping: "
 				+ springDamping, 30, 110 + controlOffsetY);
 		
-		texturizer.drawTexture(texturizer.ancestor, controlPositionX+160,controlOffsetY + 310, 1);
-		texturizer.drawTexture(texturizer.active, controlPositionX+160,controlOffsetY + 365, 1);
-	}
-
-	public void showFrameRate() {
-		fill(255);
-
+		//Texture viewer
+		app.fill(0, 255, 0, 50);
+		app.rect(15, controlOffsetY + 270, 310, 110);
+		
+		app.fill(10, 10, 10, 255);
+		app.rect(controlPositionX,controlOffsetY + 300, 120, 70);
+		texturizer.drawTexture(texturizer.ancestor, controlPositionX+60,controlOffsetY + 335, 1);
+		
+		app.rect(controlPositionX+160,controlOffsetY + 300, 120, 70);
+		texturizer.drawTexture(texturizer.active, controlPositionX+220,controlOffsetY + 335, 1);
 	}
 
 	public void mouseReleased() {
@@ -317,7 +331,7 @@ public class Simulation1 extends PApplet implements ControlListener {
 	}*/
 
 	public void keyPressed() {
-		if (key == ' ') {
+		if (app.key == ' ') {
 			showGUI = !showGUI;
 			//texturizer.image = !showGUI;
 			if (showGUI)
@@ -325,13 +339,10 @@ public class Simulation1 extends PApplet implements ControlListener {
 			else
 				controlP5.hide();
 		}
-		if (key == 'o') {
+		if (app.key == 'o') {
 			preview = !preview;
 		}
-		if (key == 'f') {
-			fullScreen = enterFullScreen(!fullScreen);
-			println("Fullscreen: "+fullScreen);
-		}
+		
 	}
 
 	public void controlEvent(ControlEvent cEvent) {
@@ -380,15 +391,25 @@ public class Simulation1 extends PApplet implements ControlListener {
 		}
 		
 		//Texturizer controls
+		if(crtlName == "Graphics"){
+			float val = cEvent.group().value();
+			//println("Choosing texture "+val+" for ancestor");
+			texturizer.mode = (int)val;
+			//cEvent.group().close();
+			return;
+		}
+		
 		if (crtlName == "Ancestor Texture") {
 			float val = cEvent.group().value();
 			//println("Choosing texture "+val+" for ancestor");
 			texturizer.ancestor = (int)val;
+			cEvent.group().close();
 			return;
 		}
 		if (crtlName == "Mimo Texture") {
 			float val = cEvent.group().value();
 			texturizer.active = (int)val;
+			cEvent.group().close();
 			return;
 		}
 		if (crtlName == "RESET") {
@@ -397,8 +418,8 @@ public class Simulation1 extends PApplet implements ControlListener {
 
 	}
 
-	public void setParentFrame(Frame appletFrame) {
+	/*public void setParentFrame(Frame appletFrame) {
 		this.mimodekFrame = appletFrame;
 		
-	}
+	}*/
 }

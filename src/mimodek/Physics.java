@@ -43,14 +43,14 @@ public class Physics {
 	public void update() {
 		physics.tick();
 		// make sure the mimos stay on the floor
-		int n = Simulation1.organism.cellCount();// numberOfParticles();
+		int n = MainHandler.organism.cellCount();// numberOfParticles();
 		for (int i = -1; ++i < n;) {
-			Mimo m = Simulation1.organism.mimos[i];
+			Mimo m = MainHandler.organism.mimos[i];
 			Vector3D p = m.particle.position();
 			switch (floor) {
 			case RIGHT:
-				if (p.x() + m.radius > Simulation1.screenWidth)
-					p.setX(Simulation1.screenWidth - m.radius);
+				if (p.x() + m.radius > MainHandler.screenWidth)
+					p.setX(MainHandler.screenWidth - m.radius);
 				break;
 			case LEFT:
 				if (p.x() - m.radius < 0)
@@ -61,8 +61,8 @@ public class Physics {
 					p.setY(m.radius);
 				break;
 			case DOWN:
-				if (p.y() + m.radius > Simulation1.screenHeight)
-					p.setY(Simulation1.screenHeight - m.radius);
+				if (p.y() + m.radius > MainHandler.screenHeight)
+					p.setY(MainHandler.screenHeight - m.radius);
 				break;
 			}
 		}
@@ -80,18 +80,18 @@ public class Physics {
 	 * Draw all springs as lines
 	 */
 	public void drawSprings(int c, float strokeW) {
-		Simulation1.gfx.pushStyle();
-		Simulation1.gfx.stroke(c);
-		Simulation1.gfx.strokeWeight(strokeW);
+		MainHandler.gfx.pushStyle();
+		MainHandler.gfx.stroke(c);
+		MainHandler.gfx.strokeWeight(strokeW);
 		int n = physics.numberOfSprings();
 		for (int i = -1; ++i < n;) {
 			Spring s = physics.getSpring(i);
 			Particle p1 = s.getOneEnd();
 			Particle p2 = s.getTheOtherEnd();
-			Simulation1.gfx.line(p1.position().x(), p1.position().y(), p2
+			MainHandler.gfx.line(p1.position().x(), p1.position().y(), p2
 					.position().x(), p2.position().y());
 		}
-		Simulation1.gfx.popStyle();
+		MainHandler.gfx.popStyle();
 	}
 
 	public void changeSprings(float springStrength, float springDamping) {

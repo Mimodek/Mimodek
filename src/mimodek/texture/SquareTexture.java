@@ -1,6 +1,8 @@
 package mimodek.texture;
 
-import mimodek.Simulation1;
+import java.io.File;
+
+import mimodek.MainHandler;
 import processing.core.PImage;
 
 /*
@@ -8,6 +10,7 @@ import processing.core.PImage;
  */
 public class SquareTexture {
 	
+	public String fileName;
 	public float scaleFactor;
 	public PImage image;
 	public float halfWidth;
@@ -17,7 +20,8 @@ public class SquareTexture {
 	 * maxWidth = maximum of the texture 
 	 */
 	public SquareTexture(String fileName,float maxWidth){
-		image = Simulation1.app.loadImage(fileName);
+		image = MainHandler.app.loadImage(fileName);
+		this.fileName = new File(fileName).getName();
 		scaleFactor = maxWidth/image.width;
 		halfWidth = image.width/2;
 	}
@@ -27,9 +31,9 @@ public class SquareTexture {
 	 * The size parameter controls how big to draw it relative to the maxWidth (see constructor)
 	 */
 	public void draw(float size){
-		Simulation1.gfx.pushMatrix();
-		Simulation1.gfx.scale(scaleFactor*size);
-		Simulation1.gfx.image(image,-halfWidth,-halfWidth);
-		Simulation1.gfx.popMatrix();
+		MainHandler.gfx.pushMatrix();
+		MainHandler.gfx.scale(scaleFactor*size);
+		MainHandler.gfx.image(image,-halfWidth,-halfWidth);
+		MainHandler.gfx.popMatrix();
 	}
 }

@@ -25,7 +25,7 @@ public class Mimo {
 	public Mimo(PVector pos) {
 		this.pos = pos;
 		this.vel = new PVector(0, 0);
-		radius = minRadius + Simulation1.app.random(1)
+		radius = minRadius + MainHandler.app.random(1)
 				* (maxRadius - minRadius);
 	}
 
