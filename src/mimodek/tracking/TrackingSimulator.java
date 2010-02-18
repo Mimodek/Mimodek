@@ -22,28 +22,26 @@ public class TrackingSimulator extends Thread {
 	public boolean running;
 
 	public TrackingSimulator(int screenWidth, int screenHeight) {
+		mimos = new ArrayList<Mimo>();
 		this.screenHeight = screenHeight;
 		this.screenWidth = screenWidth;
-
-		
-		
 	}
 	
 	public void on(){
 		running = true;
-		mimos = new ArrayList<Mimo>();
+		
 		super.start();
 	}
 	
 	public void off(){
 		running = false;
-		try {
+		/*try {
 			this.join();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		mimos = null;
+		}*/
+		//mimos = null;
 	}
 
 	public void addMimo(PVector pos) {
@@ -123,6 +121,7 @@ public class TrackingSimulator extends Thread {
 			if (m != null) {
 				listener.trackingEvent(new TrackingInfo(TrackingInfo.REMOVE,i, m.pos.x,m.pos.y));
 			}
+			mimos.remove(i--);
 		}
 	}
 

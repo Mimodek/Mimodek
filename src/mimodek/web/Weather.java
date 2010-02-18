@@ -18,7 +18,7 @@ public class Weather {
 
 	private int[] temperatureToColor;
 
-	public boolean realTemperature = true;
+	public boolean realTemperature = false;
 
 	public Weather() {
 		temperatureToColor();
@@ -73,7 +73,7 @@ public class Weather {
 		else
 			t = fakeTemperature;
 		
-		System.out.println((int)t);
+		//System.out.println((int)t);
 		
 		if (t < MIN_TEMPERATURE)
 			t = MIN_TEMPERATURE;

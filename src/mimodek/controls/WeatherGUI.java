@@ -21,12 +21,15 @@ public class WeatherGUI extends GUIModule {
 	public WeatherGUI(int x, int y, int width, int height) {
 		super(x, y, width, height, "Weather");
 		// Toggle between fake and true temperature
-		addController(MainHandler.controlP5.addToggle("Use slider value", false, x+controlPositionX,
+		addController(MainHandler.controlP5.addToggle("Use slider value", true, x+controlPositionX,
 				y+controlPositionY, 10, 10));
 		
 		//slider to change temperature
 		addController(MainHandler.controlP5.addSlider("Temperature", Weather.MIN_TEMPERATURE, Weather.MAX_TEMPERATURE, MainHandler.weather.temperature(), x+controlPositionX,
 				y+controlPositionY*2, controlWidth, controlHeight));
+		// Toggle between 'black to color' and 'color to black'
+		addController(MainHandler.controlP5.addToggle("Black to color", true, x+controlPositionX+130,
+				y+controlPositionY*2+15, 10, 10));
 	}
 
 	public void draw() {

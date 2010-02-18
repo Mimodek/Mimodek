@@ -42,10 +42,9 @@ public class StyleGUI extends GUIModule {
 		r = MainHandler.controlP5.addRadioButton("Graphics", x + controlPositionX, y + controlPositionY+ 100);
 		r.setColorForeground(MainHandler.app.color(120));
 		r.addItem("Circles", 1).setState(false);
-		r.addItem("Image", 2).setState(true);
-		r.addItem("Generated", 3).setState(false);
-
-		
+		r.addItem("Image", 2).setState(false);
+		r.addItem("Generated", 3).setState(true);
+		r.update();
 	}
 
 	public void toggleControllers(boolean on) {

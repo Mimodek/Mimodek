@@ -11,7 +11,7 @@ import mimodek.tracking.TrackingListener;
 
 public class MimosManager implements TrackingListener {
 
-	int edgeDetection = 35; //you have to love those magic numbers!
+	int edgeDetection = 35; // you have to love those magic numbers!
 	PVector directionChangeRange = new PVector(0.1f, 6.1f);
 	float maxSpeed = 10;
 
@@ -36,12 +36,11 @@ public class MimosManager implements TrackingListener {
 	}
 
 	private void update(Mimo m) {
-		if (!m.ancestor){
-			//check for collision with the organism
+		if (!m.ancestor) {
+			// check for collision with the organism
 			MainHandler.organism.resolveCollision(m);
 			return;
 		}
-			
 
 		if (m.pos.x <= 0 || m.pos.x >= MainHandler.screenWidth || m.pos.y <= 0
 				|| m.pos.y >= MainHandler.screenHeight) {
@@ -66,7 +65,7 @@ public class MimosManager implements TrackingListener {
 			Mimo m = mimos.get(i);
 			update(m);
 			if (m.ancestor) {
-				
+
 				if (MainHandler.organism.attachTo(m)) {
 
 					mimos.remove(i);
@@ -87,30 +86,38 @@ public class MimosManager implements TrackingListener {
 	}
 
 	public void trackingEvent(TrackingInfo info) {
-		if(info.type == TrackingInfo.UPDATE){
+		if (info == null)
+			return;
+		if (info.type == TrackingInfo.UPDATE) {
 			if (mimos.containsKey(info.id) && !mimos.get(info.id).ancestor) {
 				mimos.get(info.id).pos = new PVector(info.x, info.y);
 			} else {
 				mimos.put(info.id, new Mimo(new PVector(info.x, info.y)));
 			}
-		}else{
-			//For now, if we receive a remove event, we check if the mimo is near the edge and if it's the case change it to an ancestor
-			//if not, just remove it
+		} else {
+			// For now, if we receive a remove event, we check if the mimo is
+			// near the edge and if it's the case change it to an ancestor
+			// if not, just remove it
 			Mimo m = mimos.get(info.id);
-			//System.out.println("Mimo: "+m.pos);
-			//System.out.println("Tracking: "+info.x+":"+info.y);
-			if (m.pos.x <= edgeDetection || m.pos.x >= MainHandler.screenWidth-edgeDetection || m.pos.y <= edgeDetection || m.pos.y >= MainHandler.screenHeight-edgeDetection) {
+			// System.out.println("Mimo: "+m.pos);
+			// System.out.println("Tracking: "+info.x+":"+info.y);
+			if (m == null)
+				return;
+			if (m.pos.x <= edgeDetection
+					|| m.pos.x >= MainHandler.screenWidth - edgeDetection
+					|| m.pos.y <= edgeDetection
+					|| m.pos.y >= MainHandler.screenHeight - edgeDetection) {
 				m.ancestor = true;
 				if (MainHandler.organism.cellCount() == 0) {
 					System.out.println("Seeded!");
 					MainHandler.organism.attachTo(m);
 					mimos.remove(info.id);
 				}
-				//we're done
+				// we're done
 				return;
 			}
 			mimos.remove(info.id);
-			
+
 		}
 	}
 

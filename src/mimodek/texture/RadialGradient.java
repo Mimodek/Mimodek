@@ -7,6 +7,8 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 
 public class RadialGradient implements SimpleDrawer {
+	
+	public static boolean blackToColor = true; 
 	public class RadialGradientData{
 		int startColor;
 		int endColor;
@@ -51,8 +53,10 @@ public class RadialGradient implements SimpleDrawer {
 	}
 
 	public Object getDrawingData(Mimo m) {
-		
-		return new RadialGradientData(MainHandler.app.color(0,0,0),MainHandler.weather.temperatureColor(),0, (int) m.radius);
+		if(blackToColor)
+			return new RadialGradientData(MainHandler.app.color(0,0,0),MainHandler.weather.temperatureColor(),0, (int) m.radius);
+		else
+			return new RadialGradientData(MainHandler.weather.temperatureColor(),MainHandler.app.color(0,0,0),0, (int) m.radius);
 	}
 
 }

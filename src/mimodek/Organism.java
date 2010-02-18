@@ -115,7 +115,8 @@ public class Organism {
 			mimos[i].pos.x = mimos[i].particle.position().x();
 			mimos[i].pos.y = mimos[i].particle.position().y();
 			
-			if(mimos[i].collided){
+			//don't move the seed
+			if(!mimos[i].particle.isFixed() && mimos[i].collided){
 				//shake those mimo ancestor's particle a bit
 				 mimos[i].particle.position().add((float) (-4+Math.random()*8), 0, 0);
 				 mimos[i].pos.x = mimos[i].particle.position().x();
