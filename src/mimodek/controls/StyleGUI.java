@@ -19,6 +19,23 @@ public class StyleGUI extends GUIModule {
 	public StyleGUI(int x, int y, int width, int height) {
 		super(x, y, width, height, "Style");
 		// Texturize panel
+		//size range
+		//TODO : At the moment this is very badly handled, should do something about it
+		addController(MainHandler.controlP5.addRange("Mimos' size", 0f, 255,
+				Mimo.minRadius, Mimo.maxRadius, x + controlPositionX, y+controlPositionY+80, 225, 12));
+
+		//display type toggle
+		r = MainHandler.controlP5.addRadioButton("Graphics", x + controlPositionX, y + controlPositionY+ 100);
+		r.setColorForeground(MainHandler.app.color(120));
+		r.addItem("Circles", 1).setState(false);
+		r.addItem("Image", 2).setState(false);
+		r.addItem("Generated", 3).setState(true);
+		r.update();
+		
+		// Toggle smoothing
+		addController(MainHandler.controlP5.addToggle("Smoothing", true, x+controlPositionX+110,
+				y + controlPositionY+ 100, 10, 10));
+		
 		listA = MainHandler.controlP5.addListBox("Ancestor Texture", x
 				+ controlPositionX, y + controlPositionY, 120, 120);
 		listB = MainHandler.controlP5.addListBox("Mimo Texture", x
@@ -34,17 +51,7 @@ public class StyleGUI extends GUIModule {
 		listA.close();
 		listB.close();
 		
-		//size range
-		addController(MainHandler.controlP5.addRange("Mimos' size", 0f, 255,
-				Mimo.minRadius, Mimo.maxRadius, x + controlPositionX, y+controlPositionY+80, 225, 12));
 
-		//display type toggle
-		r = MainHandler.controlP5.addRadioButton("Graphics", x + controlPositionX, y + controlPositionY+ 100);
-		r.setColorForeground(MainHandler.app.color(120));
-		r.addItem("Circles", 1).setState(false);
-		r.addItem("Image", 2).setState(false);
-		r.addItem("Generated", 3).setState(true);
-		r.update();
 	}
 
 	public void toggleControllers(boolean on) {

@@ -354,6 +354,14 @@ public class MainHandler {
 			RadialGradient.blackToColor = cEvent.value() > 0;
 			return;
 		}
+		
+		if(crtlName=="Smoothing"){
+			if(cEvent.value() > 0)
+				gfx.smooth();
+			else
+				gfx.noSmooth();
+			return;
+		}
 
 		if (crtlName == "RESET") {
 			app.noLoop();
