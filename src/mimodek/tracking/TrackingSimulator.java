@@ -43,15 +43,7 @@ public class TrackingSimulator extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//remove all the fake blobs remaining
-		for (int i = -1; ++i < mimos.size();) {
-			Mimo m = mimos.get(i);
-			if (m != null) {
-				listener.trackingEvent(new TrackingInfo(TrackingInfo.REMOVE,i, m.pos.x,m.pos.y));
-			}
-		}
 		mimos = null;
-		
 	}
 
 	public void addMimo(PVector pos) {
@@ -110,17 +102,26 @@ public class TrackingSimulator extends Thread {
 	// Thread run method
 	public void run() {
 		while (running) {
-			if ((float) Math.random() < 0.1 && mimos.size() < 200) {
-				addMimo(new PVector(MainHandler.screenWidth / 2,
-						MainHandler.screenHeight / 2));
-
+			if(!MainHandler.pause){
+				if ((float) Math.random() < 0.1 && mimos.size() < 200) {
+					addMimo(new PVector(MainHandler.screenWidth / 2,
+							MainHandler.screenHeight / 2));
+	
+				}
+				update();
 			}
-			update();
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+		}
+		//remove all the fake blobs remaining when the thread is stopping
+		for (int i = -1; ++i < mimos.size();) {
+			Mimo m = mimos.get(i);
+			if (m != null) {
+				listener.trackingEvent(new TrackingInfo(TrackingInfo.REMOVE,i, m.pos.x,m.pos.y));
 			}
 		}
 	}

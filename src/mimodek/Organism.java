@@ -69,6 +69,8 @@ public class Organism {
 		boolean added = false;
 		for (int i = -1; ++i < mimos.length;) {
 			if (mimos[i].pos.dist(m.pos) <= (mimos[i].radius + m.radius) / 2) {
+				//All this commented out stuff is to set the radius of the mimo according to their distance to the seed
+				/*
 				float nuRadius = PApplet.map(m.pos.dist(mimos[0].pos), 0,
 						PApplet.max(MainHandler.screenWidth,
 								MainHandler.screenHeight), Mimo.maxRadius,
@@ -81,6 +83,7 @@ public class Organism {
 				m.pos.x += PApplet.cos(a) * d;
 				m.pos.x += PApplet.sin(a) * d;
 				m.radius = nuRadius;
+				*/
 				if (!added) {
 					m.setParticle(MainHandler.pSim.addParticle(m.pos, m.radius
 							/ Mimo.maxRadius, false));

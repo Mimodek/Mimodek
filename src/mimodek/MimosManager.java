@@ -97,8 +97,8 @@ public class MimosManager implements TrackingListener {
 			//For now, if we receive a remove event, we check if the mimo is near the edge and if it's the case change it to an ancestor
 			//if not, just remove it
 			Mimo m = mimos.get(info.id);
-			System.out.println("Mimo: "+m.pos);
-			System.out.println("Tracking: "+info.x+":"+info.y);
+			//System.out.println("Mimo: "+m.pos);
+			//System.out.println("Tracking: "+info.x+":"+info.y);
 			if (m.pos.x <= edgeDetection || m.pos.x >= MainHandler.screenWidth-edgeDetection || m.pos.y <= edgeDetection || m.pos.y >= MainHandler.screenHeight-edgeDetection) {
 				m.ancestor = true;
 				if (MainHandler.organism.cellCount() == 0) {

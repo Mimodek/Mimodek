@@ -2,6 +2,7 @@ package mimodek;
 
 import java.util.ArrayList;
 
+import processing.core.PImage;
 import processing.core.PVector;
 import traer.physics.Particle;
 
@@ -21,6 +22,8 @@ public class Mimo {
 
 	public boolean ancestor = false;
 	public boolean collided = false;
+
+	public Object drawingData;
 
 
 	public Mimo(PVector pos) {

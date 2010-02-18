@@ -1,20 +1,23 @@
+//The mimodek code
+import mimodek.*;
+
 //Dependencies
 import traer.physics.*;
 import controlP5.*;
+import TUIO.*;
 import fullscreen.*; 
 
 
 
-//The mimodek code
-import mimodek.*;
+
 
 /*
 * MIMODEK,
-* by the Mimodek Team (TODO: put names here)
-* Open Up workshop, february 2010 Media Lab Prado, Madrid, Spain
-* ---
-* TODO : More info?
-*/
+ * by the Mimodek Team (TODO: put names here)
+ * Open Up workshop, february 2010 Media Lab Prado, Madrid, Spain
+ * ---
+ * TODO : More info?
+ */
 
 MainHandler mimodek;
 
@@ -23,10 +26,11 @@ FullScreen fs;
 boolean fullScreen = false;
 
 void setup(){
-  mimodek = new MainHandler(1024, 768,this);
-  
   // Create the fullscreen object
   fs = new FullScreen(this); 
+  mimodek = new MainHandler(1024, 768,this);
+  mimodek.setup();
+
 }
 
 void draw(){
@@ -38,12 +42,23 @@ public void mouseReleased() {
   mimodek.mouseReleased();
 }
 
+
+public void mouseClicked() {
+  mimodek.mouseClicked();
+}
+
+public void mouseDragged() {
+  mimodek.mouseDragged();
+}
+
+
 public void keyPressed() {
   if(key == 'f'){
     fullScreen = !fullScreen;
     if(fullScreen){
       fs.enter();
-    }else{
+    }
+    else{
       fs.leave();
     }
   }
@@ -91,4 +106,5 @@ void refresh(TuioTime bundleTime) {
   //IS OK to do nothing here????
   //redraw();
 }
+
 

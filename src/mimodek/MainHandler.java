@@ -4,9 +4,15 @@ import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 
 
+import mimodek.controls.GUI;
+import mimodek.controls.GUIModule;
+import mimodek.controls.PhysicsGUI;
+import mimodek.controls.StyleGUI;
+import mimodek.controls.WeatherGUI;
 import mimodek.texture.Texturizer;
 import mimodek.tracking.TUIOClient;
 import mimodek.tracking.TrackingSimulator;
+import mimodek.web.Weather;
 
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
@@ -42,6 +48,9 @@ public class MainHandler{
 
 	//the mimos (active/ancestor) manager
 	MimosManager mimosManager;
+	
+	//Graphic User Interface Handler
+	GUI gui;
 
 	
 	
@@ -49,20 +58,23 @@ public class MainHandler{
 	public TrackingSimulator trackingSimulator;//don't run it at the same time as real tracking input
 	public TUIOClient tracking;
 	
+	//Weather Data
+	public static Weather weather;
+	
 	// information toggles
 	boolean showGUI = true;
-	public static boolean showSprings = true;
+	static boolean showSprings = true;
 	boolean showMimos = true;
 	boolean showOrganism = true;
 
 	// environment variables
-	float gravX_Range = 0.01f;
-	float gravY_Range = 0.02f;
-	float gravY;
-	float gravX;
+	public static float gravX_Range = 0.01f;
+	public static float gravY_Range = 0.02f;
+	public static float gravY;
+	public static float gravX;
 
-	float springStrength = 0.5f;
-	float springDamping = 0.01f;
+	public static float springStrength = 0.5f;
+	public static float springDamping = 0.01f;
 
 	// number of particles generated
 	int numMimos = 100;
@@ -76,10 +88,11 @@ public class MainHandler{
 	int outputOffsetY = 40;
 	
 	boolean preview = true;
+	public static boolean pause = false;
 	
 
 	// controls
-	ControlP5 controlP5;
+	public static ControlP5 controlP5;
 	private boolean updatePhysics = false;
 	int controlPositionX = 30;
 	int controlOffsetY = 30;
@@ -96,14 +109,14 @@ public class MainHandler{
 		MainHandler.screenWidth = screenWidth;
 		//we want to have the same ratio as the output
 		MainHandler.screenHeight = (int)(MainHandler.screenWidth*((float)outputHeight/(float)outputWidth));
-		setup();
+		//setup();
 	}
 	
 	public MainHandler(int screenWidth,int screenHeight, PApplet app) {
 		MainHandler.app = app;
 		MainHandler.screenWidth = screenWidth;
 		MainHandler.screenHeight = screenHeight;
-		setup();
+		//setup();
 	}
 
 	public void setup() {
@@ -119,11 +132,20 @@ public class MainHandler{
 
 		//app = this;
 		gfx = app.g;
-
+		
+		//simulation
 		pSim = new Physics(0.2f, 0.1f, false);
+		
+		//organism
 		organism = new Organism();
+		
+		//animation
 		mimosManager = new MimosManager();
 		
+		//weather data
+		weather = new Weather();
+		
+		//tracking
 		tracking = new TUIOClient();
 		trackingSimulator = new TrackingSimulator(screenWidth, screenHeight);
 		tracking.setListener(mimosManager);
@@ -154,75 +176,28 @@ public class MainHandler{
 	public void setupGUI() {
 
 		controlP5 = new ControlP5(app);
-
-		// Gravity control
-		controlP5.addSlider("Gravity range: X", 0, 100, 2, controlPositionX,
-				controlOffsetY + 65, controlWidth, controlHeight);
-		controlP5.addSlider("Gravity range: Y", 0, 100, 50, controlPositionX,
-				controlOffsetY + 80, controlWidth, controlHeight);
-
-		// Spring control
-		controlP5.addSlider("Spring Strength", 0, 200, 50, controlPositionX,
-				controlOffsetY + 115, controlWidth, controlHeight);
-		controlP5.addSlider("Spring Damping", 0, 500, 1, controlPositionX,
-				controlOffsetY + 130, controlWidth, controlHeight);
-
-		// Display control
-		controlP5.addToggle("Show Mimos", true, controlPositionX,
-				controlOffsetY + 160, 10, 10);
-		controlP5.addToggle("Show Springs", true, 120, controlOffsetY + 160,
-				10, 10);
-		controlP5.addToggle("Show Organism", true, 200, controlOffsetY + 160,
-				10, 10);
-
-		
-		controlP5.addSlider("Number of Mimos", 0, 500, 100, controlPositionX,
-				controlOffsetY + 200, controlWidth, controlHeight);
-		// Reset Button
-		controlP5.addButton("RESET", 0, controlPositionX, controlOffsetY + 220,
-				100, 30);
-		
-		//Texturize panel
-		ListBox listA = controlP5.addListBox("Ancestor Texture",controlPositionX,controlOffsetY + 300,120,120);
-		ListBox listB = controlP5.addListBox("Mimo Texture",controlPositionX+160,controlOffsetY + 300,120,120);
-		listA.valueLabel().style().marginTop = 1; // the +/- sign
-		listB.valueLabel().style().marginTop = 1; // the +/- sign
-		  //l.setBackgroundColor(color(100,0,0));
-		  for(int i=0;i<texturizer.textures.size();i++) {
-			  
-			  listA.addItem(texturizer.textures.get(i).fileName,i);
-			  listB.addItem(texturizer.textures.get(i).fileName,i);
-		  }
-		  listA.close();
-		  listB.close();
-		  
-		RadioButton r =controlP5.addRadioButton("Graphics", 500, 100);
-		r.setColorForeground(MainHandler.app.color(120));
-		r.addItem("Circles", 1).setState(false);
-		r.addItem("Image", 2).setState(true);
-		r.addItem("Generated", 3).setState(false);
-		
-		controlP5.addRange("Mimos' size",0f,255, Mimo.minRadius,Mimo.maxRadius, 500,200,200,12);
-
-		 // l.setColorBackground(color(255,128));
-		  //l.setColorActive(color(0,0,255,128));
-
-
+		gui = new GUI();
+		gui.addModule(new PhysicsGUI(15, controlOffsetY, 310, 250));
+		gui.addModule(new StyleGUI(15, controlOffsetY + 270, 310, 250));
+		gui.addModule(new WeatherGUI(350, controlOffsetY, 310, 250));
 	}
 
 	public void draw() {
+		
 		app.background(0);
-		updateEnv();
-		pSim.update();
-		mimosManager.update();
+		if(!pause){
+			updateEnv();
+			pSim.update();
+			mimosManager.update();
+		}
 		if(!preview){
 			app.noFill();
 			app.stroke(app.color(255));
 			
 			app.translate(outputOffsetX,outputOffsetY);
-			
+			app.rect(-1,-1,outputWidth,outputHeight);
 			app.scale(scaleFactor);
-			app.rect(-1,-1,screenWidth,screenHeight);
+			
 		}
 		/*if (underTheMouse != null)
 			underTheMouse.draw();*/
@@ -233,7 +208,7 @@ public class MainHandler{
 		if (showSprings)
 			pSim.drawSprings(app.color(0, 0, 255), 1);
 		if (showGUI)
-			showPhysicsData();
+			gui.draw();
 	}
 
 	public void updateEnv() {
@@ -245,31 +220,6 @@ public class MainHandler{
 
 	}
 
-	public void showPhysicsData() {
-		app.fill(0, 255, 0, 50);
-		app.rect(15, controlOffsetY, 310, 250);
-		app.fill(255);
-		app.text("Frame rate (fps): " + (int) app.frameRate + " | Particles: "
-				+ pSim.particleCount() + " | Springs: " + pSim.springCount(),
-				30, 30 + controlOffsetY);
-		app.text("Gravity (range): X[" + -gravX_Range + ";" + gravX_Range
-				+ "] / Y[" + -gravY_Range + ";" + gravY_Range + "]", 30,
-				60 + controlOffsetY);
-		app.text("Spring strength: " + springStrength + " | Spring damping: "
-				+ springDamping, 30, 110 + controlOffsetY);
-		
-		//Texture viewer
-		app.fill(0, 255, 0, 50);
-		app.rect(15, controlOffsetY + 270, 310, 110);
-		
-		app.fill(10, 10, 10, 255);
-		app.rect(controlPositionX,controlOffsetY + 300, 120, 70);
-		texturizer.drawTexture(texturizer.ancestor, controlPositionX+60,controlOffsetY + 335, 1);
-		
-		app.rect(controlPositionX+160,controlOffsetY + 300, 120, 70);
-		texturizer.drawTexture(texturizer.active, controlPositionX+220,controlOffsetY + 335, 1);
-	}
-
 	public void mouseReleased() {
 		if (updatePhysics) {
 			pSim.changeSprings(springStrength, springDamping);
@@ -277,6 +227,8 @@ public class MainHandler{
 		}else if (rescaleMimo) {
 			texturizer.changeScale(Mimo.maxRadius);
 			rescaleMimo = false;
+		}else if(showGUI){
+			gui.mouseReleased();
 		}
 		
 	}
@@ -286,18 +238,19 @@ public class MainHandler{
 			underTheMouse.moveTo(mouseX, mouseY);
 	}*/
 
-	/*public void mouseClicked() {
-		if (showGUI)
+	public void mouseClicked() {
+		if (!showGUI)
 			return;
-
-		if (underTheMouse != null) {
-			// organism.attachTo();
-			//mimosManager.addMimo(underTheMouse.pos);
-			underTheMouse = null;
-		} else {
-			underTheMouse = new Mimo(new PVector(mouseX, mouseY));
-		}
-	}*/
+		else
+			gui.clicked(app.mouseX, app.mouseY);
+	}
+	
+	public void mouseDragged() {
+		if (!showGUI)
+			return;
+		else
+			gui.drag(app.mouseX, app.mouseY,app.mouseX-app.pmouseX,app.mouseY-app.pmouseY);
+	}
 
 	public void keyPressed() {
 		if (app.key == ' ') {
@@ -315,6 +268,8 @@ public class MainHandler{
 	}
 
 	public void controlEvent(ControlEvent cEvent) {
+		if(cEvent == null)
+			return;
 		String crtlName = cEvent.name();
 		if (crtlName == "Spring Strength") {
 			float val = cEvent.value();
@@ -385,8 +340,22 @@ public class MainHandler{
 			return;
 		}
 		
+		//Weather control (let's play God)
+		if (crtlName == "Use slider value"){
+			weather.realTemperature = !weather.realTemperature;
+			return;
+		}
+		if (crtlName == "Temperature"){
+			float val = cEvent.value();
+			weather.fakeTemperature = val;
+			return;
+		}
+		
 		if (crtlName == "RESET") {
 			reset();
+		}
+		if (crtlName == "START/PAUSE") {
+			pause = !pause;
 		}
 
 	}
