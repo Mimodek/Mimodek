@@ -19,11 +19,14 @@ public class Mimo {
 	public float radius;
 
 	ArrayList<Mimo> neighbours;
+	Mimo father;
 
 	public boolean ancestor = false;
 	public boolean collided = false;
 
 	public Object drawingData;
+	
+	public PVector toStructure;
 
 
 	public Mimo(PVector pos) {
@@ -48,5 +51,11 @@ public class Mimo {
 
 	void setParticle(Particle p) {
 		particle = p;
+	}
+
+	public void removeNeighbour(Mimo m) {
+		if (neighbours == null || !neighbours.contains(m))
+			return; 
+		neighbours.remove(m);
 	}
 }

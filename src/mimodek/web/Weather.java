@@ -1,19 +1,19 @@
 package mimodek.web;
 
 import mimodek.MainHandler;
-import processing.core.PApplet;
+import processing.core.*;
 import processing.xml.*;
 
 /*
  * By brunovianna
  */
 public class Weather {
-	public static final int MIN_TEMPERATURE = 0;
-	public static final int MAX_TEMPERATURE = 34;
+	public static int MIN_TEMPERATURE = 0;
+	public static int MAX_TEMPERATURE = 34;
 
 	private XMLElement xml;
 
-	private static float _temperature;
+	private static float _temperature = 0;
 	public float fakeTemperature = 0;
 
 	private int[] temperatureToColor;
@@ -25,9 +25,39 @@ public class Weather {
 		update();
 	}
 
+	public Weather(String fileName) {
+		loadFromXML(fileName);
+		update();
+	}
+
+	// load colors from an XML file
+	private void loadFromXML(String fileName) {
+		XMLElement xml;
+		xml = new XMLElement(MainHandler.app, fileName);
+		int numColor = xml.getChildCount();
+		float minTemp = 1000;
+		float maxTemp = -1000;
+		MainHandler.app.colorMode(PApplet.HSB, 1f);
+		temperatureToColor = new int[numColor];
+		for (int i = 0; i < numColor; i++) {
+			XMLElement kid = xml.getChild(i);
+			int temp = kid.getIntAttribute("temperature");
+			minTemp = Math.min(minTemp, temp);
+			maxTemp = Math.max(maxTemp, temp);
+			String colorStr = kid.getContent();
+			String[] splitted = colorStr.split(",");
+			temperatureToColor[i] = MainHandler.app.color(Float
+					.parseFloat(splitted[0]), Float.parseFloat(splitted[1]),
+					Float.parseFloat(splitted[2]));
+		}
+		MainHandler.app.colorMode(PApplet.RGB, 255);
+		MIN_TEMPERATURE = (int) minTemp;
+		MAX_TEMPERATURE = (int) maxTemp;
+	}
+
 	private void temperatureToColor() {
 		temperatureToColor = new int[MAX_TEMPERATURE - MIN_TEMPERATURE + 1];
-		MainHandler.app.colorMode(PApplet.HSB,1f); 
+		MainHandler.app.colorMode(PApplet.HSB, 1f);
 		temperatureToColor[0] = MainHandler.app.color(0f, 1f, 0.502f);
 		temperatureToColor[1] = MainHandler.app.color(0.279f, 0.489f, 0.859f);
 		temperatureToColor[2] = MainHandler.app.color(0.31f, 0.561f, 0.804f);
@@ -63,7 +93,7 @@ public class Weather {
 		temperatureToColor[32] = MainHandler.app.color(0.75f, 1f, 1f);
 		temperatureToColor[33] = MainHandler.app.color(0.768f, 0.816f, 1f);
 		temperatureToColor[34] = MainHandler.app.color(0.908f, 1f, 1f);
-		MainHandler.app.colorMode(PApplet.RGB,255);
+		MainHandler.app.colorMode(PApplet.RGB, 255);
 	}
 
 	public int temperatureColor() {
@@ -72,37 +102,35 @@ public class Weather {
 			t = _temperature;
 		else
 			t = fakeTemperature;
-		
-		//System.out.println((int)t);
-		
+
+		//System.out.println((int)t+" = " + MIN_TEMPERATURE + ": "+ MAX_TEMPERATURE);
+
 		if (t < MIN_TEMPERATURE)
 			t = MIN_TEMPERATURE;
 		else if (t > MAX_TEMPERATURE)
 			t = MIN_TEMPERATURE;
-		return temperatureToColor[(int) t];
+		return temperatureToColor[(int) t - MIN_TEMPERATURE];
 	}
 
 	public float temperature() {
 		return _temperature;
 	}
 
-	//TODO: Fix me!! Is something wrong with Processing XML lib?
 	public boolean update() {
-		_temperature = 0;
-		return true;
-		/*
+		//_temperature = 0;
+
 		try {
-			xml = new XMLElement("http://rss.wunderground.com/auto/rss_full/global/stations/08221.xml?units=metric");
+			xml = new XMLElement(MainHandler.app,"http://rss.wunderground.com/auto/rss_full/global/stations/08221.xml?units=metric");
 
 			if (xml != null) {
 				System.out.println("Hey");
 				XMLElement firstItem = xml.getChild(0).getChild(11).getChild(1);
 				String content = firstItem.getContent();
-				String[] conditionsA = PApplet.split(content,':');
+				String[] conditionsA = PApplet.split(content, ':');
 				System.out.println(conditionsA);
 				String[] conditionsB = PApplet.split(conditionsA[1], 'C');
-				System.out.println(conditionsB);
-				//_temperature = PApplet.parseFloat(conditionsB[0]);
+				System.out.println(conditionsB); //
+				_temperature = PApplet.parseFloat(conditionsB[0]);
 				return true;
 			} else {
 				return false;
@@ -111,7 +139,7 @@ public class Weather {
 			e.printStackTrace();
 			return false;
 		}
-		*/
+
 	}
 
 }

@@ -52,8 +52,13 @@ public class MimosManager implements TrackingListener {
 					.noise(MainHandler.app.frameCount * 0.1f)
 					* maxSpeed;
 			m.vel.mult(speed);
-		} else {
+		} else if(m.toStructure == null) {
 			randomWalk(m);
+		} else {
+			//go attach yourself to the organism
+			float a = PApplet.atan2(m.toStructure.y - m.pos.y,
+					m.toStructure.x - m.pos.x);
+			m.vel = new PVector(PApplet.cos(a), PApplet.sin(a));
 		}
 		m.pos.add(m.vel);
 	}

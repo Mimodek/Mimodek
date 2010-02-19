@@ -136,17 +136,17 @@ public class MainHandler {
 		mimosManager = new MimosManager();
 
 		// weather data
-		weather = new Weather();
+		weather = new Weather("MimodekColour.xml");
 
 		// tracking
 		tracking = new TUIOClient();
-		trackingSimulator = new TrackingSimulator(screenWidth, screenHeight);
+		//trackingSimulator = new TrackingSimulator(screenWidth, screenHeight);
 		tracking.setListener(mimosManager);
-		trackingSimulator.setListener(mimosManager);
+		//trackingSimulator.setListener(mimosManager);
 		texturizer = new Texturizer();
 		setupGUI();
 		// texturizer = new Texturizer();
-		trackingSimulator.on();
+		//trackingSimulator.on();
 	}
 
 	public void reset() {
@@ -161,10 +161,10 @@ public class MainHandler {
 		mimosManager = new MimosManager();
 		
 		// restart the simulator
-		trackingSimulator.off();
-		trackingSimulator = new TrackingSimulator(screenWidth, screenHeight);
-		trackingSimulator.setListener(mimosManager);
-		trackingSimulator.on();
+		//trackingSimulator.off();
+		//trackingSimulator = new TrackingSimulator(screenWidth, screenHeight);
+		//trackingSimulator.setListener(mimosManager);
+		//trackingSimulator.on();
 	}
 
 	public void setupGUI() {
@@ -213,7 +213,7 @@ public class MainHandler {
 				+ PApplet.sin(app.noise(app.frameCount * 0.01f) * 2
 						* PApplet.PI) * gravY_Range * 2;
 		gravX = -gravX_Range
-				+ PApplet.sin(app.noise(app.frameCount * 0.01f) * 2
+				+ PApplet.cos(app.noise(app.frameCount * 0.01f) * 2
 						* PApplet.PI) * gravX_Range * 2;
 		pSim.setGravity(gravX, gravY);
 
@@ -352,6 +352,11 @@ public class MainHandler {
 		}
 		if (crtlName == "Black to color") {
 			RadialGradient.blackToColor = cEvent.value() > 0;
+			return;
+		}
+		if (crtlName == "Gradient") {
+			float val = cEvent.group().value();
+			RadialGradient.mode = (int) val;
 			return;
 		}
 		

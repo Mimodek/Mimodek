@@ -1,11 +1,9 @@
 package mimodek.controls;
 
-import processing.core.PApplet;
 import controlP5.CVector3f;
-import controlP5.ListBox;
 import controlP5.RadioButton;
 import mimodek.MainHandler;
-import mimodek.Mimo;
+import mimodek.texture.RadialGradient;
 import mimodek.web.Weather;
 
 public class WeatherGUI extends GUIModule {
@@ -14,8 +12,6 @@ public class WeatherGUI extends GUIModule {
 	int controlWidth = 200;
 	int controlHeight = 10;
 
-	ListBox listA;
-	ListBox listB;
 	RadioButton r;
 
 	public WeatherGUI(int x, int y, int width, int height) {
@@ -30,6 +26,13 @@ public class WeatherGUI extends GUIModule {
 		// Toggle between 'black to color' and 'color to black'
 		addController(MainHandler.controlP5.addToggle("Black to color", true, x+controlPositionX+130,
 				y+controlPositionY*2+15, 10, 10));
+
+		//gradient type toggle
+		r = MainHandler.controlP5.addRadioButton("Gradient", x+controlPositionX+130, y+controlPositionY*2+40);
+		r.setColorForeground(MainHandler.app.color(120));
+		r.addItem("Linear", RadialGradient.LINEAR).setState(true);
+		r.addItem("Sin", RadialGradient.SIN).setState(false);
+		r.update();
 	}
 
 	public void draw() {
@@ -40,5 +43,13 @@ public class WeatherGUI extends GUIModule {
 		MainHandler.gfx.fill(MainHandler.weather.temperatureColor());
 		MainHandler.gfx.rect(x+controlPositionX,y+controlPositionY*2+15, 120, 70);
 		//MainHandler.gfx.colorMode(PApplet.RGB, 255);
+	}
+	
+	public void moveControllers(int offsetX, int offsetY){
+		super.moveControllers(offsetX, offsetY);
+		CVector3f pos = r.position();
+		pos.x += offsetX;
+		pos.y += offsetY;
+		r.setPosition(pos.x,pos.y);
 	}
 }
