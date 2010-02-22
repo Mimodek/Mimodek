@@ -66,45 +66,57 @@ public void keyPressed() {
 }
 
 void controlEvent(ControlEvent cEvent){
-  mimodek.controlEvent(cEvent);
+  if(mimodek!=null)
+    mimodek.controlEvent(cEvent);
 }
 
 //SEND TRACKING EVENTS TO MIMODEK TRACKING MODULE
 // called when an object is added to the scene
 void addTuioObject(TuioObject tobj) {
-  mimodek.tracking.addTuioObject(tobj);
+  if(mimodek!=null)
+    mimodek.tracking.addTuioObject(tobj);
 }
 
 // called when an object is removed from the scene
 void removeTuioObject(TuioObject tobj) {
-  mimodek.tracking.removeTuioObject(tobj);
+  try{
+  if(mimodek!=null)
+    mimodek.tracking.removeTuioObject(tobj);
+  }catch(Exception e){
+    e.printStackTrace();
+  }
 }
 
 // called when an object is moved
 void updateTuioObject (TuioObject tobj) {
-  mimodek.tracking.updateTuioObject(tobj);
+  if(mimodek!=null)
+    mimodek.tracking.updateTuioObject(tobj);
 }
 
 // called when a cursor is added to the scene
 void addTuioCursor(TuioCursor tcur) {
-  mimodek.tracking.addTuioCursor(tcur);
+  if(mimodek!=null)
+    mimodek.tracking.addTuioCursor(tcur);
 }
 
 // called when a cursor is moved
 void updateTuioCursor (TuioCursor tcur) {
-  mimodek.tracking.updateTuioCursor(tcur);
+  if(mimodek!=null)
+    mimodek.tracking.updateTuioCursor(tcur);
 }
 
 // called when a cursor is removed from the scene
 void removeTuioCursor(TuioCursor tcur) {
-  mimodek.tracking.removeTuioCursor(tcur);
+  if(mimodek!=null)
+    mimodek.tracking.removeTuioCursor(tcur);
 }
 
 // called after each message bundle
 // representing the end of an image frame
 void refresh(TuioTime bundleTime) { 
-  //IS OK to do nothing here????
+  //Is it OK to do nothing here????
   //redraw();
 }
+
 
 

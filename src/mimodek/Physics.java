@@ -1,7 +1,5 @@
 package mimodek;
 
-import java.util.ArrayList;
-
 import processing.core.PApplet;
 import processing.core.PVector;
 import traer.physics.*;
@@ -13,6 +11,15 @@ public class Physics {
 	public static final int RIGHT = 2;
 	public static final int LEFT = 3;
 
+	// environment parameters
+	public static float gravX_Range = 0.01f;
+	public static float gravY_Range = 0.02f;
+	
+	float gravityX = 0;
+	float gravityY = 0;
+	float targetGravityX = 0;
+	float targetGravityY = 0;
+	
 	// Springs parameters
 	float springStrength = 0.5f;
 	float springDamping = 0.01f;
@@ -21,6 +28,12 @@ public class Physics {
 
 	public Physics(float gravity, float drag, boolean euler) {
 		physics = new ParticleSystem(gravity, drag);
+		
+		targetGravityX = 0;
+		targetGravityY = gravity;
+		gravityY = targetGravityY ;
+		gravityX = targetGravityX ;
+		
 		if (euler)
 			physics.setIntegrator(ParticleSystem.MODIFIED_EULER);
 	}
@@ -43,6 +56,7 @@ public class Physics {
 	}
 
 	public void update() {
+		updateEnv();
 		physics.tick();
 		// make sure the mimos stay on the floor
 		int n = MainHandler.organism.cellCount();// numberOfParticles();
@@ -68,6 +82,21 @@ public class Physics {
 				break;
 			}
 		}
+
+	}
+	
+	public void updateEnv() {
+		
+			targetGravityY = -gravY_Range
+			+ PApplet.sin(MainHandler.app.noise(MainHandler.app.frameCount * 0.01f) * 2
+					* PApplet.PI) * gravY_Range * 2;
+
+			targetGravityX = -gravX_Range
+			+ PApplet.cos(MainHandler.app.noise(MainHandler.app.frameCount * 0.01f) * 2
+					* PApplet.PI) * gravX_Range * 2;
+		gravityY+=gravityY<targetGravityY?0.01:-0.01;
+		gravityX+=gravityX<targetGravityX?0.01:-0.01;
+		setGravity(gravityX, gravityY);
 
 	}
 
@@ -166,7 +195,7 @@ public class Physics {
 	public void removeParticleAndAttachedSprings(Particle old) {
 		//ArrayList<Particle> particles = new ArrayList<Particle>();
 		
-		System.out.println("Removing attached springs. Current spring count:"+physics.numberOfSprings());
+		//System.out.println("Removing attached springs. Current spring count:"+physics.numberOfSprings());
 		//Remove all spring of the old node
 		int c = 0;
 		for (int i = -1; ++i < physics.numberOfSprings();) {
@@ -178,9 +207,9 @@ public class Physics {
 			}
 		}
 		
-		System.out.println("Done cutting. Removed:"+c);
+		//System.out.println("Done cutting. Removed:"+c);
 		//finally remove the particle
 		physics.removeParticle(old);
-		System.out.println("Done. New spring count:"+physics.numberOfSprings());
+		//System.out.println("Done. New spring count:"+physics.numberOfSprings());
 	}
 }

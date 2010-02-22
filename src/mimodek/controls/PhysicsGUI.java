@@ -1,6 +1,7 @@
 package mimodek.controls;
 
 import mimodek.MainHandler;
+import mimodek.Physics;
 
 public class PhysicsGUI extends GUIModule {
 	int controlPositionX = 15;
@@ -49,8 +50,8 @@ public class PhysicsGUI extends GUIModule {
 		MainHandler.gfx.text("Frame rate (fps): " + (int) MainHandler.app.frameRate + " | Particles: "
 				+ MainHandler.pSim.particleCount() + " | Springs: " + MainHandler.pSim.springCount(),
 				x+controlPositionX, y+controlPositionY);
-		MainHandler.gfx.text("Gravity (range): X[" + -MainHandler.gravX_Range + ";" + MainHandler.gravX_Range
-				+ "] / Y[" + -MainHandler.gravY_Range + ";" + MainHandler.gravY_Range + "]", x+controlPositionX,controlPositionY*2+y);
+		MainHandler.gfx.text("Gravity (range): X[" + -Physics.gravX_Range + ";" + Physics.gravX_Range
+				+ "] / Y[" + -Physics.gravY_Range + ";" + Physics.gravY_Range + "]", x+controlPositionX,controlPositionY*2+y);
 		MainHandler.gfx.text("Spring strength: " + MainHandler.springStrength + " | Spring damping: "
 				+ MainHandler.springDamping, x+controlPositionX, y+110);
 	}

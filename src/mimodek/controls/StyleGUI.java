@@ -28,13 +28,25 @@ public class StyleGUI extends GUIModule {
 		r = MainHandler.controlP5.addRadioButton("Graphics", x + controlPositionX, y + controlPositionY+ 100);
 		r.setColorForeground(MainHandler.app.color(120));
 		r.addItem("Circles", 1).setState(false);
-		r.addItem("Image", 2).setState(false);
-		r.addItem("Generated", 3).setState(true);
+		r.addItem("Image", 2).setState(true);
+		r.addItem("Generated", 3).setState(false);
 		r.update();
 		
 		// Toggle smoothing
 		addController(MainHandler.controlP5.addToggle("Smoothing", true, x+controlPositionX+110,
 				y + controlPositionY+ 100, 10, 10));
+		// Toggle circle/seed
+		addController(MainHandler.controlP5.addToggle("Seed", false, x+controlPositionX+110,
+				y + controlPositionY+ 130, 10, 10));
+		addController(MainHandler.controlP5.addSlider("Space between dots", 0f, 4.0f, 1.13f, x+controlPositionX,
+				y+controlPositionY+155, controlWidth, controlHeight));
+		addController(MainHandler.controlP5.addSlider("Dots size", 0f, 4.0f, 2.86f, x+controlPositionX,
+				y+controlPositionY+175, controlWidth, controlHeight));
+		
+		addController(MainHandler.controlP5.addSlider("Ancestors' brightness", 0f, 255f, 125f, x+controlPositionX,
+				y+controlPositionY+200, controlWidth, controlHeight));
+		/*addController(MainHandler.controlP5.addSlider(" size", 0f, 4.0f, 2.86f, x+controlPositionX,
+				y+controlPositionY+145, controlWidth, controlHeight));*/
 		
 		listA = MainHandler.controlP5.addListBox("Ancestor Texture", x
 				+ controlPositionX, y + controlPositionY, 120, 120);

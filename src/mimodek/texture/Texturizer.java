@@ -3,7 +3,6 @@ package mimodek.texture;
 import java.io.File;
 import java.util.ArrayList;
 
-import processing.core.PApplet;
 import processing.core.PImage;
 
 import mimodek.Mimo;
@@ -14,22 +13,29 @@ public class Texturizer {
 	public static final int IMAGE = 2;
 	public static final int GENERATED = 3;
 
-	public int mode = IMAGE;
+	public int mode = 2;
 
 	public int ancestor = 0;
 	public int active = 1;
 
 	public ArrayList<SquareTexture> textures;
 
-	public SimpleDrawer drawer;
+	public static boolean drawCircle = true;
+	public static int ancestorBrightness = 125;
+	
+	public SimpleDrawer circleDrawer;
+	public SimpleDrawer seedDrawer;
+	
+	
 
 	public Texturizer() {
 		// load the textures
 		textures = new ArrayList<SquareTexture>();
 		loadTextures(MainHandler.app.dataPath("images/"));
 
-		// initialize the drawer
-		drawer = new RadialGradient();
+		// initialize the drawers
+		circleDrawer = new RadialGradient();
+		seedDrawer = new SeedGradient();
 	}
 
 	public void loadTextures(String textureFolder) {
@@ -86,7 +92,9 @@ public class Texturizer {
 		case IMAGE:
 			MainHandler.gfx.rotate((float) Math.atan2(m.vel.y, m.vel.x));
 			if (m.ancestor) {
+				MainHandler.gfx.tint(ancestorBrightness);
 				textures.get(ancestor).draw(m.radius / Mimo.maxRadius);
+				MainHandler.gfx.noTint();
 			} else {
 				textures.get(active).draw(m.radius / Mimo.maxRadius);
 			}
@@ -95,15 +103,25 @@ public class Texturizer {
 			MainHandler.gfx.ellipse(0, 0, m.radius, m.radius);
 			break;
 		case GENERATED:
+			MainHandler.gfx.rotate((float) Math.atan2(m.vel.y, m.vel.x));
+			SimpleDrawer drawer = drawCircle?circleDrawer:seedDrawer;
 			if (m.drawingData == null) {
 				m.drawingData = drawer.getDrawingData(m);
 			}
 			PImage image =drawer.draw(m.drawingData);
+			if(m.ancestor){
+				//darken
+				MainHandler.gfx.tint(ancestorBrightness);
+			}
 			MainHandler.gfx.image(image,-image.width/2,-image.height/2);
+			if(m.ancestor){
+				MainHandler.gfx.noTint();
+			}
 			break;
 		}
 		MainHandler.gfx.popStyle();
 		MainHandler.gfx.popMatrix();
 	}
+
 
 }

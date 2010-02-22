@@ -20,6 +20,7 @@ public class TrackingSimulator extends Thread {
 	ArrayList<Mimo> mimos;
 
 	public boolean running;
+	public boolean paused = false;
 
 	public TrackingSimulator(int screenWidth, int screenHeight) {
 		mimos = new ArrayList<Mimo>();
@@ -100,7 +101,7 @@ public class TrackingSimulator extends Thread {
 	// Thread run method
 	public void run() {
 		while (running) {
-			if(!MainHandler.pause){
+			if(!paused && !MainHandler.pause){
 				if ((float) Math.random() < 0.1 && mimos.size() < 200) {
 					addMimo(new PVector(MainHandler.screenWidth / 2,
 							MainHandler.screenHeight / 2));

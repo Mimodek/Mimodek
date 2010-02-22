@@ -1,38 +1,7 @@
 <?xml version="1.0"?>
 <temperatureToColor>
-		<item temperature="0">0f, 1f, 0.502f</item>
-		<item temperature="1">0.279f, 0.489f, 0.859f</item>
-		<item temperature="2">0.31f, 0.561f, 0.804f</item>
-		<item temperature="3">0.31f, 0.561f, 0.545f</item>
-		<item temperature="4">0.333f, 0.777f, 0.439f</item>
-		<item temperature="5">0.333f, 1f, 0.502f</item>
-		<item temperature="6">0.333f, 1f, 0.545f</item>
-		<item temperature="7">0.333f, 1f, 0.804f</item>
-		<item temperature="8">0.333f, 1f, 1f</item>
-		<item temperature="9">0.418f, 0.882f, 1f</item>
-		<item temperature="10">0.424f, 0.611f, 0.706f</item>
-		<item temperature="11">0.458f, 1f, 1f</item>
-		<item temperature="12">0.452f, 0.426f, 0.922f</item>
-		<item temperature="13">0.436f, 0.46f, 0.98f</item>
-		<item temperature="14">0.5f, 0.265f, 0.933f</item>
-		<item temperature="15">0.5f, 1f, 1f</item>
-		<item temperature="16">0.506f, 0.656f, 0.82f</item>
-		<item temperature="17">0.517f, 0.714f, 0.878f</item>
-		<item temperature="18">0.509f, 0.82f, 0.698f</item>
-		<item temperature="19">0.556f, 0.502f, 1f</item>
-		<item temperature="20">0.557f, 0.502f, 0.804f</item>
-		<item temperature="21">0.564f, 1f, 0.98f</item>
-		<item temperature="22">0.584f, 1f, 1f</item>
-		<item temperature="23">0.593f, 0.669f, 0.545f</item>
-		<item temperature="24">0.667f, 0.395f, 0.933f</item>
-		<item temperature="25">0.667f, 0.756f, 0.804f</item>
-		<item temperature="26">0.667f, 1f, 1f</item>
-		<item temperature="27">0.667f, 0.755f, 0.545f</item>
-		<item temperature="28">0.667f, 1f, 0.502f</item>
-		<item temperature="29">0.667f, 1f, 0.392f</item>
-		<item temperature="30">0.779f, 0.754f, 0.557f</item>
-		<item temperature="31">0.778f, 0.756f, 0.804f</item>
-		<item temperature="32">0.75f, 1f, 1f</item>
-		<item temperature="33">0.768f, 0.816f, 1f</item>
-		<item temperature="34">0.908f, 1f, 1f</item>
+		<range from="0, 1, 0.502" to="0.279, 0.489, 0.859"></range>
+		<range from="0, 1, 0.502" to="0.279, 0.489, 0.859"></range>
+		<range from="0, 1, 0.502" to="0.279, 0.489, 0.859"></range>
+		<range from="0, 1, 0.502" to="0.279, 0.489, 0.859"></range>
 </temperatureToColor>

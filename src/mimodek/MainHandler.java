@@ -4,11 +4,11 @@ import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 
 import mimodek.controls.GUI;
-import mimodek.controls.GUIModule;
 import mimodek.controls.PhysicsGUI;
 import mimodek.controls.StyleGUI;
+import mimodek.controls.TrackingGUI;
 import mimodek.controls.WeatherGUI;
-import mimodek.texture.RadialGradient;
+import mimodek.texture.SeedGradient;
 import mimodek.texture.Texturizer;
 import mimodek.tracking.TUIOClient;
 import mimodek.tracking.TrackingSimulator;
@@ -16,9 +16,6 @@ import mimodek.web.Weather;
 
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
-import controlP5.ListBox;
-import controlP5.RadioButton;
-import controlP5.Range;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
@@ -45,7 +42,7 @@ public class MainHandler {
 	boolean rescaleMimo = false;
 
 	// the mimos (active/ancestor) manager
-	MimosManager mimosManager;
+	public static MimosManager mimosManager;
 
 	// Graphic User Interface Handler
 	GUI gui;
@@ -53,7 +50,7 @@ public class MainHandler {
 	// the tracking module
 	public TrackingSimulator trackingSimulator;// don't run it at the same time
 												// as real tracking input
-	public TUIOClient tracking;
+	public static TUIOClient tracking;
 
 	// Weather Data
 	public static Weather weather;
@@ -63,12 +60,6 @@ public class MainHandler {
 	static boolean showSprings = true;
 	boolean showMimos = true;
 	boolean showOrganism = true;
-
-	// environment variables
-	public static float gravX_Range = 0.01f;
-	public static float gravY_Range = 0.02f;
-	public static float gravY;
-	public static float gravX;
 
 	public static float springStrength = 0.5f;
 	public static float springDamping = 0.01f;
@@ -140,31 +131,27 @@ public class MainHandler {
 
 		// tracking
 		tracking = new TUIOClient();
-		//trackingSimulator = new TrackingSimulator(screenWidth, screenHeight);
 		tracking.setListener(mimosManager);
-		//trackingSimulator.setListener(mimosManager);
+		trackingSimulator = new TrackingSimulator(screenWidth, screenHeight);
+		
 		texturizer = new Texturizer();
+		
 		setupGUI();
-		// texturizer = new Texturizer();
-		//trackingSimulator.on();
+		
 	}
 
 	public void reset() {
-		/*
-		 * gravX_Range = 0.01f; gravY_Range = 0.02f;
-		 * 
-		 * springStrength = 0.5f; springDamping = 0.01f;
-		 */
 		pSim = new Physics(0.2f, 0.1f, false);
-
 		organism = new Organism();
 		mimosManager = new MimosManager();
-		
-		// restart the simulator
-		//trackingSimulator.off();
-		//trackingSimulator = new TrackingSimulator(screenWidth, screenHeight);
-		//trackingSimulator.setListener(mimosManager);
-		//trackingSimulator.on();
+	}
+	
+	public void restartTrackingSimulator(){
+		if(trackingSimulator.running)
+			trackingSimulator.off();
+		trackingSimulator = new TrackingSimulator(screenWidth, screenHeight);
+		trackingSimulator.setListener(mimosManager);
+		trackingSimulator.on();
 	}
 
 	public void setupGUI() {
@@ -174,13 +161,13 @@ public class MainHandler {
 		gui.addModule(new PhysicsGUI(350, controlOffsetY + 270, 310, 250));
 		gui.addModule(new StyleGUI(15, controlOffsetY + 270, 310, 250));
 		gui.addModule(new WeatherGUI(350, controlOffsetY, 310, 250));
+		gui.addModule(new TrackingGUI(700, controlOffsetY, 310, 250));
 	}
 
 	public void draw() {
 
 		app.background(0);
 		if (!pause) {
-			updateEnv();
 			pSim.update();
 			mimosManager.update();
 		}
@@ -208,16 +195,6 @@ public class MainHandler {
 			gui.draw();
 	}
 
-	public void updateEnv() {
-		gravY = -gravY_Range
-				+ PApplet.sin(app.noise(app.frameCount * 0.01f) * 2
-						* PApplet.PI) * gravY_Range * 2;
-		gravX = -gravX_Range
-				+ PApplet.cos(app.noise(app.frameCount * 0.01f) * 2
-						* PApplet.PI) * gravX_Range * 2;
-		pSim.setGravity(gravX, gravY);
-
-	}
 
 	public void mouseReleased() {
 		if (updatePhysics) {
@@ -285,12 +262,12 @@ public class MainHandler {
 		}
 		if (crtlName == "Gravity range: X") {
 			float val = cEvent.value();
-			gravX_Range = val / 1000;
+			Physics.gravX_Range = val / 1000;
 			return;
 		}
 		if (crtlName == "Gravity range: Y") {
 			float val = cEvent.value();
-			gravY_Range = val / 1000;
+			Physics.gravY_Range = val / 1000;
 			return;
 		}
 		if (crtlName == "Show Mimos") {
@@ -320,7 +297,6 @@ public class MainHandler {
 			texturizer.mode = (int) val;
 			return;
 		}
-
 		if (crtlName == "Ancestor Texture") {
 			float val = cEvent.group().value();
 			texturizer.ancestor = (int) val;
@@ -339,6 +315,22 @@ public class MainHandler {
 			rescaleMimo = true;
 			return;
 		}
+		if (crtlName == "Seed"){
+			Texturizer.drawCircle = cEvent.value()==0;
+			return;
+		}
+		if (crtlName == "Dots size"){
+			SeedGradient.dotSize =  cEvent.value();
+			return;
+		}
+		if (crtlName == "Space between dots"){
+			SeedGradient.radiScale =  cEvent.value();
+			return;
+		}
+		if (crtlName == "Ancestors' brightness"){
+			Texturizer.ancestorBrightness = (int)cEvent.value();
+			return;
+		}
 
 		// Weather control (let's play God)
 		if (crtlName == "Use slider value") {
@@ -347,16 +339,39 @@ public class MainHandler {
 		}
 		if (crtlName == "Temperature") {
 			float val = cEvent.value();
-			weather.fakeTemperature = val;
+			weather.setTemperature(val);
 			return;
 		}
 		if (crtlName == "Black to color") {
-			RadialGradient.blackToColor = cEvent.value() > 0;
+			SeedGradient.blackToColor = cEvent.value() > 0;
 			return;
 		}
 		if (crtlName == "Gradient") {
 			float val = cEvent.group().value();
-			RadialGradient.mode = (int) val;
+			SeedGradient.mode = (int) val;
+			return;
+		}
+		
+		//Tracking controls
+		if (crtlName == "Tracking ON/OFF") {
+			MimosManager.trackingOn = cEvent.value() > 0;
+			return;
+		}
+		if (crtlName == "Simulator ON/OFF") {
+			trackingSimulator.paused = cEvent.value() > 0;
+			return;
+		}
+		if (crtlName == "Restart simulator") {
+			if(mimosManager != null)
+				restartTrackingSimulator();
+			return;
+		}
+		if (crtlName == "Distance threshold"){
+			MimosManager.blobDistanceThreshold = cEvent.value();
+			return;
+		}
+		if (crtlName == "Edge zone size"){
+			MimosManager.edgeDetection = cEvent.value();
 			return;
 		}
 		
@@ -370,14 +385,17 @@ public class MainHandler {
 
 		if (crtlName == "RESET") {
 			app.noLoop();
-			//TODO: Is this really necessary now that the thread issue is fixed?
-			try {
-				reset();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}finally{
-				app.loop();
+			boolean tr  = MimosManager.trackingOn;
+			if(tr){
+				//if tracking is on, stop it
+				MimosManager.trackingOn = false;
 			}
+			reset();
+			if(tr){
+				//if tracking was on, start it
+				MimosManager.trackingOn = true;
+			}
+			app.loop();
 			return;
 		}
 		if (crtlName == "START/PAUSE") {
