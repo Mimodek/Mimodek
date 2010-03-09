@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<temperatureToColor>
-		<range from="0, 1, 0.502" to="0.279, 0.489, 0.859"></range>
-		<range from="0, 1, 0.502" to="0.279, 0.489, 0.859"></range>
-		<range from="0, 1, 0.502" to="0.279, 0.489, 0.859"></range>
-		<range from="0, 1, 0.502" to="0.279, 0.489, 0.859"></range>
-</temperatureToColor>

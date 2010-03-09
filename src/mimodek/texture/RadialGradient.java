@@ -1,29 +1,22 @@
 package mimodek.texture;
 
-import mimodek.MainHandler;
+import mimodek.Mimodek;
 import mimodek.Mimo;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
 
 public class RadialGradient implements SimpleDrawer {
-	public static final int LINEAR = 1;
-	public static final int SIN = 2;
-	public static boolean blackToColor = true;
-	public static int mode = LINEAR;
 
-	public class RadialGradientData {
+	public class RadialGradientData{
 		int startColor;
 		int endColor;
-		float radius;
-		float maxRadius;
+		Mimo m;
 
-		public RadialGradientData(int startColor, int endColor, int radius,
-				int maxRadius) {
+		public RadialGradientData(Mimo m, int startColor, int endColor) {
 			this.startColor = startColor;
 			this.endColor = endColor;
-			this.radius = radius;
-			this.maxRadius = maxRadius;
+			this.m = m;
 		}
 
 	}
@@ -36,43 +29,39 @@ public class RadialGradient implements SimpleDrawer {
 	public PImage draw(Object drawingData) {
 		if (!(drawingData instanceof RadialGradientData)) {
 			// can't draw without the proper data...
-			return MainHandler.app.createImage(0, 0, PApplet.RGB);
+			return Mimodek.app.createImage(0, 0, PApplet.RGB);
 		}
 		RadialGradientData data = (RadialGradientData) drawingData;
-		PGraphics buffer = MainHandler.app.createGraphics((int) data.maxRadius,
-				(int) data.maxRadius, PApplet.JAVA2D);
+		PGraphics buffer = Mimodek.app.createGraphics((int) Mimodek.config.getFloatSetting("mimosMaxRadius"),
+				(int) Mimodek.config.getFloatSetting("mimosMaxRadius"), PApplet.JAVA2D);
 
 		buffer.beginDraw();
 		buffer.background(0, 0, 0, 0);
 		buffer.noStroke();
-		for (int i = (int) data.radius; i >= 0; i--) {
+		for (int i = (int) data.m.radius; i >= 0; i--) {
 			float t = 0;
-			switch (mode) {
-			case LINEAR:
-				t = (float) i / data.maxRadius;
+			switch (Mimodek.config.getIntegerSetting("gradientFunction")) {
+			case Texturizer.LINEAR:
+				t = (float) i / Mimodek.config.getFloatSetting("mimosMaxRadius");
 				break;
-			case SIN:
-				t = (float) Math.sin(Math.PI * i / data.maxRadius);
+			case Texturizer.SIN:
+				t = (float) Math.sin(Math.PI * i / Mimodek.config.getFloatSetting("mimosMaxRadius"));
 				break;
 			}
-			buffer.fill(MainHandler.app.lerpColor(data.startColor,
+			buffer.fill(Mimodek.app.lerpColor(data.startColor,
 					data.endColor, t));
 			buffer.ellipse(buffer.width / 2, buffer.width / 2, i, i);
 		}
 		buffer.endDraw();
-		if (data.radius < data.maxRadius)
-			data.radius++;
 		return buffer;
 	}
 
 	public Object getDrawingData(Mimo m) {
-		if (blackToColor)
-			return new RadialGradientData(MainHandler.app.color(0, 0, 0),
-					MainHandler.weather.temperatureColor(), 0, (int) m.radius);
+		if (Mimodek.config.getBooleanSetting("blackToColor"))
+			return new RadialGradientData(m, Mimodek.app.color(0, 0, 0),
+					Mimodek.temperatureColor);
 		else
-			return new RadialGradientData(MainHandler.weather
-					.temperatureColor(), MainHandler.app.color(0, 0, 0), 0,
-					(int) m.radius);
+			return new RadialGradientData(m, Mimodek.temperatureColor, Mimodek.app.color(0, 0, 0));
 	}
 
 }

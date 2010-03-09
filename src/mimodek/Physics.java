@@ -5,97 +5,86 @@ import processing.core.PVector;
 import traer.physics.*;
 
 public class Physics {
-
-	public static final int UP = 0;
-	public static final int DOWN = 1;
-	public static final int RIGHT = 2;
-	public static final int LEFT = 3;
-
-	// environment parameters
-	public static float gravX_Range = 0.01f;
-	public static float gravY_Range = 0.02f;
-	
 	float gravityX = 0;
 	float gravityY = 0;
 	float targetGravityX = 0;
 	float targetGravityY = 0;
-	
-	// Springs parameters
-	float springStrength = 0.5f;
-	float springDamping = 0.01f;
+
 	ParticleSystem physics;
 	public int floor;
 
 	public Physics(float gravity, float drag, boolean euler) {
 		physics = new ParticleSystem(gravity, drag);
-		
+
 		targetGravityX = 0;
 		targetGravityY = gravity;
-		gravityY = targetGravityY ;
-		gravityX = targetGravityX ;
-		
+		gravityY = targetGravityY;
+		gravityX = targetGravityX;
+
 		if (euler)
 			physics.setIntegrator(ParticleSystem.MODIFIED_EULER);
 	}
 
 	public void setGravity(float x, float y) {
+
 		switch (floor) {
-		case RIGHT:
+		case Mimodek.RIGHT:
 			physics.setGravity(y, x, 0);
 			break;
-		case LEFT:
+		case Mimodek.LEFT:
 			physics.setGravity(-y, x, 0);
 			break;
-		case UP:
+		case Mimodek.BOTTOM:
 			physics.setGravity(x, -y, 0);
 			break;
 		default:
 			physics.setGravity(x, y, 0);
 		}
-
 	}
 
 	public void update() {
 		updateEnv();
 		physics.tick();
 		// make sure the mimos stay on the floor
-		int n = MainHandler.organism.cellCount();// numberOfParticles();
+		int n = Mimodek.organism.cellCount();// numberOfParticles();
 		for (int i = -1; ++i < n;) {
-			Mimo m = MainHandler.organism.getCell(i);
+			Mimo m = Mimodek.organism.getCell(i);
 			Vector3D p = m.particle.position();
 			switch (floor) {
-			case RIGHT:
-				if (p.x() + m.radius > MainHandler.screenWidth)
-					p.setX(MainHandler.screenWidth - m.radius);
+			case Mimodek.RIGHT:
+				if (p.x() + m.radius > Mimodek.screenWidth)
+					p.setX(Mimodek.screenWidth - m.radius);
 				break;
-			case LEFT:
+			case Mimodek.LEFT:
 				if (p.x() - m.radius < 0)
 					p.setX(m.radius);
 				break;
-			case UP:
+			case Mimodek.TOP:
 				if (p.y() - m.radius < 0)
 					p.setY(m.radius);
 				break;
-			case DOWN:
-				if (p.y() + m.radius > MainHandler.screenHeight)
-					p.setY(MainHandler.screenHeight - m.radius);
+			case Mimodek.BOTTOM:
+				if (p.y() + m.radius > Mimodek.screenHeight)
+					p.setY(Mimodek.screenHeight - m.radius);
 				break;
 			}
 		}
 
 	}
-	
-	public void updateEnv() {
-		
-			targetGravityY = -gravY_Range
-			+ PApplet.sin(MainHandler.app.noise(MainHandler.app.frameCount * 0.01f) * 2
-					* PApplet.PI) * gravY_Range * 2;
 
-			targetGravityX = -gravX_Range
-			+ PApplet.cos(MainHandler.app.noise(MainHandler.app.frameCount * 0.01f) * 2
-					* PApplet.PI) * gravX_Range * 2;
-		gravityY+=gravityY<targetGravityY?0.01:-0.01;
-		gravityX+=gravityX<targetGravityX?0.01:-0.01;
+	public void updateEnv() {
+
+		targetGravityY = -Mimodek.config.getFloatSetting("gravY_Range")
+				+ PApplet.sin(Mimodek.app.noise(Mimodek.app.frameCount * 0.01f)
+						* 2 * PApplet.PI)
+				* Mimodek.config.getFloatSetting("gravY_Range") * 2;
+
+		targetGravityX = -Mimodek.config.getFloatSetting("gravX_Range")
+				+ PApplet.cos(Mimodek.app.noise(Mimodek.app.frameCount * 0.01f)
+						* 2 * PApplet.PI)
+				* Mimodek.config.getFloatSetting("gravX_Range") * 2;
+		gravityY += gravityY < targetGravityY ? 0.01 : -0.01;
+		gravityX += gravityX < targetGravityX ? 0.01 : -0.01;
 		setGravity(gravityX, gravityY);
 
 	}
@@ -111,23 +100,23 @@ public class Physics {
 	 * Draw all springs as lines
 	 */
 	public void drawSprings(int c, float strokeW) {
-		MainHandler.gfx.pushStyle();
-		MainHandler.gfx.stroke(c);
-		MainHandler.gfx.strokeWeight(strokeW);
+		Mimodek.gfx.pushStyle();
+		Mimodek.gfx.stroke(c);
+		Mimodek.gfx.strokeWeight(strokeW);
 		int n = physics.numberOfSprings();
 		for (int i = -1; ++i < n;) {
 			Spring s = physics.getSpring(i);
 			Particle p1 = s.getOneEnd();
 			Particle p2 = s.getTheOtherEnd();
-			MainHandler.gfx.line(p1.position().x(), p1.position().y(), p2
+			Mimodek.gfx.line(p1.position().x(), p1.position().y(), p2
 					.position().x(), p2.position().y());
 		}
-		MainHandler.gfx.popStyle();
+		Mimodek.gfx.popStyle();
 	}
 
 	public void changeSprings(float springStrength, float springDamping) {
-		this.springStrength = springStrength;
-		this.springDamping = springDamping;
+		Mimodek.config.setSetting("springStrength", springStrength);
+		Mimodek.config.setSetting("springDamping", springDamping);
 		int n = physics.numberOfSprings();
 		for (int i = -1; ++i < n;) {
 			Spring s = physics.getSpring(i);
@@ -150,16 +139,19 @@ public class Physics {
 	public boolean addSpring(Particle a, Particle b) {
 		if (areAlreadyConnected(a, b))
 			return false;
-		physics.makeSpring(a, b, springStrength, springDamping, PApplet.dist(a
-				.position().x(), a.position().y(), b.position().x(), b
-				.position().y()));
+		physics.makeSpring(a, b, Mimodek.config
+				.getFloatSetting("springStrength"), Mimodek.config
+				.getFloatSetting("springDamping"), PApplet.dist(a.position()
+				.x(), a.position().y(), b.position().x(), b.position().y()));
 		return true;
 	}
-	
+
 	public boolean addSpring(Particle a, Particle b, float restLength) {
 		if (areAlreadyConnected(a, b))
 			return false;
-		physics.makeSpring(a, b, springStrength, springDamping, restLength);
+		physics.makeSpring(a, b, Mimodek.config
+				.getFloatSetting("springStrength"), Mimodek.config
+				.getFloatSetting("springDamping"), restLength);
 		return true;
 	}
 
@@ -191,12 +183,11 @@ public class Physics {
 		b.position().add(a.position());
 	}
 
-
 	public void removeParticleAndAttachedSprings(Particle old) {
-		//ArrayList<Particle> particles = new ArrayList<Particle>();
-		
-		//System.out.println("Removing attached springs. Current spring count:"+physics.numberOfSprings());
-		//Remove all spring of the old node
+		// ArrayList<Particle> particles = new ArrayList<Particle>();
+
+		// System.out.println("Removing attached springs. Current spring count:"+physics.numberOfSprings());
+		// Remove all spring of the old node
 		int c = 0;
 		for (int i = -1; ++i < physics.numberOfSprings();) {
 			Particle a2 = physics.getSpring(i).getOneEnd();
@@ -206,10 +197,10 @@ public class Physics {
 				c++;
 			}
 		}
-		
-		//System.out.println("Done cutting. Removed:"+c);
-		//finally remove the particle
+
+		// System.out.println("Done cutting. Removed:"+c);
+		// finally remove the particle
 		physics.removeParticle(old);
-		//System.out.println("Done. New spring count:"+physics.numberOfSprings());
+		// System.out.println("Done. New spring count:"+physics.numberOfSprings());
 	}
 }

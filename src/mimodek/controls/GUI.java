@@ -2,7 +2,7 @@ package mimodek.controls;
 
 import java.util.ArrayList;
 
-import mimodek.MainHandler;
+import mimodek.Mimodek;
 
 public class GUI {
 	
@@ -18,24 +18,24 @@ public class GUI {
 	}
 
 	public static void setBoxStyle() {
-		MainHandler.gfx.fill(0, 255, 0, 50);
-		MainHandler.gfx.noStroke();
+		Mimodek.gfx.fill(0, 255, 0, 50);
+		Mimodek.gfx.noStroke();
 	}
 
 	public static void setHandleStyle() {
-		MainHandler.gfx.fill(0, 0, 255);
-		MainHandler.gfx.stroke(255);
+		Mimodek.gfx.fill(0, 0, 255);
+		Mimodek.gfx.stroke(255);
 	}
 	
 	public static void setTextStyle() {
-		MainHandler.gfx.fill(255);
+		Mimodek.gfx.fill(255);
 	}
 	
 	public void draw(){
-		MainHandler.gfx.pushStyle();
+		Mimodek.gfx.pushStyle();
 		for(int i=-1;++i<modules.size();)
 			modules.get(i).draw();
-		MainHandler.gfx.popStyle();
+		Mimodek.gfx.popStyle();
 	}
 	
 	public void clicked(int mX, int mY){
@@ -59,4 +59,9 @@ public class GUI {
 			dragged.offset(offsetX, offsetY);
 		}
 	}	
+	
+	public void reset(){
+		for(int i=-1;++i<modules.size();)
+			modules.get(i).create();
+	}
 }

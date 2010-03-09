@@ -3,25 +3,25 @@ package mimodek.texture;
 import java.io.File;
 import java.util.ArrayList;
 
+import processing.core.PApplet;
+import processing.core.PGraphics;
 import processing.core.PImage;
 
+import mimodek.Mimodek;
 import mimodek.Mimo;
-import mimodek.MainHandler;
+import mimodek.texture.SeedGradient.SeedGradientData;
 
 public class Texturizer {
+	//Constants
+	//TODO: Use enums
 	public static final int CIRCLE = 1;
 	public static final int IMAGE = 2;
 	public static final int GENERATED = 3;
-
-	public int mode = 2;
-
-	public int ancestor = 0;
-	public int active = 1;
+	
+	public static final int LINEAR = 1;
+	public static final int SIN = 2;
 
 	public ArrayList<SquareTexture> textures;
-
-	public static boolean drawCircle = true;
-	public static int ancestorBrightness = 125;
 	
 	public SimpleDrawer circleDrawer;
 	public SimpleDrawer seedDrawer;
@@ -31,11 +31,20 @@ public class Texturizer {
 	public Texturizer() {
 		// load the textures
 		textures = new ArrayList<SquareTexture>();
-		loadTextures(MainHandler.app.dataPath("images/"));
+		loadTextures(Mimodek.app.dataPath("images/"));
 
 		// initialize the drawers
-		circleDrawer = new RadialGradient();
+		circleDrawer = new SeedGradient(); //
 		seedDrawer = new SeedGradient();
+		
+		// Register some settings
+		Mimodek.config.setSetting("textureMode", CIRCLE);
+		Mimodek.config.setSetting("drawCircle", true);
+		Mimodek.config.setSetting("ancestorBrightness", 125);
+		Mimodek.config.setSetting("ancestorTexture", 0);
+		Mimodek.config.setSetting("activeTexture", 1);
+		Mimodek.config.setSetting("blackToColor", true);
+		Mimodek.config.setSetting("gradientFunction",(int)SIN);
 	}
 
 	public void loadTextures(String textureFolder) {
@@ -46,7 +55,7 @@ public class Texturizer {
 			if (listOfFiles[i].isFile()) {
 				System.out.println("File " + listOfFiles[i].getName());
 				textures.add(new SquareTexture(textureFolder
-						+ listOfFiles[i].getName(), Mimo.maxRadius));
+						+ listOfFiles[i].getName(), Mimodek.config.getFloatSetting("mimosMaxRadius")));
 			} else if (listOfFiles[i].isDirectory()) {
 				System.out.println("Directory " + listOfFiles[i].getName());
 			}
@@ -54,14 +63,14 @@ public class Texturizer {
 	}
 
 	private void applyStyle(Mimo m) {
-		if (mode == CIRCLE) {
+		if (Mimodek.config.getIntegerSetting("textureMode") == CIRCLE) {
 			if (m.ancestor) {
-				MainHandler.gfx.noFill();
-				MainHandler.gfx.strokeWeight((float) 0.5);
-				MainHandler.gfx.stroke(125);
+				Mimodek.gfx.noFill();
+				Mimodek.gfx.strokeWeight((float) 0.5);
+				Mimodek.gfx.stroke(125);
 			} else {
-				MainHandler.gfx.noStroke();
-				MainHandler.gfx.fill(255, 255, 255, 100);
+				Mimodek.gfx.noStroke();
+				Mimodek.gfx.fill(255, 255, 255, 100);
 			}
 		} else {
 			;
@@ -76,51 +85,71 @@ public class Texturizer {
 	public void drawTexture(int textureIndex, int x, int y, int size) {
 		if (textureIndex >= textures.size())
 			return;
-		MainHandler.gfx.pushMatrix();
-		MainHandler.gfx.translate(x, y);
+		Mimodek.gfx.pushMatrix();
+		Mimodek.gfx.translate(x, y);
 
 		textures.get(textureIndex).draw(1);
-		MainHandler.gfx.popMatrix();
+		Mimodek.gfx.popMatrix();
 	}
 
 	public void draw(Mimo m) {
-		MainHandler.gfx.pushMatrix();
-		MainHandler.gfx.pushStyle();
-		MainHandler.gfx.translate(m.pos.x, m.pos.y);
+		Mimodek.gfx.pushMatrix();
+		Mimodek.gfx.pushStyle();
+		Mimodek.gfx.translate(m.pos.x, m.pos.y);
+		if(m.ancestor){
+			Mimodek.app.scale(1/Mimodek.config.getFloatSetting("ancestorScale"));
+		}
 		applyStyle(m);
-		switch (mode) {
+		switch (Mimodek.config.getIntegerSetting("textureMode")) {
 		case IMAGE:
-			MainHandler.gfx.rotate((float) Math.atan2(m.vel.y, m.vel.x));
+			Mimodek.gfx.rotate((float) Math.atan2(m.vel.y, m.vel.x));
 			if (m.ancestor) {
-				MainHandler.gfx.tint(ancestorBrightness);
-				textures.get(ancestor).draw(m.radius / Mimo.maxRadius);
-				MainHandler.gfx.noTint();
+				Mimodek.gfx.tint(Mimodek.config.getIntegerSetting("ancestorBrightness"));
+				textures.get(Mimodek.config.getIntegerSetting("ancestorTexture")).draw(m.radius / Mimodek.config.getFloatSetting("mimosMaxRadius"));
+				Mimodek.gfx.noTint();
 			} else {
-				textures.get(active).draw(m.radius / Mimo.maxRadius);
+				textures.get(Mimodek.config.getIntegerSetting("activeTexture")).draw(m.radius / Mimodek.config.getFloatSetting("mimosMaxRadius"));
 			}
 			break;
 		case CIRCLE:
-			MainHandler.gfx.ellipse(0, 0, m.radius, m.radius);
+			Mimodek.app.ellipse(0, 0, m.radius, m.radius);
 			break;
 		case GENERATED:
-			MainHandler.gfx.rotate((float) Math.atan2(m.vel.y, m.vel.x));
-			SimpleDrawer drawer = drawCircle?circleDrawer:seedDrawer;
+			Mimodek.gfx.rotate((float) Math.atan2(m.vel.y, m.vel.x));
+			SimpleDrawer drawer = Mimodek.config.getBooleanSetting("drawCircle")?circleDrawer:seedDrawer;
+			
 			if (m.drawingData == null) {
 				m.drawingData = drawer.getDrawingData(m);
 			}
-			PImage image =drawer.draw(m.drawingData);
-			if(m.ancestor){
+			PImage image = drawer.draw(m.drawingData);
+			/*if(m.ancestor){
 				//darken
-				MainHandler.gfx.tint(ancestorBrightness);
+				Mimodek.gfx.tint();
+			}*/
+			try{
+			Mimodek.gfx.image(image,-image.width/2,-image.height/2);
+			}catch(Exception e){
+				e.printStackTrace();
+				System.out.println(image.width+","+image.height);
+				System.out.println("Is ancestor:"+m.ancestor);
+				System.out.println("Radius:"+m.radius);
 			}
-			MainHandler.gfx.image(image,-image.width/2,-image.height/2);
-			if(m.ancestor){
-				MainHandler.gfx.noTint();
-			}
+			/*if(m.ancestor){
+				Mimodek.gfx.noTint();
+			}*/
 			break;
 		}
-		MainHandler.gfx.popStyle();
-		MainHandler.gfx.popMatrix();
+		Mimodek.gfx.popStyle();
+		Mimodek.gfx.popMatrix();
+	}
+	
+	public static void darken(SeedGradientData data){
+		PGraphics graphic = (PGraphics)data.getImg();
+		graphic.beginDraw();
+		graphic.fill(0,0,0,Mimodek.config.getIntegerSetting("ancestorBrightness"));
+		graphic.noStroke();
+		graphic.ellipse(graphic.width/2,graphic.height/2,data.m.radius+2,data.m.radius+2); //not adding 1 to the radius leaves some bright pixels
+		graphic.endDraw();
 	}
 
 

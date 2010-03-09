@@ -1,15 +1,16 @@
 package mimodek.web;
 
-import mimodek.MainHandler;
+import mimodek.Mimodek;
 import processing.core.*;
 import processing.xml.*;
 
 /*
- * By brunovianna
+ * By brunovianna (RSS call, XML parser) and Jonsku
  */
-public class Weather {
+public class Weather implements Runnable{
+	//DO NOT INITIALIZE WITH EQUAL VALUES OR BE PREPARED TO FACE INFINITY!!!! (see temperatureToColor())
 	public static float MIN_TEMPERATURE = 0;
-	public static float MAX_TEMPERATURE = 0;
+	public static float MAX_TEMPERATURE = 34;
 
 	private XMLElement xml;
 
@@ -19,125 +20,158 @@ public class Weather {
 	private int[] colorRanges;
 
 	public boolean realTemperature = false;
+	public boolean running;
+	public int fetchDataEvery = 1; //in minutes
+	
+	public boolean readingOK = false;
 
 	public Weather() {
 		defaultRange();
-		update();
 	}
 
 	public Weather(String fileName) {
-		try{
+		try {
 			loadFromXML(fileName);
-		}catch(Exception e){
-			System.out.println("Weather class says > Failed to load color range. Using default.");
+		} catch (Exception e) {
+			System.out
+					.println("MIMODEK says > Failed to load color range. Using default.");
 			e.printStackTrace();
 			defaultRange();
 		}
-		update();
+		temperatureColor();
+		running = true;
+		//update();
 	}
 
 	// load colors from an XML file
-	private void loadFromXML(String fileName) throws Exception{
-		XMLElement xml;
-		xml = new XMLElement(MainHandler.app, fileName);
-		int numRange = xml.getChildCount();
-		MainHandler.app.colorMode(PApplet.HSB, 1f);
-		//a range is defined by 2 colors
-		colorRanges = new int[numRange*2];
-		for (int i = 0; i < numRange; i++) {
-			XMLElement kid = xml.getChild(i);
-			String from = kid.getStringAttribute("from");
-			String to = kid.getStringAttribute("to");
-			//
-			String[] splitted = from.split(",");
-			colorRanges[i*2] = MainHandler.app.color(Float
-					.parseFloat(splitted[0]), Float.parseFloat(splitted[1]),
-					Float.parseFloat(splitted[2]));
-			splitted = to.split(",");
-			colorRanges[i*2+1] = MainHandler.app.color(Float
-					.parseFloat(splitted[0]), Float.parseFloat(splitted[1]),
-					Float.parseFloat(splitted[2]));
+	private void loadFromXML(String fileName) throws Exception {
+		try {
+			XMLElement xml;
+			xml = new XMLElement(Mimodek.app, fileName);
+			int numRange = xml.getChildCount();
+			Mimodek.app.colorMode(PApplet.HSB, 1f);
+			// a range is defined by 2 colors
+			colorRanges = new int[numRange * 2];
+			System.out.println(colorRanges.length / 2 + " color ranges found");
+			for (int i = 0; i < numRange; i++) {
+				XMLElement kid = xml.getChild(i);
+				String from = kid.getStringAttribute("from");
+				String to = kid.getStringAttribute("to");
+				//
+				String[] splitted = from.split(",");
+				colorRanges[i * 2] = Mimodek.app.color(Float
+						.parseFloat(splitted[0]),
+						Float.parseFloat(splitted[1]), Float
+								.parseFloat(splitted[2]));
+				splitted = to.split(",");
+				colorRanges[i * 2 + 1] = Mimodek.app.color(Float
+						.parseFloat(splitted[0]),
+						Float.parseFloat(splitted[1]), Float
+								.parseFloat(splitted[2]));
+			}
+
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			Mimodek.app.colorMode(PApplet.RGB, 255);
 		}
-		MainHandler.app.colorMode(PApplet.RGB, 255);
 	}
 
 	private void defaultRange() {
 		colorRanges = new int[8];
-		MainHandler.app.colorMode(PApplet.HSB, 1f);
-		colorRanges[0] = MainHandler.app.color(0f, 1f, 0.502f);
+		Mimodek.app.colorMode(PApplet.HSB, 1f);
+		colorRanges[0] = Mimodek.app.color(0f, 1f, 0.502f);
 
-		colorRanges[1] = MainHandler.app.color(0.333f, 1f, 0.804f);
+		colorRanges[1] = Mimodek.app.color(0.333f, 1f, 0.804f);
 
-		colorRanges[2]  = MainHandler.app.color(0.424f, 0.611f, 0.706f);
+		colorRanges[2] = Mimodek.app.color(0.424f, 0.611f, 0.706f);
 
-		colorRanges[3]  = MainHandler.app.color(0.436f, 0.46f, 0.98f);
+		colorRanges[3] = Mimodek.app.color(0.436f, 0.46f, 0.98f);
 
-		colorRanges[4]  = MainHandler.app.color(0.506f, 0.656f, 0.82f);
+		colorRanges[4] = Mimodek.app.color(0.506f, 0.656f, 0.82f);
 
-		colorRanges[5]  = MainHandler.app.color(0.509f, 0.82f, 0.698f);
+		colorRanges[5] = Mimodek.app.color(0.509f, 0.82f, 0.698f);
 
-		colorRanges[6]  = MainHandler.app.color(0.564f, 1f, 0.98f);
+		colorRanges[6] = Mimodek.app.color(0.564f, 1f, 0.98f);
 
-		colorRanges[7]  = MainHandler.app.color(0.667f, 0.395f, 0.933f);
-		MainHandler.app.colorMode(PApplet.RGB, 255);
+		colorRanges[7] = Mimodek.app.color(0.667f, 0.395f, 0.933f);
+		Mimodek.app.colorMode(PApplet.RGB, 255);
 	}
 
-	//Temperature has to be between MIN and MAX or this will fail
-	public int temperatureColor() {
-		
+	// Temperature has to be between MIN and MAX or this will fail
+	public void temperatureColor() {
+		//to animate colors
+		//_temperature = (Mimodek.app.frameCount/Mimodek.app.frameRate)/60;
+		float size = Math.abs(MAX_TEMPERATURE - MIN_TEMPERATURE);
 
-		 float size = Math.abs(MAX_TEMPERATURE-MIN_TEMPERATURE);
-
-		  float t = Math.abs(_temperature-MIN_TEMPERATURE)/size; //between 0 and 1;
-		  int i = 0;
-		  float inc = 0;
-		  float step = (float) (1.0/(colorRanges.length/2.0));
-		  //find the range
-		  while(i<colorRanges.length/2 && t>=inc){
-		    inc += step;
-		    i++;
-		  }
-		 t = PApplet.map(t,(i-1)*step,i*step,0,1);
-		 //System.out.println("Color from range "+i+", offset "+t);
-		  return MainHandler.app.lerpColor(colorRanges[i-1], colorRanges[i], t);
+		float t = Math.abs(_temperature - MIN_TEMPERATURE) / size; // between 0
+																	// and 1;
+		int i = 0;
+		float inc = 0;
+		float step = (float) (1.0 / (colorRanges.length / 2.0));
+		// find the range
+		while (i < colorRanges.length / 2 && t >= inc) {
+			inc += step;
+			i++;
+		}
+		t = PApplet.map(t, (i - 1) * step, i * step, 0, 1);
+		Mimodek.temperatureColor =  Mimodek.app.lerpColor(colorRanges[(i-1)*2], colorRanges[(i-1)*2+1], t);
 	}
 
 	public float temperature() {
 		return _temperature;
 	}
-	
-	public void setTemperature(float temp){
-		//update the minima/maxima
-		MIN_TEMPERATURE=Math.min(MIN_TEMPERATURE,temp);
-		MAX_TEMPERATURE=Math.max(MAX_TEMPERATURE,temp);
+
+	public void setTemperature(float temp) {
+		// update the minima/maxima
+		MIN_TEMPERATURE = Math.min(MIN_TEMPERATURE, temp);
+		MAX_TEMPERATURE = Math.max(MAX_TEMPERATURE, temp);
+		if(Mimodek.verbose) System.out.println("MIMODEK says > The temperature is "+temp+". Next weather report in "+fetchDataEvery+" minutes.");
 		_temperature = temp;
+		temperatureColor();
 	}
 
-	public boolean update() {
-		//_temperature = 0;
-
+	private boolean update() {
+		// _temperature = 0;
+		System.out.println("MIMODEK says > I'm looking up data on the net...");
 		try {
-			xml = new XMLElement(MainHandler.app,"http://rss.wunderground.com/auto/rss_full/global/stations/08221.xml?units=metric");
+			xml = new XMLElement(
+					Mimodek.app,
+					"http://rss.wunderground.com/auto/rss_full/global/stations/08221.xml?units=metric");
 
 			if (xml != null) {
-				System.out.println("Hey");
 				XMLElement firstItem = xml.getChild(0).getChild(11).getChild(1);
 				String content = firstItem.getContent();
 				String[] conditionsA = PApplet.split(content, ':');
-				System.out.println(conditionsA);
+				
 				String[] conditionsB = PApplet.split(conditionsA[1], 'C');
-				System.out.println(conditionsB); //
 				_temperature = PApplet.parseFloat(conditionsB[0]);
 				setTemperature(_temperature);
+				readingOK = true;
 				return true;
 			} else {
+				readingOK = false;
 				return false;
 			}
 		} catch (Exception e) {
+			readingOK = false;
 			e.printStackTrace();
 			return false;
 		}
 
+	}
+
+	public void run() {
+		while(running){
+			update();
+			try {
+				Thread.sleep(fetchDataEvery*60000);
+			} catch (InterruptedException e) {
+				// The thread was interrupted, stop waiting and end
+				return;
+			}
+		}
+		
 	}
 
 }

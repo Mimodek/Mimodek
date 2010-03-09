@@ -5,7 +5,6 @@ import mimodek.*;
 import traer.physics.*;
 import controlP5.*;
 import TUIO.*;
-import fullscreen.*; 
 
 
 
@@ -19,22 +18,23 @@ import fullscreen.*;
  * TODO : More info?
  */
 
-MainHandler mimodek;
-
-//We'll deal with full screen here
-FullScreen fs;
-boolean fullScreen = false;
+Mimodek mimodek;
 
 void setup(){
-  // Create the fullscreen object
-  fs = new FullScreen(this); 
-  mimodek = new MainHandler(1024, 768,this);
-  mimodek.setup();
+  mimodek = new Mimodek(this);
+  //Good resolution for the presentation PC's screen
+  size(1024, 768);
+  
+  smooth();
+  frameRate(24);
+  PFont font = app.createFont("Verdana", 10, false);
+  hint(PApplet.ENABLE_NATIVE_FONTS);
+  textFont(font);
 
 }
 
 void draw(){
-  mimodek.draw();
+
 }
 
 //SEND EVERY EVENTS TO MIMODEK -- There is probably a nicer solution but that will do for now
@@ -53,15 +53,6 @@ public void mouseDragged() {
 
 
 public void keyPressed() {
-  if(key == 'f'){
-    fullScreen = !fullScreen;
-    if(fullScreen){
-      fs.enter();
-    }
-    else{
-      fs.leave();
-    }
-  }
   mimodek.keyPressed();
 }
 
@@ -80,9 +71,10 @@ void addTuioObject(TuioObject tobj) {
 // called when an object is removed from the scene
 void removeTuioObject(TuioObject tobj) {
   try{
-  if(mimodek!=null)
-    mimodek.tracking.removeTuioObject(tobj);
-  }catch(Exception e){
+    if(mimodek!=null)
+      mimodek.tracking.removeTuioObject(tobj);
+  }
+  catch(Exception e){
     e.printStackTrace();
   }
 }
@@ -117,6 +109,7 @@ void refresh(TuioTime bundleTime) {
   //Is it OK to do nothing here????
   //redraw();
 }
+
 
 
 

@@ -2,8 +2,8 @@ package mimodek.tracking;
 
 import java.util.ArrayList;
 
+import mimodek.Mimodek;
 import mimodek.Mimo;
-import mimodek.MainHandler;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -101,10 +101,10 @@ public class TrackingSimulator extends Thread {
 	// Thread run method
 	public void run() {
 		while (running) {
-			if(!paused && !MainHandler.pause){
+			if(!paused && !Mimodek.config.getBooleanSetting("pause")){
 				if ((float) Math.random() < 0.1 && mimos.size() < 200) {
-					addMimo(new PVector(MainHandler.screenWidth / 2,
-							MainHandler.screenHeight / 2));
+					addMimo(new PVector(Mimodek.screenWidth / 2,
+							Mimodek.screenHeight / 2));
 	
 				}
 				update();

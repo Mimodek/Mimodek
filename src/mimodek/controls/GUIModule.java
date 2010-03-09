@@ -2,54 +2,90 @@ package mimodek.controls;
 
 import java.util.ArrayList;
 
-import mimodek.MainHandler;
+import mimodek.Mimodek;
 
 import controlP5.CVector3f;
 import controlP5.Controller;
 
-public class GUIModule {
+public abstract class GUIModule {
 	String name;
-	int x,y,width,height;
+
 	ArrayList<Controller> controllers;
-	public boolean open = true;
+	//public boolean open = true;
 	
 	public GUIModule(int x, int y, int width, int height, String name){
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
 		this.name = name;
+		Mimodek.config.setSetting(name+"_GUI_x", x);
+		Mimodek.config.setSetting(name+"_GUI_y", y);
+		Mimodek.config.setSetting(name+"_GUI_width", width);
+		Mimodek.config.setSetting(name+"_GUI_height", height);
+		Mimodek.config.setSetting(name+"_GUI_open", true);
+	}
+	
+	public void reset(){
+		//remove the controllers
+		if(controllers != null && controllers.size()>0){
+			for(int i=0;i<controllers.size();i++){
+				Mimodek.controlP5.remove(controllers.get(i).name());
+			}
+		}
 		controllers = new ArrayList<Controller>(); 
 	}
+	
+	public abstract void create();
 	
 	public void addController(Controller c){
 		controllers.add(c);
 	}
 	
+	public int getX(){
+		return Mimodek.config.getIntegerSetting(name+"_GUI_x");
+	}
+	
+	public int getY(){
+		return Mimodek.config.getIntegerSetting(name+"_GUI_y");
+	}
+	
+	public void setX(int x){
+		Mimodek.config.setSetting(name+"_GUI_x", x);
+	}
+	
+	public void setY(int y){
+		Mimodek.config.setSetting(name+"_GUI_y", y);
+	}
+	
+	public int getWidth(){
+		return Mimodek.config.getIntegerSetting(name+"_GUI_width");
+	}
+	
+	public int getHeight(){
+		return Mimodek.config.getIntegerSetting(name+"_GUI_height");
+	}
+	
 	public void draw(){
-		MainHandler.gfx.pushMatrix();
-		MainHandler.gfx.translate(x,y);
-		if(open){
+		Mimodek.gfx.pushMatrix();
+		Mimodek.gfx.translate(getX(),getY());
+		if(Mimodek.config.getBooleanSetting(name+"_GUI_open")){
 			GUI.setBoxStyle();
-			MainHandler.gfx.rect(0,0,width,height);
+			Mimodek.gfx.rect(0,0,getWidth(),getHeight());
 		}
 		GUI.setHandleStyle();
-		MainHandler.gfx.rect(0,0,width,10);
+		Mimodek.gfx.rect(0,0,getWidth(),10);
 		GUI.setTextStyle();
-		MainHandler.gfx.text(name,5,10);
+		Mimodek.gfx.text(name,5,10);
 		GUI.setHandleStyle();
-		MainHandler.gfx.rect(width-10,0,10,10);
-		MainHandler.gfx.line(width-10,5,width,5);
-		if(!open){
-			MainHandler.gfx.line(width-5,0,width-5,10);
+		Mimodek.gfx.rect(getWidth()-10,0,10,10);
+		Mimodek.gfx.line(getWidth()-10,5,getWidth(),5);
+		if(!Mimodek.config.getBooleanSetting(name+"_GUI_open")){
+			Mimodek.gfx.line(getWidth()-5,0,getWidth()-5,10);
 		}
-		MainHandler.gfx.popMatrix();
+		Mimodek.gfx.popMatrix();
 	}
 	
 	public boolean click(int mX, int mY){
-		if(mX>=x+width-10 && mX<=x+width && mY>=y && mY<=y+10){
-			open = !open;
-			toggleControllers(open);
+		if(mX>=getX()+getWidth()-10 && mX<=getX()+getWidth() && mY>=getY() && mY<=getY()+10){
+			Mimodek.config.setSetting(name+"_GUI_open",!Mimodek.config.getBooleanSetting(name+"_GUI_open"));
+			toggleControllers(Mimodek.config.getBooleanSetting(name+"_GUI_open"));
 			return true;
 		}
 		return false;
@@ -74,18 +110,17 @@ public class GUIModule {
 	}
 	
 	public boolean drag(int mX, int mY, int offsetX, int offsetY){
-		if(mX>=x && mX<=x+width && mY>=y && mY<=y+10){
-			x+=offsetX;
-			y+=offsetY;
-			moveControllers(offsetX, offsetY);
+		if(mX>=getX() && mX<=getX()+getWidth() && mY>=getY() && mY<=getY()+10){
+			
+			offset(offsetX, offsetY);
 			return true;
 		}
 		return false;
 	}
 	
 	public void offset(int offsetX, int offsetY){
-			x+=offsetX;
-			y+=offsetY;
-			moveControllers(offsetX, offsetY);
+		setX(getX()+offsetX);
+		setY(getY()+offsetY);
+		moveControllers(offsetX, offsetY);
 	}
 }
