@@ -40,9 +40,7 @@ public class PhysicsGUI extends GUIModule {
 		addController(Mimodek.controlP5.addToggle("Show Organism", Mimodek.config.getBooleanSetting("showOrganism"),
 				x + 200, y + controlPositionY + 130, 10, 10));
 
-		addController(Mimodek.controlP5.addSlider("Number of Mimos", 100,
-				1000,  Mimodek.config.getIntegerSetting("maxCells"), x + controlPositionX, y + controlPositionY + 170,
-				controlWidth, controlHeight));
+
 		// Reset Button
 		addController(Mimodek.controlP5.addButton("RESET", 0, x
 				+ controlPositionX, y + controlPositionY + 190, 70, 30));

@@ -10,8 +10,8 @@ public class SeedGradient implements SimpleDrawer {
 	public static final float GOLDEN_ANGLE = (float) (PApplet.TWO_PI*0.618034);
 	
 	public class SeedGradientData{
-		int startColor;
-		int endColor;
+		public int startColor;
+		public int endColor;
 		int numberOfDots;
 		private PImage img;
 		Mimo m;

@@ -106,23 +106,21 @@ public class MimosManager implements TrackingListener {
 			activeMimoMove(m);
 			// return;
 		} else {
-
-			if (m.toStructure != null){ // pointing to the structure
-				walkToStruct(m);
-			}else if (m.turning){ // compute velocity while turning
-				computeTurnVel(m);
-			}else{
-				// random walk with smooth turns
-				randomWalk(m);
-			}
-			if(!Mimodek.mimodek.isInTheScreen(m.pos, 0)){ //m.radius
-				int closestEdge = Mimodek.mimodek.getClosestEdge(m.pos);
-				if(closestEdge == Mimodek.BOTTOM || closestEdge == Mimodek.TOP){
-					m.vel.y *= -1;
-				}else{
-					m.vel.x *= -1;
-				}
+			if(!Mimodek.mimodek.isInTheScreen(m.pos, m.radius)){
+				//orient the mimo towards the center to get it back in the screen
+				float a = (float) Math.atan2(Mimodek.screenHeight/2-m.pos.y, Mimodek.screenWidth/2-m.pos.x);
+				m.vel.x = (float) Math.cos(a);
+				m.vel.y = (float) Math.sin(a);
 				m.turning = false;
+			}else{
+				if (m.toStructure != null){ // pointing to the structure
+					walkToStruct(m);
+				}else if (m.turning){ // compute velocity while turning
+					computeTurnVel(m);
+				}else{
+					// random walk with smooth turns
+					randomWalk(m);
+				}
 			}
 		}
 
@@ -217,7 +215,6 @@ public class MimosManager implements TrackingListener {
 				if (Mimodek.app.millis()-m.createdAt>=Mimodek.config.getIntegerSetting("mimosMinLifeTime")*1000) {
 					//the active mimo has been there long enough to be turned in to an ancestor
 						m.ancestor = true;
-						Texturizer.darken((SeedGradientData)m.drawingData);
 						//m.pos = m.targetPos;
 						if (Mimodek.organism.cellCount() == 0) {
 							//set the target to the nearest edge

@@ -122,12 +122,15 @@ public class Texturizer {
 				m.drawingData = drawer.getDrawingData(m);
 			}
 			PImage image = drawer.draw(m.drawingData);
-			/*if(m.ancestor){
-				//darken
-				Mimodek.gfx.tint();
-			}*/
+			
 			try{
 			Mimodek.gfx.image(image,-image.width/2,-image.height/2);
+				if(m.ancestor){
+					//darken by drawing a dark filter ellipse on top
+					Mimodek.gfx.fill(0,0,0,Mimodek.config.getIntegerSetting("ancestorBrightness"));
+					Mimodek.gfx.noStroke();
+					Mimodek.gfx.ellipse(1,1,m.radius+2,m.radius+2); //not adding 1 to the radius leaves some bright pixels
+				}
 			}catch(Exception e){
 				e.printStackTrace();
 				System.out.println(image.width+","+image.height);
@@ -142,15 +145,5 @@ public class Texturizer {
 		Mimodek.gfx.popStyle();
 		Mimodek.gfx.popMatrix();
 	}
-	
-	public static void darken(SeedGradientData data){
-		PGraphics graphic = (PGraphics)data.getImg();
-		graphic.beginDraw();
-		graphic.fill(0,0,0,Mimodek.config.getIntegerSetting("ancestorBrightness"));
-		graphic.noStroke();
-		graphic.ellipse(graphic.width/2,graphic.height/2,data.m.radius+2,data.m.radius+2); //not adding 1 to the radius leaves some bright pixels
-		graphic.endDraw();
-	}
-
 
 }

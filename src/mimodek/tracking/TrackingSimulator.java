@@ -102,7 +102,7 @@ public class TrackingSimulator extends Thread {
 	public void run() {
 		while (running) {
 			if(!paused && !Mimodek.config.getBooleanSetting("pause")){
-				if ((float) Math.random() < 0.1 && mimos.size() < 200) {
+				if ((float) Math.random() < 0.1 && mimos.size() < 500) {
 					addMimo(new PVector(Mimodek.screenWidth / 2,
 							Mimodek.screenHeight / 2));
 	

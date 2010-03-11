@@ -4,6 +4,7 @@ import mimodek.configuration.Configurator;
 import mimodek.controls.ActiveMimoGUI;
 import mimodek.controls.GUI;
 import mimodek.controls.PhysicsGUI;
+import mimodek.controls.Plotter;
 import mimodek.controls.StyleGUI;
 import mimodek.controls.TrackingGUI;
 import mimodek.controls.WeatherGUI;
@@ -16,6 +17,7 @@ import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PImage;
 import processing.core.PVector;
 
 public class Mimodek {
@@ -60,6 +62,7 @@ public class Mimodek {
 	public static ControlP5 controlP5;
 
 	public static int temperatureColor = 0;
+	public static boolean takeSnapShot = false;
 	public static boolean verbose = true;
 
 	// Graphic User Interface Handler
@@ -84,11 +87,17 @@ public class Mimodek {
 	int controlOffsetY = 30;
 	int controlWidth = 200;
 	int controlHeight = 10;
+	
+	PImage mask;
+	Plotter plotter;
+	int shotCounter = 0;
+	
 
 	public Mimodek(PApplet app) {
 		Mimodek.app = app;
 		app.registerSize(this);
 		app.registerDispose(this);
+		app.registerPost(this);
 		// Mimodek.app.registerPre(this);
 		app.registerDraw(this);
 		mimodek = this;
@@ -120,6 +129,8 @@ public class Mimodek {
 			// the rendering context - could be an offscreen buffer also...
 			gfx = app;
 			PApplet.println("MIMODEk says > MIMODEK ready to run!");
+			createMask(app.color(0,0,255));
+			plotter = new Plotter(screenWidth,150,-0.1f,0.1f,1f);
 			ready = true; // told you!
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -157,6 +168,22 @@ public class Mimodek {
 
 		setupGUI();
 	}
+	
+	private void createMask(int c){
+		mask = app.createImage(screenWidth, screenHeight,PApplet.RGB);
+		mask.loadPixels();
+		for(int i=0;i<screenWidth;i++){
+			for(int j=0;j<screenHeight;j++){
+				if(!isInTheScreen(i, j, 0)){
+					mask.pixels[i+j*screenWidth] = c;
+				}else{
+					mask.pixels[i+j*screenWidth] = app.color(0,0,0,0);
+				}
+			}
+		}
+		mask.updatePixels();
+
+	}
 
 	public void reset() {
 		pSim = new Physics(0.2f, 0.1f, false);
@@ -190,7 +217,7 @@ public class Mimodek {
 				return false;
 			}
 		} else {
-			float distance = scaledPanelWidth * 2;
+			float distance = scaledPanelWidth * 5;
 			float leftEdge = halfWidth - distance + edgeDetection;
 			float rightEdge = halfWidth + distance - edgeDetection;
 			if ((coordinate.x < leftEdge) || (coordinate.x > rightEdge)) {
@@ -261,7 +288,7 @@ public class Mimodek {
 			app.rect(-1, -1, outputWidth + 1, outputHeight + 1);
 			app.scale(scaleFactor);
 		}
-
+		app.image(mask, 0, 0);
 		if (config.getBooleanSetting("showOrganism")) {
 			organism.draw();
 		}
@@ -273,8 +300,18 @@ public class Mimodek {
 		}
 		app.popMatrix();
 
-		if (config.getBooleanSetting("showGUI"))
+		if (config.getBooleanSetting("showGUI")){
 			gui.draw();
+			plotter.plot(pSim.gravityY);
+			app.image(plotter.buffer, 0, app.height-plotter.buffer.height);
+		}
+	}
+	
+	public void post(){
+		/*if(takeSnapShot){
+			app.save("mimodek_"+(shotCounter++)+".png");
+			takeSnapShot = false;
+		}*/
 	}
 
 	public void mouseReleased() {
@@ -332,6 +369,12 @@ public class Mimodek {
 			System.out.println("Settings loaded from /data/config/config.xml");
 
 		}
+		if (app.key == 'j') {
+			organism.saveToFile("mimodek.xml");
+		}
+		if (app.key == 'k') {
+			organism.loadFromFile("mimodek.xml");
+		}
 
 	}
 
@@ -386,7 +429,7 @@ public class Mimodek {
 			config.setSetting("showOrganism", val > 0);
 			return;
 		}
-		if (crtlName == "Number of Mimos") {
+		if (crtlName == "Homeostasis threshold") {
 			float val = cEvent.value();
 			config.setSetting("maxCells", (int) val);
 			return;
@@ -418,10 +461,6 @@ public class Mimodek {
 			rescaleMimo = true;
 			return;
 		}
-		if (crtlName == "Seed") {
-			config.setSetting("drawCircle", cEvent.value() == 0);
-			return;
-		}
 		if (crtlName == "Dots size") {
 			config.setSetting("dotSize", cEvent.value());
 			return;
@@ -436,15 +475,6 @@ public class Mimodek {
 		}
 
 		// Weather control (let's play God)
-		if (crtlName == "Use slider value") {
-			weather.realTemperature = !weather.realTemperature;
-			return;
-		}
-		/*if (crtlName == "Temperature") {
-			float val = cEvent.value();
-			weather.setTemperature(val);
-			return;
-		}*/
 		if (crtlName == "Black to color") {
 			config.setSetting("blackToColor", cEvent.value() > 0);
 			return;

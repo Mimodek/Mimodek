@@ -2,8 +2,11 @@ package mimodek;
 
 import java.util.ArrayList;
 
+import mimodek.texture.SeedGradient.SeedGradientData;
+
 
 import processing.core.PVector;
+import processing.xml.XMLElement;
 import traer.physics.Particle;
 
 public class Mimo {
@@ -22,13 +25,14 @@ public class Mimo {
 	public boolean ancestor = false;
 	public boolean collided = false;
 	
-	public boolean hasEntered = false;
+//	public boolean hasEntered = false;
+
 
 	public Object drawingData;
 	
 	public PVector toStructure;
 	
-	public float growth = 0.01f;
+	//public float growth = 0.01f;
 	
 	public boolean isSeed = false;
 	public PVector targetVel;
@@ -81,5 +85,36 @@ public class Mimo {
 		if (neighbours == null || !neighbours.contains(m))
 			return; 
 		neighbours.remove(m);
+	}
+	
+	//returns a String representing the mimo in XML 
+	public String toXMLCell(){
+		String xml = isSeed?"<seed ":"<cell";
+		xml +=" pos=\""+pos.x+","+pos.y+"\"";
+		xml +=" radius=\""+radius+"\"";
+		SeedGradientData d = (SeedGradientData)drawingData;
+		xml +=" startColor=\""+d.startColor+"\"";
+		xml +=" endColor=\""+d.endColor+"\"";
+		xml += "/>";
+		return xml;
+	}
+	
+	public static Mimo createtFromXML(XMLElement cell){
+		String[] position = cell.getAttribute("pos").split(",");
+		Mimo m = new Mimo(new PVector(Float.parseFloat(position[0]),Float.parseFloat(position[1])));
+		
+		m.isSeed = cell.getName()=="seed";
+		
+		Object data = Mimodek.texturizer.seedDrawer.getDrawingData(m);
+		m.drawingData = data;
+		SeedGradientData d = (SeedGradientData)m.drawingData;
+		d.startColor = cell.getIntAttribute("startColor");
+		d.endColor = cell.getIntAttribute("endColor");
+		float r = cell.getFloatAttribute("radius");
+		while(m.radius<r){
+			Mimodek.texturizer.draw(m);
+		}
+		m.ancestor = true;
+		return m;
 	}
 }

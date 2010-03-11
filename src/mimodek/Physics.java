@@ -5,8 +5,8 @@ import processing.core.PVector;
 import traer.physics.*;
 
 public class Physics {
-	float gravityX = 0;
-	float gravityY = 0;
+	public float gravityX = 0;
+	public float gravityY = 0;
 	float targetGravityX = 0;
 	float targetGravityY = 0;
 
@@ -73,16 +73,15 @@ public class Physics {
 	}
 
 	public void updateEnv() {
-
-		targetGravityY = -Mimodek.config.getFloatSetting("gravY_Range")
-				+ PApplet.sin(Mimodek.app.noise(Mimodek.app.frameCount * 0.01f)
-						* 2 * PApplet.PI)
-				* Mimodek.config.getFloatSetting("gravY_Range") * 2;
-
+		if(Math.abs(targetGravityY-gravityY)<=0.01){
+			targetGravityY = -Mimodek.config.getFloatSetting("gravY_Range")
+					+ Mimodek.app.random(2) * (Mimodek.config.getFloatSetting("gravY_Range"));
+			//targetGravityY = (float) (Math.sin(2*Math.PI*Mimodek.app.noise(Mimodek.app.frameCount*0.1f)) * (Mimodek.config.getFloatSetting("gravY_Range")));
+		}
+		if(Math.abs(targetGravityX-gravityX)<=0.01){
 		targetGravityX = -Mimodek.config.getFloatSetting("gravX_Range")
-				+ PApplet.cos(Mimodek.app.noise(Mimodek.app.frameCount * 0.01f)
-						* 2 * PApplet.PI)
-				* Mimodek.config.getFloatSetting("gravX_Range") * 2;
+				+ Mimodek.app.random(2) * (Mimodek.config.getFloatSetting("gravX_Range"));
+		}
 		gravityY += gravityY < targetGravityY ? 0.01 : -0.01;
 		gravityX += gravityX < targetGravityX ? 0.01 : -0.01;
 		setGravity(gravityX, gravityY);

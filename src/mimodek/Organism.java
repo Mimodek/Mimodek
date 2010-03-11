@@ -1,9 +1,12 @@
 package mimodek;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 import processing.core.PApplet;
 import processing.core.PImage;
+import processing.xml.XMLElement;
 
 public class Organism {
 	public ArrayList<Mimo> mimos;
@@ -63,6 +66,8 @@ public class Organism {
 				System.out.print("TOP");
 			}
 			System.out.println(" edge.");
+			//save a snapshot
+			Mimodek.takeSnapShot = true;
 			return true;
 		}
 		float scale = 1 / Mimodek.config.getFloatSetting("ancestorScale");
@@ -116,6 +121,10 @@ public class Organism {
 
 			}
 		}
+		if(added){
+			//save a snapshot
+			Mimodek.takeSnapShot = true;
+		}
 		return added;
 	}
 
@@ -157,7 +166,6 @@ public class Organism {
 
 	// update and draw
 	void draw() {
-
 		if (cellCount() > Mimodek.config.getIntegerSetting("maxCells")) {
 			// Too much cells, apply homeostasis
 			Mimo m = mimos.get(1);
@@ -165,6 +173,8 @@ public class Organism {
 			// now update the length of the springs connected to this cell
 			if (m.radius <= 0) {
 				removeCell(m);
+				//save a snapshot
+				Mimodek.takeSnapShot = true;
 			} else {
 				updateCellsSprings(m);
 			}
@@ -179,12 +189,12 @@ public class Organism {
 			// update the position of the mimos according to the physics
 			// simulation particle they are bound to
 
-			if (!Mimodek.mimodek.isInTheScreen(m.particle.position().x(),
+			/*if (!Mimodek.mimodek.isInTheScreen(m.particle.position().x(),
 					m.particle.position().y(), 0)) {
 				// Ohoho, out of the screen... No need to waste CPU on those
 				removeCell(m);
 				i--;
-			} else {
+			} else {*/
 				m.pos.x = m.particle.position().x();
 				m.pos.y = m.particle.position().y();
 				// don't move the seed
@@ -202,7 +212,35 @@ public class Organism {
 					m.collided = false;
 				}
 				Mimodek.texturizer.draw(m);
-			}
+			//}
 		}
+	}
+	
+	//save to an XML file
+	public void saveToFile(String fileName){
+		System.out.println("MIMODEK says > Saving organism to "+fileName);
+		PrintWriter output = Mimodek.app.createWriter("data/save/"+fileName); 
+		output.println("<?xml version=\"1.0\"?>");
+		output.println("<mimodek>");
+		for(int i=0;i<mimos.size();i++){
+			output.println(mimos.get(i).toXMLCell());
+		}
+		output.println("</mimodek>");
+		output.flush(); // Writes the remaining data to the file
+		output.close();
+	}
+	
+	//load from an XML file
+	public void loadFromFile(String fileName){
+		mimos = new ArrayList<Mimo>();
+		System.out.println("MIMODEK says > Loading organism from "+fileName);
+		XMLElement xml;
+		xml = new XMLElement(Mimodek.app, "data/save/"+fileName);
+		int numCells = xml.getChildCount();
+		System.out.println("MIMODEK says > Found "+numCells+" cells.");
+		for (int i = 0; i < numCells; i++) {
+			attachTo(Mimo.createtFromXML(xml.getChild(i)));
+		}
+		System.out.println("MIMODEK says > Created organism of "+mimos.size()+" cells.");
 	}
 }
