@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Mimodek" default="jar">
+	<property file="build.properties" />
+	<target name="javadoc">
+		<javadoc access="protected" author="true" classpath="controlP5.jar:core.jar" destdir="${processingLibraries}/mimodek/doc" doctitle="Mimodek" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="mimodek.tracking,mimodek.controls,mimodek.facade,mimodek.texture,mimodek,mimodek.decorator,mimodek.decorator.graphics,mimodek.configuration" source="1.5" sourcepath="src" splitindex="true" use="true" version="true" />
+	</target>
+	<target name="jar">
+		<mkdir dir="${processingLibraries}/mimodek/library/" />
+		<jar update="true"  destfile="${processingLibraries}/mimodek/library/mimodek.jar" basedir="bin" />
+	</target>
+</project>

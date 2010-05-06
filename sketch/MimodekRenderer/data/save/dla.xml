@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DLACell className="mimodek.decorator.Cell" fixed="false">
+	<GraphicDecorator className="mimodek.decorator.graphics.SeedGradientDrawer">
+		<Decorator className="mimodek.decorator.ActiveMimo">
+			<MimoObject className="mimodek.SimpleMimo"posX="58.33448" posY="40.51615" radius="34.134686"/>
+		</Decorator>
+		<DrawingData className="mimodek.decorator.graphics.GradientData" iteration="592" color="0" startColor="-16581440"/>
+	</GraphicDecorator>
+	<neighbours>
+		<DLACell className="mimodek.decorator.Cell" fixed="false">
+			<GraphicDecorator className="mimodek.decorator.graphics.SeedGradientDrawer">
+				<Decorator className="mimodek.decorator.ActiveMimo">
+					<MimoObject className="mimodek.SimpleMimo" posX="59.688038" posY="43.665977" radius="40.792645"/>
+				</Decorator>
+				<DrawingData className="mimodek.decorator.graphics.GradientData" iteration="850" color="0" startColor="-16581440"/>
+			</GraphicDecorator>
+			<neighbours>
+				<DLACell className="mimodek.decorator.Cell" fixed="false">
+					<GraphicDecorator className="mimodek.decorator.graphics.SeedGradientDrawer">
+						<Decorator className="mimodek.decorator.ActiveMimo">
+							<MimoObject className="mimodek.SimpleMimo" posX="59.1258" posY="41.824585" radius="31.863459"/>
+						</Decorator>
+						<DrawingData className="mimodek.decorator.graphics.GradientData" iteration="519" color="0" startColor="-16581440"/>
+					</GraphicDecorator>
+					<neighbours>
+						<DLACell className="mimodek.decorator.Cell" fixed="false">
+							<GraphicDecorator className="mimodek.decorator.graphics.SeedGradientDrawer">
+								<Decorator className="mimodek.decorator.ActiveMimo">
+									<MimoObject className="mimodek.SimpleMimo" posX="57.768" posY="37.582813" radius="28.588808"/>
+								</Decorator>
+								<DrawingData className="mimodek.decorator.graphics.GradientData" iteration="418" color="0" startColor="-16581440"/>
+							</GraphicDecorator>
+							<neighbours>
+							</neighbours>
+						</DLACell>
+					</neighbours>
+				</DLACell>
+				<DLACell className="mimodek.decorator.Cell" fixed="false">
+					<GraphicDecorator className="mimodek.decorator.graphics.SeedGradientDrawer">
+						<Decorator className="mimodek.decorator.ActiveMimo">
+							<MimoObject className="mimodek.SimpleMimo" posX="61.782898" posY="49.892696" radius="43.63527"/>
+						</Decorator>
+						<DrawingData className="mimodek.decorator.graphics.GradientData" iteration="968" color="0" startColor="-16581440"/>
+					</GraphicDecorator>
+					<neighbours>
+					</neighbours>
+				</DLACell>
+				<DLACell className="mimodek.decorator.Cell" fixed="false">
+					<GraphicDecorator className="mimodek.decorator.graphics.SeedGradientDrawer">
+						<Decorator className="mimodek.decorator.ActiveMimo">
+							<MimoObject className="mimodek.SimpleMimo" posX="55.906796" posY="36.242897" radius="25.85266"/>
+						</Decorator>
+						<DrawingData className="mimodek.decorator.graphics.GradientData" iteration="342" color="0" startColor="-16581440"/>
+					</GraphicDecorator>
+					<neighbours>
+						<DLACell className="mimodek.decorator.Cell" fixed="false">
+							<GraphicDecorator className="mimodek.decorator.graphics.SeedGradientDrawer">
+								<Decorator className="mimodek.decorator.ActiveMimo">
+									<MimoObject className="mimodek.SimpleMimo" posX="54.332573" posY="31.646107" radius="13.929824"/>
+								</Decorator>
+								<DrawingData className="mimodek.decorator.graphics.GradientData" iteration="100" color="0" startColor="-16581440"/>
+							</GraphicDecorator>
+							<neighbours>
+							</neighbours>
+						</DLACell>
+					</neighbours>
+				</DLACell>
+				<DLACell className="mimodek.decorator.Cell" fixed="false">
+					<GraphicDecorator className="mimodek.decorator.graphics.SeedGradientDrawer">
+						<Decorator className="mimodek.decorator.ActiveMimo">
+							<MimoObject className="mimodek.SimpleMimo" posX="58.411972" posY="40.56917" radius="33.687386"/>
+						</Decorator>
+						<DrawingData className="mimodek.decorator.graphics.GradientData" iteration="580" color="0" startColor="-16581440"/>
+					</GraphicDecorator>
+					<neighbours>
+					</neighbours>
+				</DLACell>
+			</neighbours>
+		</DLACell>
+	</neighbours>
+</DLACell>

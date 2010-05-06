@@ -1,0 +1,289 @@
+<?xml version="1.0"?>
+<DLACell className="mimodek.decorator.Cell" fixed="false">
+	<GraphicDecorator className="mimodek.decorator.graphics.PolarDrawer">
+		<Decorator className="mimodek.decorator.TargetSeaker">
+			<Decorator className="mimodek.decorator.DeadMimo2">
+				<MimoObject className="mimodek.SimpleMimo" posX="97.57628" posY="47.745895" radius="65.09954"/>
+			</Decorator>
+		</Decorator>
+		<DrawingData className="mimodek.decorator.graphics.SimpleDrawingData" iteration="958" color="-14564368"/>
+		<params>
+			<param position="1" type="mimodek.MimodekObject"/>
+			<param position="2" type="java.lang.Integer" value="-14564368"/>
+			<param position="3" type="java.lang.Float" value="18.257912"/>
+			<param position="4" type="java.lang.Float" value="-16.735039"/>
+		</params>
+	</GraphicDecorator>
+	<neighbours>
+		<DLACell className="mimodek.decorator.Cell" fixed="false">
+			<GraphicDecorator className="mimodek.decorator.graphics.PolarDrawer">
+				<Decorator className="mimodek.decorator.RandomWalker">
+					<Decorator className="mimodek.decorator.DeadMimo2">
+						<MimoObject className="mimodek.SimpleMimo" posX="107.86001" posY="61.168213" radius="65.09954"/>
+					</Decorator>
+				</Decorator>
+				<DrawingData className="mimodek.decorator.graphics.SimpleDrawingData" iteration="817" color="-15860557"/>
+				<params>
+					<param position="1" type="mimodek.MimodekObject"/>
+					<param position="2" type="java.lang.Integer" value="-15860557"/>
+					<param position="3" type="java.lang.Float" value="8.126862"/>
+					<param position="4" type="java.lang.Float" value="35.830765"/>
+				</params>
+			</GraphicDecorator>
+			<neighbours>
+				<DLACell className="mimodek.decorator.Cell" fixed="false">
+					<GraphicDecorator className="mimodek.decorator.graphics.PolarDrawer">
+						<Decorator className="mimodek.decorator.RandomWalker">
+							<Decorator className="mimodek.decorator.DeadMimo2">
+								<MimoObject className="mimodek.SimpleMimo" posX="97.455605" posY="47.839222" radius="65.09954"/>
+							</Decorator>
+						</Decorator>
+						<DrawingData className="mimodek.decorator.graphics.SimpleDrawingData" iteration="686" color="-417022"/>
+						<params>
+							<param position="1" type="mimodek.MimodekObject"/>
+							<param position="2" type="java.lang.Integer" value="-417022"/>
+							<param position="3" type="java.lang.Float" value="38.323425"/>
+							<param position="4" type="java.lang.Float" value="13.25058"/>
+						</params>
+					</GraphicDecorator>
+					<neighbours>
+						<DLACell className="mimodek.decorator.Cell" fixed="false">
+							<GraphicDecorator className="mimodek.decorator.graphics.PolarDrawer">
+								<Decorator className="mimodek.decorator.RandomWalker">
+									<Decorator className="mimodek.decorator.DeadMimo2">
+										<MimoObject className="mimodek.SimpleMimo" posX="107.8703" posY="61.160175" radius="65.09954"/>
+									</Decorator>
+								</Decorator>
+								<DrawingData className="mimodek.decorator.graphics.SimpleDrawingData" iteration="520" color="-419582"/>
+								<params>
+									<param position="1" type="mimodek.MimodekObject"/>
+									<param position="2" type="java.lang.Integer" value="-419582"/>
+									<param position="3" type="java.lang.Float" value="-0.30265045"/>
+									<param position="4" type="java.lang.Float" value="10.861801"/>
+								</params>
+							</GraphicDecorator>
+							<neighbours>
+							</neighbours>
+						</DLACell>
+					</neighbours>
+				</DLACell>
+			</neighbours>
+		</DLACell>
+		<DLACell className="mimodek.decorator.Cell" fixed="false">
+			<GraphicDecorator className="mimodek.decorator.graphics.PolarDrawer">
+				<Decorator className="mimodek.decorator.RandomWalker">
+					<Decorator className="mimodek.decorator.DeadMimo2">
+						<MimoObject className="mimodek.SimpleMimo" posX="107.859116" posY="61.168896" radius="65.09954"/>
+					</Decorator>
+				</Decorator>
+				<DrawingData className="mimodek.decorator.graphics.SimpleDrawingData" iteration="806" color="-9878792"/>
+				<params>
+					<param position="1" type="mimodek.MimodekObject"/>
+					<param position="2" type="java.lang.Integer" value="-9878792"/>
+					<param position="3" type="java.lang.Float" value="13.261868"/>
+					<param position="4" type="java.lang.Float" value="8.172356"/>
+				</params>
+			</GraphicDecorator>
+			<neighbours>
+				<DLACell className="mimodek.decorator.Cell" fixed="false">
+					<GraphicDecorator className="mimodek.decorator.graphics.PolarDrawer">
+						<Decorator className="mimodek.decorator.RandomWalker">
+							<Decorator className="mimodek.decorator.DeadMimo2">
+								<MimoObject className="mimodek.SimpleMimo" posX="97.50022" posY="47.804504" radius="65.09954"/>
+							</Decorator>
+						</Decorator>
+						<DrawingData className="mimodek.decorator.graphics.SimpleDrawingData" iteration="664" color="-1506605"/>
+						<params>
+							<param position="1" type="mimodek.MimodekObject"/>
+							<param position="2" type="java.lang.Integer" value="-1506605"/>
+							<param position="3" type="java.lang.Float" value="-23.751295"/>
+							<param position="4" type="java.lang.Float" value="-35.246613"/>
+						</params>
+					</GraphicDecorator>
+					<neighbours>
+						<DLACell className="mimodek.decorator.Cell" fixed="false">
+							<GraphicDecorator className="mimodek.decorator.graphics.PolarDrawer">
+								<Decorator className="mimodek.decorator.RandomWalker">
+									<Decorator className="mimodek.decorator.DeadMimo2">
+										<MimoObject className="mimodek.SimpleMimo" posX="105.5366" posY="32.927326" radius="65.09954"/>
+									</Decorator>
+								</Decorator>
+								<DrawingData className="mimodek.decorator.graphics.SimpleDrawingData" iteration="915" color="-10617758"/>
+								<params>
+									<param position="1" type="mimodek.MimodekObject"/>
+									<param position="2" type="java.lang.Integer" value="-10617758"/>
+									<param position="3" type="java.lang.Float" value="-9.209206"/>
+									<param position="4" type="java.lang.Float" value="21.49997"/>
+								</params>
+							</GraphicDecorator>
+							<neighbours>
+								<DLACell className="mimodek.decorator.Cell" fixed="false">
+									<GraphicDecorator className="mimodek.decorator.graphics.PolarDrawer">
+										<Decorator className="mimodek.decorator.RandomWalker">
+											<Decorator className="mimodek.decorator.DeadMimo2">
+												<MimoObject className="mimodek.SimpleMimo" posX="116.10902" posY="25.42991" radius="34.700005"/>
+											</Decorator>
+										</Decorator>
+										<DrawingData className="mimodek.decorator.graphics.SimpleDrawingData" iteration="148" color="-12221196"/>
+										<params>
+											<param position="1" type="mimodek.MimodekObject"/>
+											<param position="2" type="java.lang.Integer" value="-12221196"/>
+											<param position="3" type="java.lang.Float" value="18.75119"/>
+											<param position="4" type="java.lang.Float" value="-10.051025"/>
+										</params>
+									</GraphicDecorator>
+									<neighbours>
+									</neighbours>
+								</DLACell>
+							</neighbours>
+						</DLACell>
+					</neighbours>
+				</DLACell>
+				<DLACell className="mimodek.decorator.Cell" fixed="false">
+					<GraphicDecorator className="mimodek.decorator.graphics.PolarDrawer">
+						<Decorator className="mimodek.decorator.RandomWalker">
+							<Decorator className="mimodek.decorator.DeadMimo2">
+								<MimoObject className="mimodek.SimpleMimo" posX="108.747826" posY="78.05451" radius="65.09954"/>
+							</Decorator>
+						</Decorator>
+						<DrawingData className="mimodek.decorator.graphics.SimpleDrawingData" iteration="1370" color="-10290084"/>
+						<params>
+							<param position="1" type="mimodek.MimodekObject"/>
+							<param position="2" type="java.lang.Integer" value="-10290084"/>
+							<param position="3" type="java.lang.Float" value="2.2672005"/>
+							<param position="4" type="java.lang.Float" value="-39.445763"/>
+						</params>
+					</GraphicDecorator>
+					<neighbours>
+						<DLACell className="mimodek.decorator.Cell" fixed="false">
+							<GraphicDecorator className="mimodek.decorator.graphics.PolarDrawer">
+								<Decorator className="mimodek.decorator.RandomWalker">
+									<Decorator className="mimodek.decorator.DeadMimo2">
+										<MimoObject className="mimodek.SimpleMimo" posX="95.342186" posY="85.152374" radius="51.699745"/>
+									</Decorator>
+								</Decorator>
+								<DrawingData className="mimodek.decorator.graphics.SimpleDrawingData" iteration="318" color="-13978383"/>
+								<params>
+									<param position="1" type="mimodek.MimodekObject"/>
+									<param position="2" type="java.lang.Integer" value="-13978383"/>
+									<param position="3" type="java.lang.Float" value="-30.705353"/>
+									<param position="4" type="java.lang.Float" value="-35.10842"/>
+								</params>
+							</GraphicDecorator>
+							<neighbours>
+								<DLACell className="mimodek.decorator.Cell" fixed="false">
+									<GraphicDecorator className="mimodek.decorator.graphics.PolarDrawer">
+										<Decorator className="mimodek.decorator.RandomWalker">
+											<Decorator className="mimodek.decorator.DeadMimo2">
+												<MimoObject className="mimodek.SimpleMimo" posX="84.7235" posY="83.15351" radius="31.500044"/>
+											</Decorator>
+										</Decorator>
+										<DrawingData className="mimodek.decorator.graphics.SimpleDrawingData" iteration="116" color="-7991301"/>
+										<params>
+											<param position="1" type="mimodek.MimodekObject"/>
+											<param position="2" type="java.lang.Integer" value="-7991301"/>
+											<param position="3" type="java.lang.Float" value="-21.47737"/>
+											<param position="4" type="java.lang.Float" value="-4.46373"/>
+										</params>
+									</GraphicDecorator>
+									<neighbours>
+										<DLACell className="mimodek.decorator.Cell" fixed="false">
+											<GraphicDecorator className="mimodek.decorator.graphics.PolarDrawer">
+												<Decorator className="mimodek.decorator.RandomWalker">
+													<Decorator className="mimodek.decorator.DeadMimo2">
+														<MimoObject className="mimodek.SimpleMimo" posX="76.37035" posY="81.413345" radius="34.200012"/>
+													</Decorator>
+												</Decorator>
+												<DrawingData className="mimodek.decorator.graphics.SimpleDrawingData" iteration="143" color="-1113448"/>
+												<params>
+													<param position="1" type="mimodek.MimodekObject"/>
+													<param position="2" type="java.lang.Integer" value="-1113448"/>
+													<param position="3" type="java.lang.Float" value="-17.965431"/>
+													<param position="4" type="java.lang.Float" value="48.315292"/>
+												</params>
+											</GraphicDecorator>
+											<neighbours>
+											</neighbours>
+										</DLACell>
+									</neighbours>
+								</DLACell>
+							</neighbours>
+						</DLACell>
+						<DLACell className="mimodek.decorator.Cell" fixed="false">
+							<GraphicDecorator className="mimodek.decorator.graphics.PolarDrawer">
+								<Decorator className="mimodek.decorator.RandomWalker">
+									<Decorator className="mimodek.decorator.DeadMimo2">
+										<MimoObject className="mimodek.SimpleMimo" posX="121.17374" posY="72.53323" radius="39.59993"/>
+									</Decorator>
+								</Decorator>
+								<DrawingData className="mimodek.decorator.graphics.SimpleDrawingData" iteration="197" color="-469502"/>
+								<params>
+									<param position="1" type="mimodek.MimodekObject"/>
+									<param position="2" type="java.lang.Integer" value="-469502"/>
+									<param position="3" type="java.lang.Float" value="31.16832"/>
+									<param position="4" type="java.lang.Float" value="24.833557"/>
+								</params>
+							</GraphicDecorator>
+							<neighbours>
+							</neighbours>
+						</DLACell>
+					</neighbours>
+				</DLACell>
+				<DLACell className="mimodek.decorator.Cell" fixed="false">
+					<GraphicDecorator className="mimodek.decorator.graphics.PolarDrawer">
+						<Decorator className="mimodek.decorator.RandomWalker">
+							<Decorator className="mimodek.decorator.DeadMimo2">
+								<MimoObject className="mimodek.SimpleMimo" posX="113.369545" posY="70.779015" radius="20.2"/>
+							</Decorator>
+						</Decorator>
+						<DrawingData className="mimodek.decorator.graphics.SimpleDrawingData" iteration="3" color="-10399241"/>
+						<params>
+							<param position="1" type="mimodek.MimodekObject"/>
+							<param position="2" type="java.lang.Integer" value="-10399241"/>
+							<param position="3" type="java.lang.Float" value="16.994133"/>
+							<param position="4" type="java.lang.Float" value="-26.313316"/>
+						</params>
+					</GraphicDecorator>
+					<neighbours>
+					</neighbours>
+				</DLACell>
+			</neighbours>
+		</DLACell>
+		<DLACell className="mimodek.decorator.Cell" fixed="false">
+			<GraphicDecorator className="mimodek.decorator.graphics.PolarDrawer">
+				<Decorator className="mimodek.decorator.RandomWalker">
+					<Decorator className="mimodek.decorator.DeadMimo2">
+						<MimoObject className="mimodek.SimpleMimo" posX="103.52597" posY="36.026917" radius="36.099983"/>
+					</Decorator>
+				</Decorator>
+				<DrawingData className="mimodek.decorator.graphics.SimpleDrawingData" iteration="163" color="-15270741"/>
+				<params>
+					<param position="1" type="mimodek.MimodekObject"/>
+					<param position="2" type="java.lang.Integer" value="-15270741"/>
+					<param position="3" type="java.lang.Float" value="6.3980026"/>
+					<param position="4" type="java.lang.Float" value="-11.958939"/>
+				</params>
+			</GraphicDecorator>
+			<neighbours>
+			</neighbours>
+		</DLACell>
+		<DLACell className="mimodek.decorator.Cell" fixed="false">
+			<GraphicDecorator className="mimodek.decorator.graphics.PolarDrawer">
+				<Decorator className="mimodek.decorator.RandomWalker">
+					<Decorator className="mimodek.decorator.DeadMimo2">
+						<MimoObject className="mimodek.SimpleMimo" posX="103.44707" posY="37.012875" radius="29.100035"/>
+					</Decorator>
+				</Decorator>
+				<DrawingData className="mimodek.decorator.graphics.SimpleDrawingData" iteration="92" color="-12351501"/>
+				<params>
+					<param position="1" type="mimodek.MimodekObject"/>
+					<param position="2" type="java.lang.Integer" value="-12351501"/>
+					<param position="3" type="java.lang.Float" value="-26.16649"/>
+					<param position="4" type="java.lang.Float" value="27.924881"/>
+				</params>
+			</GraphicDecorator>
+			<neighbours>
+			</neighbours>
+		</DLACell>
+	</neighbours>
+</DLACell>
