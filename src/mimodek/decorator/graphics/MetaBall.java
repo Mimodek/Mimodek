@@ -55,9 +55,11 @@ public class MetaBall extends MimodekObjectGraphicsDecorator {
 	}
 
 	public float equation(float x, float y) {
-
-		float d = MetaBallRenderer.distlookup[Math.round(Math
-				.abs(x - getPosX()))][Math.round(Math.abs(y - getPosY()))];
+		int i =Math.round(Math.abs(x - getPosX()));
+		int j =Math.round(Math.round(Math.abs(y - getPosY())));
+		if(i<0||i>=FacadeFactory.getFacade().width||j<0||j>=FacadeFactory.getFacade().height)
+			return 0;
+		float d = MetaBallRenderer.distlookup[i][j];
 		if (d > (getDiameter()/2)) {
 			return 0;
 		}
