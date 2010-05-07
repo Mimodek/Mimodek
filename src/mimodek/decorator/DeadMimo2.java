@@ -3,6 +3,7 @@ package mimodek.decorator;
 import processing.core.PImage;
 import mimodek.MimodekObject;
 import mimodek.configuration.Configurator;
+import mimodek.utils.Verbose;
 
 public class DeadMimo2 extends MimodekObjectDecorator {
 	float currentScale = 1;
@@ -13,7 +14,8 @@ public class DeadMimo2 extends MimodekObjectDecorator {
 
 	public DeadMimo2(MimodekObject decoratedObject, PImage activeMimosShape) {
 		super(decoratedObject);
-		energy = decoratedObject.getDiameter()/2;
+		energy = decoratedObject.getDiameter();
+		Verbose.debug("Energy:"+energy);
 		this.activeMimosShape = activeMimosShape;
 	}
 
@@ -32,9 +34,9 @@ public class DeadMimo2 extends MimodekObjectDecorator {
 		return energy;
 	}
 
-	/*public float getDiameter(){
+	public float getDiameter(){
 		if(Math.abs(currentScale-Configurator.getFloatSetting("ancestorScale"))>0.1)
 			currentScale += currentScale<Configurator.getFloatSetting("ancestorScale")?0.05:-0.05;
 		return decoratedObject.getDiameter()*(1.0f/currentScale);
-	}*/
+	}
 }

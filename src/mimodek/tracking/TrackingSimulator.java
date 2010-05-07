@@ -20,7 +20,7 @@ import processing.core.PVector;
  * See MimodekSketch in the example folder for more info.
  * @author Jonsku
  */
-public class TrackingSimulator extends Thread{
+public class TrackingSimulator extends Thread implements Tracker{
 	class Particle{
 		PVector vel;
 		PVector pos;

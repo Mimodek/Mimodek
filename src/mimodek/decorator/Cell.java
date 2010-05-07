@@ -4,8 +4,11 @@ import java.util.ArrayList;
 
 //import mimodek.configuration.Configurator;
 import mimodek.MimodekObject;
+import mimodek.decorator.graphics.ImageDrawer;
 import mimodek.decorator.graphics.MimodekObjectGraphicsDecorator;
+import mimodek.decorator.graphics.NoImageException;
 import mimodek.facade.FacadeFactory;
+import mimodek.utils.Verbose;
 
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -20,7 +23,7 @@ import processing.core.PVector;
  
  * @author Jonsku
  */
-public class Cell extends MimodekObjectGraphicsDecorator {
+public class Cell extends ImageDrawer {
 
 	public boolean fixed = false;
 
@@ -29,10 +32,11 @@ public class Cell extends MimodekObjectGraphicsDecorator {
 	/**
 	 * Creates a new cell from a MimodekObjectGraphicsDecorator.
 	 * @param decoratedObject
+	 * @throws NoImageException 
 	 */
-	public Cell(MimodekObjectGraphicsDecorator decoratedObject) {
-		super(decoratedObject);
-		System.out.println(decoratedObject.decoratedObject.getClass().getName());
+	public Cell(DeadMimo2 decoratedObject, PApplet app) throws NoImageException {
+		super(decoratedObject,decoratedObject.activeMimosShape,app.color(app.random(255),app.random(255),app.random(255)),app); 
+		Verbose.debug(decoratedObject.decoratedObject.getClass().getName());
 	}
 
 	/**
@@ -121,7 +125,7 @@ public class Cell extends MimodekObjectGraphicsDecorator {
 	 * @param app The parent Sketch
 	 */
 	protected void draw(Cell up, PApplet app) {
-		((MimodekObjectGraphicsDecorator) decoratedObject).draw(app);
+		super.draw(app);
 		for (int i = 0; i < neighbours.size(); i++) {
 			Cell c = ((Cell) neighbours.get(i));
 			if (c != up) // draw only if it is not the calling cell
@@ -240,14 +244,14 @@ public class Cell extends MimodekObjectGraphicsDecorator {
 		}
 	}
 
-	@Override
+	/*@Override
 	public PImage toImage(PApplet app) {
 		return ((MimodekObjectGraphicsDecorator)decoratedObject).toImage(app);
-	}
+	}*/
 	
 	public String toXMLString(Cell up,String prefix){
 		
-		System.out.println(prefix+this);
+		Verbose.debug(prefix+this);
 		String XMLString = prefix+"<DLACell className=\""+this.getClass().getName()+"\" fixed=\""+fixed+"\">\n";
 		XMLString += decoratedObject.toXMLString(prefix+"\t");
 		XMLString += prefix+"\t<neighbours>\n";

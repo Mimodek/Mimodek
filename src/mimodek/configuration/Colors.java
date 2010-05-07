@@ -1,5 +1,6 @@
 package mimodek.configuration;
 
+import mimodek.utils.Verbose;
 import processing.core.PApplet;
 import processing.xml.XMLElement;
 
@@ -51,7 +52,7 @@ public class Colors {
 		try{
 			loadFromXML(fileName, app);
 		}catch(Exception ex){
-			System.out.println("MIMODEK says > Failed to load color palette from "+fileName);
+			Verbose.say("Failed to load color palette from "+fileName);
 			ex.printStackTrace();
 		}
 	}
@@ -65,7 +66,7 @@ public class Colors {
 			app.colorMode(PApplet.HSB, 1f);
 			// a range is defined by 2 colors
 			colors.colorRanges = new int[numRange * 2];
-			System.out.println(colors.colorRanges.length / 2 + " color ranges found");
+			Verbose.say(colors.colorRanges.length / 2 + " color ranges found");
 			for (int i = 0; i < numRange; i++) {
 				XMLElement kid = xml.getChild(i);
 				String from = kid.getStringAttribute("from");

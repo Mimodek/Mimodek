@@ -8,7 +8,7 @@ import processing.core.PImage;
 import processing.core.PVector;
 
 public class MetaBall extends MimodekObjectGraphicsDecorator {
-	public static float MIN_THRESHOLD = 0.1f;
+	public static float MIN_THRESHOLD = 0.01f;
 	public static float MAX_THRESHOLD = 1.0f; // Minimum and maximum threshold
 												// for an isosurface
 	public float strength;
@@ -19,9 +19,20 @@ public class MetaBall extends MimodekObjectGraphicsDecorator {
 
 	public MetaBall(MimodekObject decoratedObject, int color) {
 		super(decoratedObject);
-		setDrawingData(new SimpleDrawingData(color));
+		setDrawingData(new SimpleDrawingData(addAlpha(color)));
 		strength = 1f;
 		reset();
+	}
+	
+	public void increaseStrength(float s){
+		strength += s;
+	}
+	
+	private int addAlpha(int c){
+		int r = c>> 16 & 0xFF;
+		int g = c>> 8 & 0xFF;
+	    int b = c & 0xFF;
+		return (254 << 24) | (r << 16) | (g << 8) | b;
 	}
 	
 	public void update(){
@@ -77,23 +88,28 @@ public class MetaBall extends MimodekObjectGraphicsDecorator {
 	@Override
 	public PImage toImage(PApplet app) {
 		PGraphics renderer = app.createGraphics((int) getDiameter(),(int) getDiameter(), PApplet.JAVA2D);
-		renderer.beginDraw();
-		renderer.background(0,0,0,0);
-		renderer.loadPixels();
-		
-		int startX = (int)(getPosX()-getDiameter()/2);
-		int startY = (int)(getPosY()-getDiameter()/2);
-		for(int i=0;i<renderer.pixels.length;i++){
-			renderer.pixels[i] = renderer.lerpColor(renderer.color(0,0,0,0),renderer.color(255),equation(startX+(i%renderer.width),startY+(i/renderer.width)));
-		}
-		renderer.updatePixels();
-		renderer.endDraw();
+		draw(renderer);
 		PImage img = renderer.get();
 		renderer.filter(PApplet.GRAY);
 		renderer.loadPixels();
 		img.mask(renderer.pixels);
 		renderer.dispose();
 		return img;
+	}
+
+	@Override
+	protected void draw(PGraphics gfx) {
+		gfx.beginDraw();
+		gfx.background(0,0,0,0);
+		gfx.loadPixels();
+		
+		int startX = (int)(getPosX()-getDiameter()/2);
+		int startY = (int)(getPosY()-getDiameter()/2);
+		for(int i=0;i<gfx.pixels.length;i++){
+			gfx.pixels[i] = gfx.lerpColor(gfx.color(0,0,0,0),gfx.color(255),equation(startX+(i%gfx.width),startY+(i/gfx.width)));
+		}
+		gfx.updatePixels();
+		gfx.endDraw();
 	}
 
 }

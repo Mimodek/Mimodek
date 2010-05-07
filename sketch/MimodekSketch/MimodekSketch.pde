@@ -6,6 +6,7 @@ import mimodek.*;
 
 //Dependencies
 import controlP5.*;
+import TUIO.*;
 
 /*
  * MIMODEK,
@@ -17,20 +18,32 @@ import controlP5.*;
 
 Mimodek mimodek;
 
-TrackingSimulator tracking;
+int TUIO = 1;
+int SIMULATOR = 0;
+int tracker = TUIO;
+
+Tracker tracking;
 
 void setup(){
 
   //use only this resolution for the presentation PC's screen
   size(1024, 768);
+  PFont f = loadFont("Courier-48.vlw");
+  textFont(f);
   //The order of initialization is important
   mimodek = new Mimodek(this); //Create Mimodek first so that it can setup the context
   mimodek.size(1024, 768); //set the size
   //THE FOLLOWING IS OPTIONAL BUT USEFUL FOR DEBUG/DEMO
   setupGUI(); //Create a GUI using controlP5
-  tracking = new TrackingSimulator(this, FacadeFactory.getFacade().leftOffset,FacadeFactory.getFacade().topOffset*2+FacadeFactory.getFacade().height); //Create a Tracking simulator
-  tracking.setListener(mimodek.mimosManager); //set the Mimos Manager as a listener for trakcing data
-  tracking.start(); //Start the simulator (Threaded)
+  if(tracker == TUIO)
+    tracking = new TUIOClient(this);
+  else
+    tracking = new TrackingSimulator(this, FacadeFactory.getFacade().leftOffset,FacadeFactory.getFacade().topOffset*2+FacadeFactory.getFacade().height); //Create a Tracking simulator
+    
+   tracking.setListener(mimodek.mimosManager); //set the Mimos Manager as a listener for trakcing data
+   
+  if(tracker == SIMULATOR)
+   ((TrackingSimulator)tracking).start(); //Start the simulator (Threaded)
   
   smooth();
   frameRate(24);
@@ -59,7 +72,8 @@ public void setupGUI() {
 void draw(){
   background(0);
   FacadeFactory.getFacade().showDrawingArea();
-  tracking.draw();
+  if(tracker == SIMULATOR)
+   ((TrackingSimulator)tracking).draw();
 }
 
 void keyPressed(){

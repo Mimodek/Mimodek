@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 
 import mimodek.configuration.Configurator;
+import mimodek.utils.Verbose;
 
 public class TextureCollection {
 	protected static TextureCollection collection;
@@ -48,11 +49,11 @@ public class TextureCollection {
 
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
+				Verbose.debug("File " + listOfFiles[i].getName());
 				textures.add(new SquareTexture(textureFolder
 						+ listOfFiles[i].getName(), Configurator.getFloatSetting("mimosMaxRadius"),app));
 			} else if (listOfFiles[i].isDirectory()) {
-				System.out.println("Directory " + listOfFiles[i].getName());
+				Verbose.debug("Directory " + listOfFiles[i].getName());
 			}
 		}
 	}

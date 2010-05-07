@@ -13,18 +13,21 @@ public class RandomWalker extends MimodekObjectDecorator {
 	public int numSteps;
 	public int current;
 	
-	public static float maxSpeed = 2;
+	public float maxSpeed = 2;
+	public boolean canWalkOut = false;
 	
-	public RandomWalker(MimodekObject decoratedObject) {
+	public RandomWalker(MimodekObject decoratedObject, float maxSpeed, boolean canWalkOut) {
 		super(decoratedObject);
 		vel = new PVector(0,0);
 		oldVel = new PVector(0, 0);
 		targetVel = new PVector(0, 0);
 		turning = false;
+		this.maxSpeed = maxSpeed;
+		this.canWalkOut = canWalkOut;
 	}
 
 	public void update() {
-		if(!FacadeFactory.getFacade().isInTheScreen(getPos(), getDiameter()/2)){
+		if(!canWalkOut && !FacadeFactory.getFacade().isInTheScreen(getPos(), getDiameter()/2)){
 			//orient the mimo towards the center to get it back in the screen
 			float a = (float) Math.atan2(FacadeFactory.getFacade().height/2-getPosY(), FacadeFactory.getFacade().width/2-getPosX());
 			vel.x = (float) Math.cos(a);

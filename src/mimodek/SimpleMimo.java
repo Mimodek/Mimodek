@@ -1,5 +1,6 @@
 package mimodek;
 
+import mimodek.facade.FacadeFactory;
 import processing.core.PVector;
 
 public class SimpleMimo implements MimodekObject {
@@ -67,6 +68,10 @@ public class SimpleMimo implements MimodekObject {
 	
 	public String toXMLString(String prefix){
 		return prefix+"<MimoObject className=\""+this.getClass().getName()+"\" posX=\""+getPosX()+"\" posY=\""+getPosY()+"\" radius=\""+getDiameter()+"\"/>\n";
+	}
+
+	public boolean isInScreen() {
+		return FacadeFactory.getFacade().isInTheScreen(getPos(), getDiameter()/2);
 	}
 
 }

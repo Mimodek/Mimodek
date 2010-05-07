@@ -139,28 +139,43 @@ public class MetaBallRenderer {
 		        }
 
 		        //float col = sum>1 ? 1 : (sum<MetaBall.MIN_THRESHOLD ? 0: sum);
-		        int col =  sum<MetaBall.MIN_THRESHOLD ? 0 : blendColor(colors, strength);
+		        int col =  sum<MetaBall.MIN_THRESHOLD ? buffer.color(0,0,0,0) : blendColor(colors, strength);
 		        //float col = sum<MIN_THRESHOLD ? 0: sum;
 		        int pos = (int)x+(int)y*buffer.width;
-		        if(col!=0 || buffer.pixels[pos] == buffer.color(0,0,0,0))
+		        if(/*col!=0 || */buffer.pixels[pos] == buffer.color(0,0,0,0))
 		          buffer.pixels[pos] = col;//buffer.lerpColor(buffer.color(0,0,0,0),buffer.color(255),col); //b.getDrawingData().getColor()
 		      }
 		    }
 		}
 	
+	
+	/**
+	 * Blends an array of colors by specifying their strength in the composite.
+	 * Note that there must be as much colors as strength.
+	 * @param colors Array of colors
+	 * @param strength Array of strength matching the colors
+	 * @return The composite color
+	 */
 	private  int blendColor(int[] colors, float[] strength){
+		
+		 float a = 0;
 		  float r = 0;
 		  float g = 0;
 		  float b = 0;
+		  
 		  for(int i=0;i<colors.length;i++){
+			  a += (colors[i] >> 24 & 0xFF)*strength[i];
 		    r += (colors[i]>> 16 & 0xFF)*strength[i];
 		    g += (colors[i]>> 8 & 0xFF)*strength[i];
 		    b += (colors[i] & 0xFF)*strength[i];
+		    
 		  }
+		  a = a>255?255:a;
 		  r = r>255?255:r;
 		  g = g>255?255:g;
 		  b = b>255?255:b;
-		  return app.color(r,g,b);
+		  
+		  return app.color(r,g,b,a);
 		}
 	
 	

@@ -10,7 +10,7 @@ import mimodek.decorator.ActiveMimo;
 public class SeedGradientDrawer extends MimodekObjectGraphicsDecorator {
 	public static final float GOLDEN_ANGLE = (float) (PApplet.TWO_PI * 0.618034);
 	private int numberOfDots = 0;
-	public PImage renderer = null;
+	public PGraphics renderer = null;
 	private PGraphics alphaMask = null;
 	private boolean rendered = false;
 
@@ -28,13 +28,13 @@ public class SeedGradientDrawer extends MimodekObjectGraphicsDecorator {
 
 	@Override
 	public void draw(PApplet app) {
-		GradientData data = (GradientData) getDrawingData();
+		//GradientData data = (GradientData) getDrawingData();
 		if (renderer == null) {
 			renderer = app.createGraphics((int) Configurator
 					.getFloatSetting("mimosMaxRadius"), (int) Configurator
 					.getFloatSetting("mimosMaxRadius"), PApplet.JAVA2D);
-			((PGraphics) renderer).beginDraw();
-			((PGraphics) renderer).endDraw();
+			renderer.beginDraw();
+			renderer.endDraw();
 			alphaMask = app.createGraphics((int) Configurator
 					.getFloatSetting("mimosMaxRadius"), (int) Configurator
 					.getFloatSetting("mimosMaxRadius"), PApplet.JAVA2D);
@@ -47,8 +47,15 @@ public class SeedGradientDrawer extends MimodekObjectGraphicsDecorator {
 			float center = Configurator.getFloatSetting("mimosMaxRadius") / 2f;
 			float r = (float) (Configurator.getFloatSetting("radiScale") * Math
 					.sqrt(numberOfDots));
-
+			
 			if (r <= center - Configurator.getFloatSetting("dotSize")) {//
+				renderer.beginDraw();
+				draw(renderer);
+				renderer.endDraw();
+				setDiameter(r * 2);
+				numberOfDots++;
+				getDrawingData().incIteration(1);
+			/*
 				float x, y;
 				int c;
 				float angle = GOLDEN_ANGLE * numberOfDots;
@@ -88,7 +95,7 @@ public class SeedGradientDrawer extends MimodekObjectGraphicsDecorator {
 
 				setDiameter(r * 2);
 				numberOfDots++;
-				getDrawingData().incIteration(1);
+				getDrawingData().incIteration(1);*/
 			}
 			app.image(renderer, getPosX() - renderer.width / 2, getPosY()
 					- renderer.height / 2);
@@ -99,7 +106,7 @@ public class SeedGradientDrawer extends MimodekObjectGraphicsDecorator {
 				PImage img = renderer.get(Math.round(renderer.width/2-(getDiameter()/2)),Math.round(renderer.height/2-(getDiameter()/2)),Math.round(getDiameter()+5),Math.round(getDiameter()+5));
 				img.mask(imgGray);
 				alphaMask.dispose();
-				renderer = img;
+				renderer = (PGraphics)img;
 				rendered = true;
 			}
 			app.pushMatrix();
@@ -116,7 +123,7 @@ public class SeedGradientDrawer extends MimodekObjectGraphicsDecorator {
 	public void render(PApplet app) {
 		int it = 0;
 
-		GradientData data = (GradientData) getDrawingData();
+		//GradientData data = (GradientData) getDrawingData();
 		if (renderer == null) {
 			renderer = app.createGraphics((int) Configurator
 					.getFloatSetting("mimosMaxRadius"), (int) Configurator
@@ -139,39 +146,7 @@ public class SeedGradientDrawer extends MimodekObjectGraphicsDecorator {
 					.sqrt(numberOfDots));
 
 			if (r <= center - Configurator.getFloatSetting("dotSize")) {//
-				float x, y;
-				int c;
-				float angle = GOLDEN_ANGLE * numberOfDots;
-				x = center + (float) (r * Math.cos(angle));
-				y = center + (float) (r * Math.sin(angle));
-
-				
-				if (Configurator.getIntegerSetting("gradientFunction") != GradientData.LINEAR) {
-					c = app.lerpColor(data.getStartColor(), data.getColor(),
-							(float) r
-									/ Configurator
-											.getFloatSetting("mimosMaxRadius"));
-				} else {
-					c = app
-							.lerpColor(
-									data.getStartColor(),
-									data.getColor(),
-									(float) Math
-											.sin(Math.PI
-													* (float) r
-													/ Configurator
-															.getFloatSetting("mimosMaxRadius")));
-				}
-				((PGraphics) renderer).noStroke();
-				((PGraphics) renderer).fill(c);
-				// ((PGraphics)
-				// data.img).strokeWeight(Configurator.getFloatSetting("dotSize"));
-				float s = Configurator.getFloatSetting("dotSize");
-				((PGraphics) renderer).ellipse(x, y, s, s);
-				
-				alphaMask.noStroke();
-				alphaMask.fill(app.color(0,0,255));
-				alphaMask.ellipse(x, y, s, s);
+				draw(renderer);
 				setDiameter(r * 2);
 				numberOfDots++;
 				it++;
@@ -189,7 +164,7 @@ public class SeedGradientDrawer extends MimodekObjectGraphicsDecorator {
 			PImage img = renderer.get(tLX,tLY,w,h);
 			img.mask(imgGray);
 			alphaMask.dispose();
-			renderer = img;
+			renderer = (PGraphics) img;
 			rendered = true;
 		}
 	}
@@ -206,7 +181,7 @@ public class SeedGradientDrawer extends MimodekObjectGraphicsDecorator {
 			PImage img = renderer.get(tLX,tLY,w,h);
 			img.mask(imgGray);
 			alphaMask.dispose();
-			renderer = img;
+			renderer = (PGraphics) img;
 			rendered = true;
 		}
 		return renderer;
@@ -217,6 +192,54 @@ public class SeedGradientDrawer extends MimodekObjectGraphicsDecorator {
 		String XMLString = super.constructorToXML(prefix);
 		XMLString 		+= prefix+"<param position=\"2\" type=\""+Integer.class.getName()+"\" value=\""+((GradientData) getDrawingData()).startColor+"\"/>\n";
 		return XMLString; 
+	}
+
+	@Override
+	protected void draw(PGraphics gfx) {
+		gfx.pushStyle();
+		GradientData data = (GradientData) getDrawingData();
+		float center = Configurator.getFloatSetting("mimosMaxRadius") / 2f;
+		float r = (float) (Configurator.getFloatSetting("radiScale") * Math
+				.sqrt(numberOfDots));
+			float x, y;
+			int c;
+			float angle = GOLDEN_ANGLE * numberOfDots;
+			x = center + (float) (r * Math.cos(angle));
+			y = center + (float) (r * Math.sin(angle));
+
+			//((PGraphics) renderer).beginDraw();
+			//alphaMask.beginDraw();
+			if (Configurator.getIntegerSetting("gradientFunction") != GradientData.LINEAR) {
+				c = gfx.lerpColor(data.getStartColor(), data.getColor(),
+						(float) r
+								/ Configurator
+										.getFloatSetting("mimosMaxRadius"));
+			} else {
+				c = gfx
+						.lerpColor(
+								data.getStartColor(),
+								data.getColor(),
+								(float) Math
+										.sin(Math.PI
+												* (float) r
+												/ Configurator
+														.getFloatSetting("mimosMaxRadius")));
+			}
+			gfx.noStroke();
+			gfx.fill(c);
+			// ((PGraphics)
+			// data.img).strokeWeight(Configurator.getFloatSetting("dotSize"));
+			float s = Configurator.getFloatSetting("dotSize");
+			gfx.ellipse(x, y, s, s);
+			
+			
+			alphaMask.noStroke();
+			alphaMask.fill(gfx.color(0,0,255));
+			alphaMask.ellipse(x, y, s, s);
+			alphaMask.endDraw();
+			gfx.popStyle();
+			
+		
 	}
 
 }

@@ -10,6 +10,7 @@ import mimodek.configuration.Configurator;
 import mimodek.decorator.graphics.TextureCollection;
 //import mimodek.controls.GUI;
 import mimodek.facade.FacadeFactory;
+import mimodek.utils.Verbose;
 
 import processing.core.PApplet;
 
@@ -70,7 +71,8 @@ public class Mimodek implements ControlListener {
 		app.registerPost(this);
 		app.registerDraw(this);
 		app.registerKeyEvent(this);
-		PApplet.println("MIMODEk says > Hi! Wait a moment I'm setting up...");
+		Verbose.speak = false;
+		Verbose.say("Hi! Wait a moment I'm setting up...");
 	}
 
 	/**
@@ -81,7 +83,7 @@ public class Mimodek implements ControlListener {
 	 * 
 	 */
 	public void dispose() {
-		PApplet.println("MIMODEk says > Bye bye!");
+		Verbose.say("Bye bye!");
 	}
 
 	/**
@@ -95,12 +97,12 @@ public class Mimodek implements ControlListener {
 	 */
 	public void size(int width, int height) {
 		try {
-			System.out.println("MIMODEk says > I will run in " + width + " X "
+			Verbose.say("I will run in " + width + " X "
 					+ height + ".");
 
 			prepare(); // do some more initialization
 
-			PApplet.println("MIMODEk says > MIMODEK ready to run!");
+			Verbose.say("MIMODEK ready to run!");
 			ready = true; // told you!
 		} catch (Exception e) {
 			e.printStackTrace(); // useful for debugging, but no really
@@ -227,8 +229,7 @@ public class Mimodek implements ControlListener {
 		
 		if (app.key == 's') {
 			Configurator.saveToFile("Configurator.xml");
-			System.out
-					.println("Settings saved in /data/Configurator/Configurator.xml");
+			Verbose.say("Settings saved in /data/Configurator/Configurator.xml");
 		}
 		if (app.key == 'l') {
 			Configurator.loadFromFile("Configurator.xml");
@@ -237,8 +238,7 @@ public class Mimodek implements ControlListener {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			System.out
-					.println("Settings loaded from /data/Configurator/Configurator.xml");
+			Verbose.say("Settings loaded from /data/Configurator/Configurator.xml");
 
 		}
 		if (app.key == 'j') {

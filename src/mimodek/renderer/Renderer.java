@@ -9,7 +9,9 @@ import mimodek.decorator.DeadMimo2;
 import mimodek.decorator.MimodekObjectDecorator;
 import mimodek.decorator.graphics.DrawingData;
 import mimodek.decorator.graphics.MimodekObjectGraphicsDecorator;
+import mimodek.decorator.graphics.NoImageException;
 import mimodek.decorator.graphics.RenderDrawer;
+import mimodek.utils.Verbose;
 import processing.core.PApplet;
 import processing.core.PVector;
 import processing.xml.XMLElement;
@@ -24,22 +26,35 @@ public class Renderer {
 		boolean fixed = new Boolean(xmlElement.getAttribute("fixed"));
 		MimodekObjectGraphicsDecorator gfxDecorator = parseGfxDecorator(
 				xmlElement.getChild("GraphicDecorator"), app);
-		DeadMimo2 deadMimo2 = new DeadMimo2(gfxDecorator.decoratedObject);
+		DeadMimo2 deadMimo2 = new DeadMimo2(gfxDecorator.decoratedObject,null);
 		
-		RenderDrawer render = new RenderDrawer(deadMimo2,
-				gfxDecorator, app);
+		try {
+			RenderDrawer render = new RenderDrawer(deadMimo2,
+					gfxDecorator, app);
+		} catch (NoImageException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		deadMimo2.render();
 		//((MimodekObjectDecorator)gfxDecorator.decoratedObject).render();
-		Cell cell = new Cell(render);
-		cell.fixed = fixed;
-		XMLElement neighboursElem = xmlElement.getChild("neighbours");
-		int neighboursCount = neighboursElem.getChildCount();
-		for (int i = 0; i < neighboursCount; i++) {
-			Cell neighbour = parseDLACell(neighboursElem.getChild(i), app);
-			cell.attach(neighbour);
+		//Cell cell = new Cell(render);
+		Cell cell;
+		try {
+			cell = new Cell(deadMimo2,app);
+			cell.fixed = fixed;
+			XMLElement neighboursElem = xmlElement.getChild("neighbours");
+			int neighboursCount = neighboursElem.getChildCount();
+			for (int i = 0; i < neighboursCount; i++) {
+				Cell neighbour = parseDLACell(neighboursElem.getChild(i), app);
+				cell.attach(neighbour);
+			}
+			Verbose.debug(cell);
+			return cell;
+		} catch (NoImageException e) {
+			// TODO Auto-generated catch block
+			return null;
 		}
-		System.out.println(cell);
-		return cell;
+		
 
 	}
 
@@ -55,7 +70,7 @@ public class Renderer {
 
 		MimodekObjectDecorator decorator = parseDecorator(xmlElement
 				.getChild("Decorator"));
-		// System.out.println(decorator);
+		// Verbose.debug(decorator);
 		DrawingData drawingData = parseDarwingData(xmlElement
 				.getChild("DrawingData"));
 
@@ -91,7 +106,7 @@ public class Renderer {
 		// int iteration = drawingData.getIteration();
 		// drawingData.setIteration(0);
 		gfxDecorator.getDrawingData().setIteration(drawingData.getIteration());
-		// System.out.println("Iteration:"+iteration);
+		// Verbose.debug("Iteration:"+iteration);
 		// while(drawingData.getIteration()<iteration){
 		gfxDecorator.render(app);
 		// }
@@ -116,7 +131,7 @@ public class Renderer {
 			drawingData = (DrawingData) drawingDataConstructor
 					.newInstance(new Object[] { startColor, color });
 		} else {
-			System.out.println(drawingDataClassName);
+			Verbose.debug(drawingDataClassName);
 			Constructor drawingDataConstructor = drawingDataClass
 					.getConstructor(new Class[] { int.class });
 			drawingData = (DrawingData) drawingDataConstructor
@@ -132,7 +147,7 @@ public class Renderer {
 			InstantiationException, IllegalAccessException,
 			InvocationTargetException {
 		String decoratorClassName = xmlElement.getStringAttribute("className");
-		// System.out.println(decoratorClassName);
+		// Verbose.debug(decoratorClassName);
 		Class decoratorClass = Class.forName(decoratorClassName);
 
 
@@ -150,7 +165,7 @@ public class Renderer {
 		float posX = mimoObjectElem.getFloatAttribute("posX");
 		float posY = mimoObjectElem.getFloatAttribute("posY");
 		float radius = mimoObjectElem.getFloatAttribute("radius");
-		// System.out.println("Radius:"+radius);
+		// Verbose.debug("Radius:"+radius);
 		Class mimoObjectClass = Class.forName(mimoObjectClassName);
 		Constructor mimodekObjectConstructor = mimoObjectClass
 				.getConstructor(new Class[] { PVector.class });
@@ -158,7 +173,7 @@ public class Renderer {
 				.newInstance(new Object[] { new PVector(posX, posY) });
 		mimodekObject.setDiameter(radius);
 
-		System.out.println(mimodekObject);
+		Verbose.debug(mimodekObject);
 		// now create the decorator
 		Constructor decoratorConstructor = decoratorClass
 				.getConstructor(new Class[] { MimodekObject.class });

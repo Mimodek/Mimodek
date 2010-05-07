@@ -7,6 +7,7 @@ import java.util.Hashtable;
 
 import mimodek.configuration.Configurator;
 import mimodek.facade.FacadeEventListener;
+import mimodek.utils.Verbose;
 
 import processing.core.PApplet;
 
@@ -42,7 +43,7 @@ public class GUI implements ControlListener, FacadeEventListener {
 		// GUI.addModule(new PhysicsGUI(350, controlOffsetY + 270, 310, 250));
 		GUI.addModule(new StyleGUI(15, controlOffsetY + 270, 310, 250));
 		GUI.addModule(new WeatherGUI(350, controlOffsetY, 310, 250));
-		// GUI.addModule(new TrackingGUI(700, controlOffsetY, 310, 250));
+		//GUI.addModule(new TrackingGUI(700, controlOffsetY, 310, 250));
 		GUI.addModule(new ActiveMimoGUI(700, controlOffsetY + 270, 310, 250));
 		return gui;
 	}
@@ -69,13 +70,13 @@ public class GUI implements ControlListener, FacadeEventListener {
 		try {
 			controlP5.controller(event).addListener(this);
 			Controller c = controlP5.controller(event);
-			if (c == null) {
-				controlP5.group(event).addListener(this);
-			} else {
+			if (c != null) {
+				/*controlP5.group(event).addListener(this);
+			} else {*/
 				c.addListener(this);
 			}
 		} catch (Exception e) {
-			System.out.println("Unknown event: " + event);
+			Verbose.debug("Unknown event: " + event);
 		}
 	}
 

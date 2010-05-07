@@ -4,6 +4,7 @@ import mimodek.MimodekObject;
 import mimodek.configuration.Configurator;
 import mimodek.decorator.ActiveMimo;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 import processing.core.PImage;
 
 public class TextureDrawer extends MimodekObjectGraphicsDecorator {
@@ -47,8 +48,7 @@ public class TextureDrawer extends MimodekObjectGraphicsDecorator {
 
 	@Override
 	public PImage toImage(PApplet app) {
-		if (!(decoratedObject instanceof ActiveMimo)) {
-						
+		if (!(decoratedObject instanceof ActiveMimo)) {	
 			return TextureCollection.get(Configurator.getIntegerSetting("ancestorTexture")).image;
 			
 		}else{
@@ -61,6 +61,11 @@ public class TextureDrawer extends MimodekObjectGraphicsDecorator {
 		String XMLString = super.constructorToXML(prefix);
 		XMLString 		+= prefix+"<param position=\"2\" type=\""+Integer.class.getName()+"\" value=\""+getDrawingData().getColor()+"\"/>\n";
 		return XMLString;
+	}
+
+	@Override
+	protected void draw(PGraphics gfx) {
+		return;
 	}
 
 }

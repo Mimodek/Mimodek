@@ -4,6 +4,7 @@ import mimodek.MimodekObject;
 import mimodek.configuration.Configurator;
 import mimodek.decorator.ActiveMimo;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 import processing.core.PImage;
 
 public class ImageDrawer extends MimodekObjectGraphicsDecorator {
@@ -13,8 +14,11 @@ public class ImageDrawer extends MimodekObjectGraphicsDecorator {
 		super(decoratedObject);
 	}
 	
-	public ImageDrawer(MimodekObject decoratedObject, PImage image, int color, PApplet app) {
+	public ImageDrawer(MimodekObject decoratedObject, PImage image, int color, PApplet app) throws NoImageException{
 		super(decoratedObject);
+		if(image == null)
+			throw new NoImageException();
+		
 		setDrawingData(new SimpleDrawingData(color));
 		this.image = new SquareTexture(image,app);
 	}
@@ -22,36 +26,34 @@ public class ImageDrawer extends MimodekObjectGraphicsDecorator {
 
 	@Override
 	public void draw(PApplet app) {
-		app.pushMatrix();
-		
-		app.translate(getPosX(),getPosY());
-		/*
-		app.pushStyle();
-		app.noFill();
-		app.stroke(255);
-		app.ellipse(0,0,getRadius()/2,getRadius()/2);
-		app.popStyle();
-		*/
-		if (!(decoratedObject instanceof ActiveMimo)) {
-			app.colorMode(PApplet.HSB,255);
-			int c = getDrawingData().getColor();
-			//c = app.color(app.hue(c), app.saturation(c),Configurator.getIntegerSetting("ancestorBrightness"));
-			c = app.color(0, 0,Configurator.getIntegerSetting("ancestorBrightness"));
-			app.tint(c);			
-			image.draw(getDiameter() / Configurator.getFloatSetting("mimosMaxRadius"));
-			app.colorMode(PApplet.RGB, 255);
-		}else{
-			app.tint(getDrawingData().getColor());
-			
-			image.draw(getDiameter() / Configurator.getFloatSetting("mimosMaxRadius"));
-		}
-		app.noTint();
-		app.popMatrix();
+		draw(app.g);
 	}
 
 	@Override
 	public PImage toImage(PApplet app) {
 		return image.image;
+	}
+
+	@Override
+	protected void draw(PGraphics gfx) {
+		gfx.pushMatrix();
+		gfx.pushStyle();
+		gfx.translate(getPosX(),getPosY());
+		if (!(decoratedObject instanceof ActiveMimo)) {
+			gfx.colorMode(PApplet.HSB,255);
+			int c = getDrawingData().getColor();
+			c = gfx.color(gfx.hue(c), gfx.saturation(c),Configurator.getIntegerSetting("ancestorBrightness"));
+			//c = gfx.color(0, 0,Configurator.getIntegerSetting("ancestorBrightness"));
+			gfx.tint(c);			
+			image.draw(getDiameter() / Configurator.getFloatSetting("mimosMaxRadius"));
+			gfx.colorMode(PApplet.RGB, 255);
+		}else{
+			gfx.tint(getDrawingData().getColor());
+			
+			image.draw(getDiameter() / Configurator.getFloatSetting("mimosMaxRadius"));
+		}
+		gfx.popStyle();
+		gfx.popMatrix();	
 	}
 	
 }

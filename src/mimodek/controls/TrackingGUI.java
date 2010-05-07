@@ -54,9 +54,9 @@ public class TrackingGUI extends GUIModule {
 		if (!Configurator.getBooleanSetting(name+"_GUI_open"))
 			return;
 		GUI.gui().app.fill(255);
-		GUI.gui().app.text("Active mimos: "
-				+ MimosManager.activeMimoCount, getX()
-				+ controlPositionX, getY() + controlPositionY * 3);
+		/*GUI.gui().app.text("Active mimos: "
+				+ MimosManager, getX()
+				+ controlPositionX, getY() + controlPositionY * 3);*/
 		GUI.gui().app.text(
 				"Receiving TUIO: "
 						+ ((Configurator
@@ -83,6 +83,5 @@ public class TrackingGUI extends GUIModule {
 			Configurator.setSetting("edgeDetection", cEvent.value());
 			return;
 		}
-		
 	}
 }

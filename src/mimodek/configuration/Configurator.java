@@ -4,6 +4,8 @@ import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import mimodek.utils.Verbose;
+
 import processing.core.PApplet;
 import processing.xml.XMLElement;
 
@@ -133,7 +135,7 @@ public class Configurator {
 	}
 	
 	protected void loadFromFil(String fileName){
-		System.out.println("MIMODEK says > Loading configuration from "+fileName);
+		Verbose.say("MIMODEK says > Loading configuration from "+fileName);
 		XMLElement xml;
 		xml = new XMLElement(app, "data/config/"+fileName);
 		int numSettings = xml.getChildCount();

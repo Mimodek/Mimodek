@@ -1,9 +1,11 @@
 package mimodek.decorator.graphics;
 
 import processing.core.PApplet;
+import processing.core.PGraphics;
 import processing.core.PImage;
 import mimodek.decorator.MimodekObjectDecorator;
 import mimodek.decorator.graphics.DrawingData;
+import mimodek.utils.Verbose;
 import mimodek.MimodekObject;
 
 /**
@@ -35,10 +37,12 @@ public abstract class MimodekObjectGraphicsDecorator extends MimodekObjectDecora
 	
 	public abstract void draw(PApplet app);
 	
+	protected abstract void draw(PGraphics gfx);
+	
 	public abstract PImage toImage(PApplet app);
 	
 	public String toXMLString(String prefix){
-		System.out.println(prefix+this);
+		Verbose.debug(prefix+this);
 		String XMLString = prefix+"<GraphicDecorator className=\""+this.getClass().getName()+"\">\n";
 		XMLString 		+= decoratedObject.toXMLString(prefix+"\t");
 		if(drawingData!=null)

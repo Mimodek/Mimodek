@@ -2,6 +2,7 @@ package mimodek.decorator.graphics;
 
 import mimodek.MimodekObject;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 import processing.core.PImage;
 
 public class ComboGraphicsDecorator extends MimodekObjectGraphicsDecorator {
@@ -35,6 +36,11 @@ public class ComboGraphicsDecorator extends MimodekObjectGraphicsDecorator {
 	public PImage toImage(PApplet app) {
 		// TODO Auto-generated method stub
 		return primaryDecorator.toImage(app);
+	}
+
+	@Override
+	protected void draw(PGraphics gfx) {
+		;
 	}
 
 }

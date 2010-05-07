@@ -1,5 +1,6 @@
 package mimodek.tracking;
 
+import mimodek.configuration.Configurator;
 import mimodek.facade.FacadeFactory;
 
 public class TrackingInfo {

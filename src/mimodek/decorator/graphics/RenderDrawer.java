@@ -13,7 +13,7 @@ public class RenderDrawer extends ImageDrawer {
 		super(decoratedObject);
 	}
 	
-	public RenderDrawer(MimodekObject decoratedObject, MimodekObjectGraphicsDecorator gfxDecorator, PApplet app){
+	public RenderDrawer(MimodekObject decoratedObject, MimodekObjectGraphicsDecorator gfxDecorator, PApplet app) throws NoImageException{
 		super(decoratedObject,gfxDecorator.toImage(app), Colors.getColor(Configurator.getFloatSetting("mimosColor")),app);
 		this.gfxDecorator = gfxDecorator;
 		gfxDecorator.decoratedObject = decoratedObject;

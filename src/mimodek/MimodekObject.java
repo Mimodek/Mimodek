@@ -62,6 +62,8 @@ public interface MimodekObject {
 	 */
 	public void update();
 	
+	public boolean isInScreen();
+	
 	public String toXMLString(String prefix);
 	
 }

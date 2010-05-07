@@ -4,10 +4,10 @@ import mimodek.MimodekObject;
 import mimodek.configuration.Configurator;
 import processing.core.PApplet;
 
-public class DeadMimo1 extends MimodekObjectDecorator {
+public class DeadMimo1 extends DeadMimo2 {
 
 	public DeadMimo1(MimodekObject decoratedObject) {
-		super(decoratedObject);
+		super(decoratedObject, null);
 	}
 
 	public void update() {

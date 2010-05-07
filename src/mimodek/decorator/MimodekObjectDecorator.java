@@ -1,6 +1,8 @@
 package mimodek.decorator;
 
 import mimodek.MimodekObject;
+import mimodek.facade.FacadeFactory;
+import mimodek.utils.Verbose;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -71,9 +73,12 @@ public abstract class MimodekObjectDecorator implements MimodekObject {
 	public void render(){
 		return;
 	}
+	public boolean isInScreen(){
+		return decoratedObject.isInScreen();
+	}
 	
 	public String toXMLString(String prefix){
-		System.out.println(prefix+this);
+		Verbose.debug(prefix+this);
 		return prefix+"<Decorator className=\""+this.getClass().getName()+"\">\n"+decoratedObject.toXMLString(prefix+"\t")+prefix+"</Decorator>\n";
 	}
 }

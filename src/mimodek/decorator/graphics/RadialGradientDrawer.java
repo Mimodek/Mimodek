@@ -31,23 +31,7 @@ public class RadialGradientDrawer extends MimodekObjectGraphicsDecorator {
 				PApplet.JAVA2D);
 
 		buffer.beginDraw();
-		buffer.background(0, 0, 0, 0);
-		buffer.noStroke();
-		for (int i = (int) getDiameter(); i >= 0; i--) {
-			float t = 0;
-			switch (Configurator.getIntegerSetting("gradientFunction")) {
-			case GradientData.LINEAR:
-				t = (float) i / Configurator.getFloatSetting("mimosMaxRadius");
-				// break;
-			case GradientData.SIN:
-				t = (float) Math.sin(Math.PI * i
-						/ Configurator.getFloatSetting("mimosMaxRadius"));
-				break;
-			}
-			buffer.fill(app.lerpColor(((GradientData) getDrawingData())
-					.getStartColor(), getDrawingData().getColor(), t));
-			buffer.ellipse(buffer.width / 2, buffer.width / 2, i, i);
-		}
+		draw(buffer);
 		buffer.endDraw();
 		
 		if (!(decoratedObject instanceof ActiveMimo)) {
@@ -64,8 +48,35 @@ public class RadialGradientDrawer extends MimodekObjectGraphicsDecorator {
 
 	@Override
 	public PImage toImage(PApplet app) {
-		// TODO Auto-generated method stub
-		return null;
+		PGraphics buffer = app.createGraphics((int)getDiameter()+4,
+				(int) getDiameter()+4,
+				PApplet.JAVA2D);
+		buffer.beginDraw();
+		draw(buffer);
+		buffer.endDraw();
+		return buffer;
+	}
+
+	@Override
+	protected void draw(PGraphics gfx) {
+		gfx.background(0, 0, 0, 0);
+		gfx.noStroke();
+		for (int i = (int) getDiameter(); i >= 0; i--) {
+			float t = 0;
+			switch (Configurator.getIntegerSetting("gradientFunction")) {
+			case GradientData.LINEAR:
+				t = (float) i / Configurator.getFloatSetting("mimosMaxRadius");
+				// break;
+			case GradientData.SIN:
+				t = (float) Math.sin(Math.PI * i
+						/ Configurator.getFloatSetting("mimosMaxRadius"));
+				break;
+			}
+			gfx.fill(gfx.lerpColor(((GradientData) getDrawingData())
+					.getStartColor(), getDrawingData().getColor(), t));
+			gfx.ellipse(gfx.width / 2, gfx.width / 2, i, i);
+		}
+		
 	}
 
 }
