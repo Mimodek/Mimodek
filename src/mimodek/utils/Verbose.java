@@ -14,4 +14,8 @@ public class Verbose {
 		if(speak)
 			System.out.println("(debug) "+sentence);
 	}
+	
+	public static void overRule(Object sentence){
+			System.out.println("(debug) "+sentence);
+	}
 }

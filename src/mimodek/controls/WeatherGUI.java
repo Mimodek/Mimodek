@@ -41,7 +41,7 @@ public class WeatherGUI extends GUIModule {
 		super.draw();
 		if (!Configurator.getBooleanSetting(name + "_GUI_open"))
 			return;
-		GUI.gui().app.fill(Colors.getColor(Configurator.getFloatSetting("mimosColor")));
+		//GUI.gui().app.fill(Colors.getColor(Configurator.getFloatSetting("mimosColor")));
 
 		GUI.gui().app.rect(getX() + controlPositionX, getY() + controlPositionY
 				* 2 + 15, 120, 70);

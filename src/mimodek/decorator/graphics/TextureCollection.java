@@ -37,6 +37,11 @@ public class TextureCollection {
 		return collection.getSize();
 	}
 	
+	public static int addTexture(SquareTexture img){
+		collection.textures.add(img);
+		return size()-1;
+	}
+	
 	
 	
 	protected int getSize() {

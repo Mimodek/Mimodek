@@ -126,16 +126,22 @@ public class Mimodek implements ControlListener {
 		Configurator.loadFromFile("Configurator.xml");
 		
 		// Creates an empty Mimodek
-		mimosManager = new MimosManager(this);
-
+		Colors activeMimosColors = new Colors(app);
+		try {
+			activeMimosColors.loadFromCSV("ActiveMimosColor.txt", app);
+		} catch (Exception e) {
+			Verbose.overRule(e.getMessage());
+		}finally{
+			mimosManager = new MimosManager(this,activeMimosColors);
+		}
 		TextureCollection.loadTextures(app);
 
 		
 		// load color palette from XML (singleton)
-		Colors.createColors(app, "MimodekColourRanges.xml");
+		//Colors.createColors(app, "MimodekColourRanges.xml");
 		// define the range of values to map thes colros to
-		Colors.getColor(-10);
-		Colors.getColor(40);
+		//Colors.getColor(-10);
+		//Colors.getColor(40);
 	}
 
 	
@@ -172,7 +178,8 @@ public class Mimodek implements ControlListener {
 	 * Call this method to reset Mimodek without quitting the program. WARNING: Every Mimos and the DLA will be lost!!
 	 */
 	public void reset() {
-		mimosManager = new MimosManager(this);
+		Colors c = mimosManager.activeMimosColors;
+		mimosManager = new MimosManager(this,c);
 	}
 
 	/**

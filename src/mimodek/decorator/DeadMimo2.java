@@ -33,6 +33,10 @@ public class DeadMimo2 extends MimodekObjectDecorator {
 	public float getEnergy() {
 		return energy;
 	}
+	
+	public void setEnergy(float e) {
+		energy = e;
+	}
 
 	public float getDiameter(){
 		if(Math.abs(currentScale-Configurator.getFloatSetting("ancestorScale"))>0.1)

@@ -1,6 +1,8 @@
 //The mimodek code
 import mimodek.facade.*;
 import mimodek.tracking.*;
+import mimodek.configuration.*;
+import mimodek.decorator.graphics.*;
 import mimodek.controls.*;
 import mimodek.*;
 
@@ -20,7 +22,9 @@ Mimodek mimodek;
 
 int TUIO = 1;
 int SIMULATOR = 0;
-int tracker = TUIO;
+int tracker = 1;
+
+boolean SHOW_ID = false;
 
 Tracker tracking;
 
@@ -45,6 +49,8 @@ void setup(){
   if(tracker == SIMULATOR)
    ((TrackingSimulator)tracking).start(); //Start the simulator (Threaded)
   
+  if(SHOW_ID)
+    Configurator.setSetting("activeMimoDecorator", GraphicsDecoratorEnum.TEXT.toString());
   smooth();
   frameRate(24);
   PFont font = createFont("Verdana", 10, false);

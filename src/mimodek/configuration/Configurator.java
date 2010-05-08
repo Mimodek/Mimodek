@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import mimodek.decorator.graphics.GraphicsDecoratorEnum;
 import mimodek.utils.Verbose;
 
 import processing.core.PApplet;
@@ -47,6 +48,8 @@ public class Configurator {
 		Configurator.setSetting("ancestorBrightness", 144);
 		Configurator.setSetting("ancestorTexture", 0);
 		Configurator.setSetting("activeTexture", 1);
+		
+		Configurator.setSetting("activeMimoDecorator", GraphicsDecoratorEnum.COMBO.toString());
 	}
 	
 	protected Configurator(PApplet app){

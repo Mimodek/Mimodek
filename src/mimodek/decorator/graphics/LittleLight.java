@@ -1,6 +1,7 @@
 package mimodek.decorator.graphics;
 
 import mimodek.MimodekObject;
+import mimodek.configuration.Configurator;
 import mimodek.decorator.DeadMimo2;
 import mimodek.facade.FacadeFactory;
 import processing.core.PApplet;
@@ -9,6 +10,7 @@ import processing.core.PImage;
 
 public class LittleLight extends MimodekObjectGraphicsDecorator {
 	public static float STRENGTH = 0.95f;
+	public static int littleLightGfx = -1;
 	
 	public LittleLight(MimodekObject decoratedObject) {
 		super(decoratedObject);
@@ -21,8 +23,28 @@ public class LittleLight extends MimodekObjectGraphicsDecorator {
 
 	@Override
 	public void draw(PApplet app) {
+		//create the image if not created yet
+		if(littleLightGfx < 0){
+			//makes the biggest possible image
+			float r = Configurator.getFloatSetting("mimosMaxRadius");
+			float e = ((DeadMimo2)decoratedObject).getEnergy(); //set the energy to max level
+			((DeadMimo2)decoratedObject).setEnergy(r);
+			if((int)r<=0)
+				return;
+			PGraphics img = app.createGraphics((int)r,(int)r,PApplet.JAVA2D);
+			draw(img);
+			littleLightGfx = TextureCollection.addTexture(new SquareTexture(img,app));
+			((DeadMimo2)decoratedObject).setEnergy(e);//restore actual energy
+			
+		}
+		app.pushMatrix();
+		app.translate(getPosX(),getPosY());
+		app.tint(getDrawingData().getColor());
+		//app.ellipse(0, 0, ((DeadMimo2)decoratedObject).getEnergy(), ((DeadMimo2)decoratedObject).getEnergy());
+		TextureCollection.get(littleLightGfx).draw(((DeadMimo2)decoratedObject).getEnergy()/Configurator.getFloatSetting("mimosMaxRadius"));
+		app.popMatrix();
 		 //strength = Strength;//*(map(dist(pos.x,pos.y,facade.mouseX,facade.mouseY),0,dist(0,0,facade.width,facade.height),1,0));
-		float r = ((DeadMimo2)decoratedObject).getEnergy();
+		/*float r = ((DeadMimo2)decoratedObject).getEnergy();
 		if((int)r<=0)
 			return;
 		PGraphics img = app.createGraphics((int)r,(int)r,PApplet.JAVA2D);
@@ -31,7 +53,7 @@ public class LittleLight extends MimodekObjectGraphicsDecorator {
 		app.translate(getPosX(),getPosY());
 		app.image(img,-img.width/2,-img.height/2);
 		app.popMatrix();
-		img.dispose();
+		img.dispose();*/
 	}
 	
 	 protected float equation(float x, float y,float strength){
@@ -50,7 +72,6 @@ public class LittleLight extends MimodekObjectGraphicsDecorator {
 
 	@Override
 	public PImage toImage(PApplet app) {
-		
 		float r = ((DeadMimo2)decoratedObject).getEnergy();
 		if((int)r<=0)
 			return null;
@@ -67,7 +88,7 @@ public class LittleLight extends MimodekObjectGraphicsDecorator {
 	      for(int j=0;j<gfx.height;j++){
 	        float v = equation(i,j,STRENGTH);
 	        v = v>0.95*STRENGTH?1:v/2;
-	        gfx.pixels[i+j*gfx.width] = gfx.lerpColor(gfx.color(0,0,0,0),getDrawingData().getColor(),v);
+	        gfx.pixels[i+j*gfx.width] = gfx.lerpColor(gfx.color(0,0,0,0),gfx.color(255),v);
 	      }
 	    }
 	    gfx.updatePixels();
