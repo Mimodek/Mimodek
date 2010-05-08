@@ -10,11 +10,13 @@ public class DeadMimo1 extends DeadMimo2 {
 		super(decoratedObject, null);
 	}
 
+	@Override
 	public void update() {
 		setDiameter(decoratedObject.getDiameter()-0.025f);
 		decoratedObject.update();
 	}
 	
+	@Override
 	public float getDiameter(){
 		return decoratedObject.getDiameter()*(1.0f/Configurator.getFloatSetting("ancestorScale"));
 	}

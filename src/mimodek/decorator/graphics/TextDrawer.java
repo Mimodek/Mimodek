@@ -2,6 +2,7 @@ package mimodek.decorator.graphics;
 
 import mimodek.MimodekObject;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 
@@ -23,7 +24,7 @@ String text = "";
 	public PImage toImage(PApplet app) {
 		int h = Math.round(app.textDescent() + app.textAscent());
 		int w = Math.round(app.textWidth(text));
-		PGraphics renderer = app.createGraphics(w+2,h+2, PApplet.JAVA2D);//leave a little margin for rounding error 
+		PGraphics renderer = app.createGraphics(w+2,h+2, PConstants.JAVA2D);//leave a little margin for rounding error 
 		renderer.beginDraw();
 		renderer.textFont(app.g.textFont);
 		renderer.translate(-getPosX()+renderer.width/2, -getPosY()+h);
@@ -31,7 +32,7 @@ String text = "";
 		renderer.endDraw();
 		PGraphics gfx = renderer;
 		PImage img = gfx.get();
-		gfx.filter(PApplet.GRAY);
+		gfx.filter(PConstants.GRAY);
 		gfx.loadPixels();
 		img.mask(gfx.pixels);
 		gfx.dispose();

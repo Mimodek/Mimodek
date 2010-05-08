@@ -20,6 +20,7 @@ public class ActiveMimoGUI extends GUIModule {
 		create();
 	}
 
+	@Override
 	public void create() {
 		reset();
 		int x = getX();

@@ -1,7 +1,6 @@
 package mimodek.controls;
 
 import controlP5.ControlEvent;
-import mimodek.MimosManager;
 import mimodek.configuration.Configurator;
 
 public class TrackingGUI extends GUIModule {
@@ -15,6 +14,7 @@ public class TrackingGUI extends GUIModule {
 		create();
 	}
 
+	@Override
 	public void create() {
 		reset();
 		int x = getX();
@@ -49,6 +49,7 @@ public class TrackingGUI extends GUIModule {
 		toggleControllers(Configurator.getBooleanSetting(name+"_GUI_open"));
 	}
 
+	@Override
 	public void draw() {
 		super.draw();
 		if (!Configurator.getBooleanSetting(name+"_GUI_open"))

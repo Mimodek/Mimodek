@@ -22,7 +22,7 @@ Mimodek mimodek;
 
 int TUIO = 1;
 int SIMULATOR = 0;
-int tracker = 1;
+int tracker = 0;
 
 boolean SHOW_ID = false;
 

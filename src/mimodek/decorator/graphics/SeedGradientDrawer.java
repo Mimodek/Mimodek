@@ -1,6 +1,7 @@
 package mimodek.decorator.graphics;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import mimodek.MimodekObject;
@@ -8,7 +9,7 @@ import mimodek.configuration.Configurator;
 import mimodek.decorator.ActiveMimo;
 
 public class SeedGradientDrawer extends MimodekObjectGraphicsDecorator {
-	public static final float GOLDEN_ANGLE = (float) (PApplet.TWO_PI * 0.618034);
+	public static final float GOLDEN_ANGLE = (float) (PConstants.TWO_PI * 0.618034);
 	private int numberOfDots = 0;
 	public PGraphics renderer = null;
 	private PGraphics alphaMask = null;
@@ -32,12 +33,12 @@ public class SeedGradientDrawer extends MimodekObjectGraphicsDecorator {
 		if (renderer == null) {
 			renderer = app.createGraphics((int) Configurator
 					.getFloatSetting("mimosMaxRadius"), (int) Configurator
-					.getFloatSetting("mimosMaxRadius"), PApplet.JAVA2D);
+					.getFloatSetting("mimosMaxRadius"), PConstants.JAVA2D);
 			renderer.beginDraw();
 			renderer.endDraw();
 			alphaMask = app.createGraphics((int) Configurator
 					.getFloatSetting("mimosMaxRadius"), (int) Configurator
-					.getFloatSetting("mimosMaxRadius"), PApplet.JAVA2D);
+					.getFloatSetting("mimosMaxRadius"), PConstants.JAVA2D);
 			alphaMask.beginDraw();
 			alphaMask.background(0);
 			alphaMask.endDraw();
@@ -127,19 +128,19 @@ public class SeedGradientDrawer extends MimodekObjectGraphicsDecorator {
 		if (renderer == null) {
 			renderer = app.createGraphics((int) Configurator
 					.getFloatSetting("mimosMaxRadius"), (int) Configurator
-					.getFloatSetting("mimosMaxRadius"), PApplet.JAVA2D);
-			((PGraphics) renderer).beginDraw();
-			((PGraphics) renderer).endDraw();
+					.getFloatSetting("mimosMaxRadius"), PConstants.JAVA2D);
+			(renderer).beginDraw();
+			(renderer).endDraw();
 			alphaMask = app.createGraphics((int) Configurator
 					.getFloatSetting("mimosMaxRadius"), (int) Configurator
-					.getFloatSetting("mimosMaxRadius"), PApplet.JAVA2D);
+					.getFloatSetting("mimosMaxRadius"), PConstants.JAVA2D);
 			alphaMask.beginDraw();
 			alphaMask.background(0);
 			alphaMask.endDraw();
 		}
 
 		float center = Configurator.getFloatSetting("mimosMaxRadius") / 2f;
-		((PGraphics) renderer).beginDraw();
+		(renderer).beginDraw();
 		alphaMask.beginDraw();
 		while (it < getDrawingData().getIteration()) {
 			float r = (float) (Configurator.getFloatSetting("radiScale") * Math
@@ -152,7 +153,7 @@ public class SeedGradientDrawer extends MimodekObjectGraphicsDecorator {
 				it++;
 			}
 			alphaMask.endDraw();
-			((PGraphics) renderer).endDraw();
+			(renderer).endDraw();
 		}
 		if (!rendered  && renderer instanceof PGraphics) {
 			int w = PApplet.round(getDiameter()+5);
@@ -211,7 +212,7 @@ public class SeedGradientDrawer extends MimodekObjectGraphicsDecorator {
 			//alphaMask.beginDraw();
 			if (Configurator.getIntegerSetting("gradientFunction") != GradientData.LINEAR) {
 				c = gfx.lerpColor(data.getStartColor(), data.getColor(),
-						(float) r
+						r
 								/ Configurator
 										.getFloatSetting("mimosMaxRadius"));
 			} else {
@@ -221,7 +222,7 @@ public class SeedGradientDrawer extends MimodekObjectGraphicsDecorator {
 								data.getColor(),
 								(float) Math
 										.sin(Math.PI
-												* (float) r
+												* r
 												/ Configurator
 														.getFloatSetting("mimosMaxRadius")));
 			}

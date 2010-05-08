@@ -5,7 +5,6 @@ import java.io.File;
 import mimodek.configuration.Configurator;
 
 import processing.core.PApplet;
-import processing.core.PGraphics;
 import processing.core.PImage;
 
 /*

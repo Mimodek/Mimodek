@@ -9,6 +9,7 @@ import processing.core.PVector;
 
 import mimodek.configuration.Colors;
 import mimodek.configuration.Configurator;
+import mimodek.data.PollutionLevelsEnum;
 import mimodek.decorator.ActiveMimo;
 import mimodek.decorator.Cell;
 import mimodek.decorator.DeadMimo1;
@@ -295,51 +296,64 @@ public class MimosManager implements TrackingListener {
 	 */
 	private void createActiveMimo(TrackingInfo info) {
 		ActiveMimo aM = new ActiveMimo(new SimpleMimo(new PVector(info.x,
-				info.y)));
+				info.y)),info.id);
 		aM.setDiameter(Configurator.getFloatSetting("mimosMinRadius"));
 		aM.targetPos.x = info.x;
 		aM.targetPos.y = info.y;
 		aM.lastActiveMovement = mimodek.app.millis();
 		aM.createdAt = aM.lastActiveMovement;
-		MimodekObjectGraphicsDecorator decorated = null;
+		
+		//get a color from the colors pool
 		int colour = activeMimosColors.getRandomIndividualColor();
-		switch (GraphicsDecoratorEnum.valueOf(Configurator
-				.getStringSetting("activeMimoDecorator"))) { // Configurator.getIntegerSetting("textureMode")
-		case TEXTURE:
-			decorated = new TextureDrawer(aM, colour);
-			break;
-		case GENERATED:
-			decorated = new SeedGradientDrawer(aM, colour);
-			break;
-		case METABALL:
-			decorated = new MetaBall(aM, colour);
-			break;
-		case POLAR:
-			decorated = new PolarDrawer(aM, colour, -50
-					+ mimodek.app.noise(aM.getPosX(), aM.getPosY()) * 100, -100
-					+ mimodek.app.noise(aM.getPosY(), aM.getPosX()) * 200);
-			break;
-		case COMBO:
-			MimodekObjectGraphicsDecorator primaryDecorator = new PolarDrawer(
-					aM, colour, -50
-							+ mimodek.app.noise(aM.getPosX(), aM.getPosY())
-							* 100, -100
-							+ mimodek.app.noise(aM.getPosY(), aM.getPosX())
-							* 200/*-50+mimodek.app.noise(aM.getPosX(),aM.getPosY())*100,-100+mimodek.app.noise(aM.getPosY(),aM.getPosX())*200*/);
-			MimodekObjectGraphicsDecorator secondaryDecorator = new MetaBall(
-					aM, colour);
-			decorated = new ComboGraphicsDecorator(primaryDecorator,
-					secondaryDecorator);
-			break;
-		case TEXT:
-			decorated = new TextDrawer(aM, colour, info.id + "");
-			break;
-		case CIRCLE:
-		default:
-			decorated = new CircleDrawer(aM, colour);
-		}
+		//get the current pollution level
+		PollutionLevelsEnum pollutionLevel = PollutionLevelsEnum.valueOf(Configurator.getStringSetting("pollutionScore"));
+		//
+		MimodekObjectGraphicsDecorator decorated = decorateByPollutionLevel(aM, colour, pollutionLevel);
+		
 		Verbose.debug(decorated);
 		activeMimos.put(info.id, decorated);
+	}
+	
+	private MimodekObjectGraphicsDecorator decorateByPollutionLevel(ActiveMimo aM, int colour, PollutionLevelsEnum pollutionLevel){
+		GraphicsDecoratorEnum chosenDecorator = null;
+		float paramA = 0;
+		float paramB = 0;
+		switch(pollutionLevel){
+		case GOOD:
+			chosenDecorator = GraphicsDecoratorEnum.GENERATED;
+			break;
+		case OK:
+			
+		case BAD:
+
+		case VERY_BAD:
+			chosenDecorator = GraphicsDecoratorEnum.COMBO;
+			paramA = -50+mimodek.app.noise(aM.getPosX(),aM.getPosY())*100;
+			paramB = -100+mimodek.app.noise(aM.getPosY(),aM.getPosX())*200;
+			break;
+		}
+		
+		switch (chosenDecorator) { // Configurator.getIntegerSetting("textureMode")
+		case TEXTURE:
+			return new TextureDrawer(aM, colour);
+		case GENERATED:
+			return new SeedGradientDrawer(aM, colour);
+		case METABALL:
+			return new MetaBall(aM, colour);
+		case POLAR:
+			return new PolarDrawer(aM, colour, paramA, paramB);
+		case COMBO:
+			MimodekObjectGraphicsDecorator primaryDecorator = new PolarDrawer(aM, colour, paramA, paramB);
+			MimodekObjectGraphicsDecorator secondaryDecorator = new MetaBall(
+					aM, colour);
+			return new ComboGraphicsDecorator(primaryDecorator,
+					secondaryDecorator);
+		case TEXT:
+			return new TextDrawer(aM, colour, aM.id + "");
+		case CIRCLE:
+		default:
+			return new CircleDrawer(aM, colour);
+		}
 	}
 
 	/**

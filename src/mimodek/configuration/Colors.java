@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import mimodek.utils.Verbose;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.xml.XMLElement;
 
 /**
@@ -32,7 +33,7 @@ public class Colors {
 	public Colors(PApplet app) {
 		this.app = app;
 		colorRanges = new ArrayList<Integer>();
-		app.colorMode(PApplet.HSB, 1f);
+		app.colorMode(PConstants.HSB, 1f);
 		colorRanges.add(app.color(0f, 1f, 0.502f));
 
 		colorRanges.add(app.color(0.333f, 1f, 0.804f));
@@ -48,7 +49,7 @@ public class Colors {
 		colorRanges.add(app.color(0.564f, 1f, 0.98f));
 
 		colorRanges.add(app.color(0.667f, 0.395f, 0.933f));
-		app.colorMode(PApplet.RGB, 255);
+		app.colorMode(PConstants.RGB, 255);
 	}
 
 	// load colors from an XML file
@@ -57,7 +58,7 @@ public class Colors {
 			XMLElement xml;
 			xml = new XMLElement(app, "data/config/" + fileName);
 			int numRange = xml.getChildCount();
-			app.colorMode(PApplet.HSB, 1f);
+			app.colorMode(PConstants.HSB, 1f);
 
 			colorRanges = new ArrayList<Integer>();
 			Verbose.say(numRange + " colors found");
@@ -81,7 +82,7 @@ public class Colors {
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			app.colorMode(PApplet.RGB, 255);
+			app.colorMode(PConstants.RGB, 255);
 		}
 	}
 
@@ -105,7 +106,7 @@ public class Colors {
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			app.colorMode(PApplet.RGB, 255);
+			app.colorMode(PConstants.RGB, 255);
 		}
 	}
 

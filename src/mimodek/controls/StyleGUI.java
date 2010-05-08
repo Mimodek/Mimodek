@@ -35,6 +35,7 @@ public class StyleGUI extends GUIModule {
 		create();
 	}
 
+	@Override
 	public void reset() {
 		super.reset();
 		if (listA != null)
@@ -47,6 +48,7 @@ public class StyleGUI extends GUIModule {
 			GUI.gui().controlP5.remove(rG.name());
 	}
 
+	@Override
 	public void create() {
 		reset();
 		int x = getX();
@@ -200,6 +202,7 @@ public class StyleGUI extends GUIModule {
 		// gradient control
 	}
 
+	@Override
 	public void toggleControllers(boolean on) {
 		super.toggleControllers(on);
 		if (on) {
@@ -215,6 +218,7 @@ public class StyleGUI extends GUIModule {
 		}
 	}
 
+	@Override
 	public void moveControllers(int offsetX, int offsetY) {
 		super.moveControllers(offsetX, offsetY);
 		CVector3f pos = listA.position();
@@ -238,6 +242,7 @@ public class StyleGUI extends GUIModule {
 		rG.setPosition(pos.x, pos.y);
 	}
 
+	@Override
 	public void draw() {
 		super.draw();
 		if (!Configurator.getBooleanSetting(name + "_GUI_open"))

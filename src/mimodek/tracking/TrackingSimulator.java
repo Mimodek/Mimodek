@@ -7,6 +7,7 @@ import java.util.Hashtable;
 import mimodek.facade.Facade;
 import mimodek.facade.FacadeFactory;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PVector;
 
 /**
@@ -40,7 +41,7 @@ public class TrackingSimulator extends Thread implements Tracker{
 		
 		public void draw(PApplet app){
 			app.pushStyle();
-			app.rectMode(PApplet.CENTER);
+			app.rectMode(PConstants.CENTER);
 			if(active){
 				app.noStroke();
 				app.fill(out?125:255);
@@ -86,6 +87,7 @@ public class TrackingSimulator extends Thread implements Tracker{
 		running = false;
 	}
 	
+	@Override
 	public void run() {
 		while (running) {
 			
@@ -113,7 +115,7 @@ public class TrackingSimulator extends Thread implements Tracker{
 		//draw the tracking area
 		app.noFill();
 		app.stroke(255);
-		app.rectMode(PApplet.CORNER);
+		app.rectMode(PConstants.CORNER);
 		app.rect(left, top, facade.width, facade.height);
 		Enumeration<Integer> e = particles.keys();
 		while (e.hasMoreElements()) {

@@ -4,6 +4,7 @@ import mimodek.MimodekObject;
 import mimodek.configuration.Configurator;
 import mimodek.decorator.ActiveMimo;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 
@@ -28,7 +29,7 @@ public class RadialGradientDrawer extends MimodekObjectGraphicsDecorator {
 		PGraphics buffer = app.createGraphics(
 				(int) Configurator.getFloatSetting("mimosMaxRadius"),
 				(int) Configurator.getFloatSetting("mimosMaxRadius"),
-				PApplet.JAVA2D);
+				PConstants.JAVA2D);
 
 		buffer.beginDraw();
 		draw(buffer);
@@ -50,7 +51,7 @@ public class RadialGradientDrawer extends MimodekObjectGraphicsDecorator {
 	public PImage toImage(PApplet app) {
 		PGraphics buffer = app.createGraphics((int)getDiameter()+4,
 				(int) getDiameter()+4,
-				PApplet.JAVA2D);
+				PConstants.JAVA2D);
 		buffer.beginDraw();
 		draw(buffer);
 		buffer.endDraw();
@@ -65,7 +66,7 @@ public class RadialGradientDrawer extends MimodekObjectGraphicsDecorator {
 			float t = 0;
 			switch (Configurator.getIntegerSetting("gradientFunction")) {
 			case GradientData.LINEAR:
-				t = (float) i / Configurator.getFloatSetting("mimosMaxRadius");
+				t = i / Configurator.getFloatSetting("mimosMaxRadius");
 				// break;
 			case GradientData.SIN:
 				t = (float) Math.sin(Math.PI * i

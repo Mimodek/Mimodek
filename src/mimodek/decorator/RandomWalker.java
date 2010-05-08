@@ -3,6 +3,7 @@ package mimodek.decorator;
 import mimodek.MimodekObject;
 import mimodek.facade.FacadeFactory;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PVector;
 
 public class RandomWalker extends MimodekObjectDecorator {
@@ -48,7 +49,7 @@ public class RandomWalker extends MimodekObjectDecorator {
 		if (Math.random() < 0.99) {
 			return;
 		}
-		float a = (float)Math.random()*PApplet.TWO_PI;
+		float a = (float)Math.random()*PConstants.TWO_PI;
 		float speed = (float)Math.random()*0.1f;
 		speed = PApplet.constrain(speed + PApplet.dist(0, 0, vel.x, vel.y),0.0f, maxSpeed);
 

@@ -3,7 +3,6 @@ package mimodek.controls;
 import controlP5.ControlEvent;
 import controlP5.Slider;
 
-import mimodek.configuration.Colors;
 import mimodek.configuration.Configurator;
 
 
@@ -21,6 +20,7 @@ public class WeatherGUI extends GUIModule {
 	}
 
 
+	@Override
 	public void create() {
 		reset();
 		int x = getX();
@@ -37,6 +37,7 @@ public class WeatherGUI extends GUIModule {
 	}
 
 
+	@Override
 	public void draw() {
 		super.draw();
 		if (!Configurator.getBooleanSetting(name + "_GUI_open"))

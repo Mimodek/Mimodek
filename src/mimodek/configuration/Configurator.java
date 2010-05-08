@@ -61,6 +61,12 @@ public class Configurator {
 		config.setSettng(name, value);
 	}
 	
+	public static void setSettingIfNotSet(String name, Object value){
+		if(!config.settings.containsKey(name)){
+			config.setSettng(name, value);
+		}
+	}
+	
 	protected void setSettng(String name, Object value){
 			settings.put(name, value);
 	}

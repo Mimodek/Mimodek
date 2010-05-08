@@ -15,6 +15,7 @@ public class GradientData extends SimpleDrawingData{
 			return startColor;
 		}
 		
+		@Override
 		public String toXMLString(String prefix){
 			return prefix+"<DrawingData className=\""+this.getClass().getName()+"\" iteration=\""+iteration+"\" color=\""+color+"\" startColor=\""+startColor+"\"/>\n";
 		}

@@ -62,6 +62,7 @@ public class SimpleMimo implements MimodekObject {
 		radius = r;
 	}
 	
+	@Override
 	public String toString(){
 		return "SimpleMimo";
 	}

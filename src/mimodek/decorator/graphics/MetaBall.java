@@ -3,6 +3,7 @@ package mimodek.decorator.graphics;
 import mimodek.MimodekObject;
 import mimodek.facade.FacadeFactory;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -35,6 +36,7 @@ public class MetaBall extends MimodekObjectGraphicsDecorator {
 		return (254 << 24) | (r << 16) | (g << 8) | b;
 	}
 	
+	@Override
 	public void update(){
 		reset();
 	}
@@ -87,10 +89,10 @@ public class MetaBall extends MimodekObjectGraphicsDecorator {
 	
 	@Override
 	public PImage toImage(PApplet app) {
-		PGraphics renderer = app.createGraphics((int) getDiameter(),(int) getDiameter(), PApplet.JAVA2D);
+		PGraphics renderer = app.createGraphics((int) getDiameter(),(int) getDiameter(), PConstants.JAVA2D);
 		draw(renderer);
 		PImage img = renderer.get();
-		renderer.filter(PApplet.GRAY);
+		renderer.filter(PConstants.GRAY);
 		renderer.loadPixels();
 		img.mask(renderer.pixels);
 		renderer.dispose();

@@ -9,12 +9,14 @@ public class ActiveMimo extends MimodekObjectDecorator {
 	public PVector targetPos = null;
 	public long lastActiveMovement;
 	public long createdAt;
+	public long id;
 
 	
-	public ActiveMimo(MimodekObject decoratedObject) {
+	public ActiveMimo(MimodekObject decoratedObject, long id) {
 		super(decoratedObject);
 		vel = new PVector(0,0);
 		targetPos = new PVector(0,0);
+		this.id = id;
 	}
 	
 	public void setTargetPos(PVector tPos){

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import mimodek.facade.FacadeFactory;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
@@ -37,7 +38,7 @@ public class MetaBallRenderer {
 	 */
 	protected MetaBallRenderer(PApplet app){
 		this.app = app;
-		buffer = app.createGraphics(FacadeFactory.getFacade().width,FacadeFactory.getFacade().height, PApplet.JAVA2D);
+		buffer = app.createGraphics(FacadeFactory.getFacade().width,FacadeFactory.getFacade().height, PConstants.JAVA2D);
 		QTree.createQuadTree(minQuadSize);
 		root = QTree.getInstance();
 		 distlookup=new float[buffer.width][buffer.height];  
@@ -98,7 +99,7 @@ public class MetaBallRenderer {
 		    bbs = new ArrayList<MetaBall>();
 		    bbs.add(b);
 		    for(int c=0;c<cells.size();c++){
-		      QTree cell = (QTree)cells.get(c);
+		      QTree cell = cells.get(c);
 		      start.x = PApplet.min(start.x,cell.x);
 		      start.y = PApplet.min(start.y,cell.y);
 		      stop.x = PApplet.max(stop.x,cell.x+cell.w);
@@ -108,7 +109,7 @@ public class MetaBallRenderer {
 		      for(int i=0;i<bbs_tmp.size();i++){
 		        if(!bbs.contains(bbs_tmp.get(i))){
 		          bbs.add(bbs_tmp.get(i));
-		          MetaBall b_tmp =  (MetaBall)bbs_tmp.get(i);
+		          MetaBall b_tmp =  bbs_tmp.get(i);
 		          b_tmp.used = true; //flag as used
 		          PVector tl = b_tmp.getTopLeft();
 		          ArrayList<QTree> tmp_cells = root.getCellsThatContainRect(tl.x, tl.y, b_tmp.diameter, b_tmp.diameter);
@@ -131,7 +132,7 @@ public class MetaBallRenderer {
 		      for (float y=start.y-1;++y<stop.y;){
 		        float sum = 0;
 		        for(int i=0;i<bbs.size();i++){
-		          MetaBall blob = (MetaBall)bbs.get(i);
+		          MetaBall blob = bbs.get(i);
 		          colors[i] = blob.getDrawingData().getColor();
 		          strength[i] = blob.equation(x,y); 
 		          sum += strength[i];

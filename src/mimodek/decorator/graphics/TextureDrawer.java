@@ -4,6 +4,7 @@ import mimodek.MimodekObject;
 import mimodek.configuration.Configurator;
 import mimodek.decorator.ActiveMimo;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 
@@ -25,12 +26,12 @@ public class TextureDrawer extends MimodekObjectGraphicsDecorator {
 		
 		app.translate(getPosX(),getPosY());
 		if (!(decoratedObject instanceof ActiveMimo)) {
-			app.colorMode(PApplet.HSB,255);
+			app.colorMode(PConstants.HSB,255);
 			int c = getDrawingData().getColor();
 			c = app.color(app.hue(c), app.saturation(c),Configurator.getIntegerSetting("ancestorBrightness"));
 			app.tint(c);			
 			TextureCollection.get(Configurator.getIntegerSetting("ancestorTexture")).draw(getDiameter() / Configurator.getFloatSetting("mimosMaxRadius"));
-			app.colorMode(PApplet.RGB, 255);
+			app.colorMode(PConstants.RGB, 255);
 		}else{
 			app.tint(getDrawingData().getColor());
 			TextureCollection.get(Configurator.getIntegerSetting("activeTexture")).draw(getDiameter() / Configurator.getFloatSetting("mimosMaxRadius"));
@@ -42,6 +43,7 @@ public class TextureDrawer extends MimodekObjectGraphicsDecorator {
 	    	*/
 	}
 	
+	@Override
 	public void render(PApplet app){
 		return;
 	}

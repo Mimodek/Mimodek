@@ -4,14 +4,13 @@ import java.util.ArrayList;
 
 //import mimodek.configuration.Configurator;
 import mimodek.MimodekObject;
+import mimodek.configuration.Configurator;
 import mimodek.decorator.graphics.ImageDrawer;
-import mimodek.decorator.graphics.MimodekObjectGraphicsDecorator;
 import mimodek.decorator.graphics.NoImageException;
 import mimodek.facade.FacadeFactory;
 import mimodek.utils.Verbose;
 
 import processing.core.PApplet;
-import processing.core.PImage;
 import processing.core.PVector;
 
 /**
@@ -44,8 +43,7 @@ public class Cell extends ImageDrawer {
 	 * @throws NoImageException
 	 */
 	public Cell(DeadMimo2 decoratedObject, PApplet app) throws NoImageException {
-		super(decoratedObject, decoratedObject.activeMimosShape, app.color(app
-				.random(255), app.random(255), app.random(255)), app);
+		super(decoratedObject, decoratedObject.activeMimosShape, Configurator.getIntegerSetting("temperatureColor"), app);
 		Verbose.debug(decoratedObject.decoratedObject.getClass().getName());
 	}
 
@@ -76,9 +74,10 @@ public class Cell extends ImageDrawer {
 	 * 
 	 * @see mimodek.decorator.graphics.MimodekObjectGraphicsDecorator#update()
 	 */
+	@Override
 	public void update() {
 		for (int i = 0; i < neighbours.size(); i++) {
-			Cell c = ((Cell) neighbours.get(i));
+			Cell c = (neighbours.get(i));
 			c.update(this);
 		}
 	}
@@ -117,7 +116,7 @@ public class Cell extends ImageDrawer {
 			}
 			// pass the message to neighbours cells
 			for (int i = 0; i < neighbours.size(); i++) {
-				Cell c = ((Cell) neighbours.get(i));
+				Cell c = (neighbours.get(i));
 				if (c != up) { // update only if it is not the calling cell
 					c.update(this);
 				}
@@ -156,7 +155,7 @@ public class Cell extends ImageDrawer {
 	protected void draw(Cell up, PApplet app) {
 		super.draw(app);
 		for (int i = 0; i < neighbours.size(); i++) {
-			Cell c = ((Cell) neighbours.get(i));
+			Cell c = (neighbours.get(i));
 			if (c != up) // draw only if it is not the calling cell
 				c.draw(this, app);
 		}
@@ -176,7 +175,7 @@ public class Cell extends ImageDrawer {
 			return this;
 
 		for (int i = 0; i < neighbours.size(); i++) {
-			Cell c = (Cell) neighbours.get(i);
+			Cell c = neighbours.get(i);
 			if (c != up) {
 				Cell tmp = c.attachTest(this, obj);
 				if (tmp != null)
@@ -230,7 +229,7 @@ public class Cell extends ImageDrawer {
 			update(null);
 		}
 		for (int i = 0; i < neighbours.size(); i++) {
-			Cell c = (Cell) neighbours.get(i);
+			Cell c = neighbours.get(i);
 			if (c != up) {
 				c.attract(this, x, y, threshold);
 			}
@@ -268,7 +267,7 @@ public class Cell extends ImageDrawer {
 			update(null);
 		}
 		for (int i = 0; i < neighbours.size(); i++) {
-			Cell c = (Cell) neighbours.get(i);
+			Cell c = neighbours.get(i);
 			if (c != up) {
 				c.repel(this, x, y, threshold);
 			}
@@ -287,7 +286,7 @@ public class Cell extends ImageDrawer {
 		if (neighbours.size() < 2)
 			collector.add(this);
 		for (int i = 0; i < neighbours.size(); i++) {
-			Cell c = (Cell) neighbours.get(i);
+			Cell c = neighbours.get(i);
 			if (c != up) {
 				c.getLeaves(this, collector);
 			}
@@ -307,7 +306,7 @@ public class Cell extends ImageDrawer {
 		XMLString += decoratedObject.toXMLString(prefix + "\t");
 		XMLString += prefix + "\t<neighbours>\n";
 		for (int i = 0; i < neighbours.size(); i++) {
-			Cell c = (Cell) neighbours.get(i);
+			Cell c = neighbours.get(i);
 			if (c != up) {
 				XMLString += c.toXMLString(this, prefix + "\t\t");
 			}

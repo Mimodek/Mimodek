@@ -17,11 +17,11 @@ public abstract class GUIModule implements ControlListener{
 	
 	public GUIModule(int x, int y, int width, int height, String name){
 		this.name = name;
-		Configurator.setSetting(name+"_GUI_x", x);
-		Configurator.setSetting(name+"_GUI_y", y);
-		Configurator.setSetting(name+"_GUI_width", width);
-		Configurator.setSetting(name+"_GUI_height", height);
-		Configurator.setSetting(name+"_GUI_open", true);
+		Configurator.setSettingIfNotSet(name+"_GUI_x", x);
+		Configurator.setSettingIfNotSet(name+"_GUI_y", y);
+		Configurator.setSettingIfNotSet(name+"_GUI_width", width);
+		Configurator.setSettingIfNotSet(name+"_GUI_height", height);
+		Configurator.setSettingIfNotSet(name+"_GUI_open", true);
 	}
 	
 	public void reset(){

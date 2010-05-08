@@ -150,6 +150,7 @@ public class MadridPradoFacade extends Facade implements PConstants {
 	 * 
 	 * @see #on on
 	 */
+	@Override
 	public void draw() {
 		if (!on)
 			return;
@@ -270,6 +271,7 @@ public class MadridPradoFacade extends Facade implements PConstants {
 	 *            used to define a margin, set to 0 to test entire area
 	 * @return true if the coordinates are in the screen, false otherwise
 	 */
+	@Override
 	public boolean isInTheScreen(PVector coordinate, float margin) {
 		if (coordinate.x < margin || coordinate.x > width - margin
 				|| coordinate.y > height - margin || coordinate.y < margin) {
@@ -307,6 +309,7 @@ public class MadridPradoFacade extends Facade implements PConstants {
 	 *            a PVector holding the coordinates to test
 	 * @return true if the coordinates are in the screen, false otherwise
 	 */
+	@Override
 	public boolean isInTheScreen(PVector coordinate) {
 		return isInTheScreen(coordinate, 0);
 	}
@@ -322,6 +325,7 @@ public class MadridPradoFacade extends Facade implements PConstants {
 	 *            used to define a margin, set to 0 to test entire area
 	 * @return true if the coordinates are in the screen, false otherwise
 	 */
+	@Override
 	public boolean isInTheScreen(float x, float y, float margin) {
 		return isInTheScreen(new PVector(x, y), margin);
 	}
@@ -335,6 +339,7 @@ public class MadridPradoFacade extends Facade implements PConstants {
 	 *            the vertical coordinate to test
 	 * @return true if the coordinates are in the screen, false otherwise
 	 */
+	@Override
 	public boolean isInTheScreen(float x, float y) {
 		return isInTheScreen(new PVector(x, y), 0);
 	}

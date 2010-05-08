@@ -5,6 +5,7 @@ import mimodek.configuration.Configurator;
 import mimodek.decorator.DeadMimo2;
 import mimodek.facade.FacadeFactory;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 
@@ -31,7 +32,7 @@ public class LittleLight extends MimodekObjectGraphicsDecorator {
 			((DeadMimo2)decoratedObject).setEnergy(r);
 			if((int)r<=0)
 				return;
-			PGraphics img = app.createGraphics((int)r,(int)r,PApplet.JAVA2D);
+			PGraphics img = app.createGraphics((int)r,(int)r,PConstants.JAVA2D);
 			draw(img);
 			littleLightGfx = TextureCollection.addTexture(new SquareTexture(img,app));
 			((DeadMimo2)decoratedObject).setEnergy(e);//restore actual energy
@@ -75,7 +76,7 @@ public class LittleLight extends MimodekObjectGraphicsDecorator {
 		float r = ((DeadMimo2)decoratedObject).getEnergy();
 		if((int)r<=0)
 			return null;
-		PGraphics img = app.createGraphics((int)r,(int)r,PApplet.JAVA2D);
+		PGraphics img = app.createGraphics((int)r,(int)r,PConstants.JAVA2D);
 		draw(img);
 	    return img;
 	}

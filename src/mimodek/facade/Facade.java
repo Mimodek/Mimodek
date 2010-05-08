@@ -3,6 +3,7 @@ package mimodek.facade;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PImage;
 import processing.core.PVector;
 
@@ -121,7 +122,7 @@ public abstract class Facade {
 		app.resetMatrix();
 		app.noFill();
 		app.stroke(255);
-		app.rectMode(PApplet.CORNER);
+		app.rectMode(PConstants.CORNER);
 		app.rect(leftOffset, topOffset, width, height);
 		app.popStyle();
 		app.popMatrix();

@@ -41,6 +41,7 @@ public abstract class MimodekObjectGraphicsDecorator extends MimodekObjectDecora
 	
 	public abstract PImage toImage(PApplet app);
 	
+	@Override
 	public String toXMLString(String prefix){
 		Verbose.debug(prefix+this);
 		String XMLString = prefix+"<GraphicDecorator className=\""+this.getClass().getName()+"\">\n";

@@ -1,6 +1,5 @@
 package mimodek.tracking;
 
-import mimodek.configuration.Configurator;
 import mimodek.facade.FacadeFactory;
 
 public class TrackingInfo {
@@ -29,6 +28,7 @@ public class TrackingInfo {
 		}
 	}
 	
+	@Override
 	public String toString(){
 		return id+" : "+type+", ("+x+","+y+")";
 	}

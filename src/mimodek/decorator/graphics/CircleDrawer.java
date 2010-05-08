@@ -1,6 +1,7 @@
 package mimodek.decorator.graphics;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import mimodek.MimodekObject;
@@ -32,7 +33,7 @@ public class CircleDrawer extends MimodekObjectGraphicsDecorator {
 
 	@Override
 	public PImage toImage(PApplet app) {
-		PGraphics renderer = app.createGraphics((int) getDiameter()+4,(int) getDiameter()+4, PApplet.JAVA2D);//leave a little margin for rounding error 
+		PGraphics renderer = app.createGraphics((int) getDiameter()+4,(int) getDiameter()+4, PConstants.JAVA2D);//leave a little margin for rounding error 
 		renderer.beginDraw();
 		renderer.noStroke();
 		renderer.translate(-getPosX()+getDiameter()/2+2, -getPosY()+getDiameter()/2+2);
@@ -41,7 +42,7 @@ public class CircleDrawer extends MimodekObjectGraphicsDecorator {
 		PGraphics gfx = renderer;
 		//remove the background
 		PImage img = gfx.get();
-		gfx.filter(PApplet.GRAY);
+		gfx.filter(PConstants.GRAY);
 		gfx.loadPixels();
 		img.mask(gfx.pixels);
 		gfx.dispose();
@@ -59,7 +60,7 @@ public class CircleDrawer extends MimodekObjectGraphicsDecorator {
 	protected void draw(PGraphics gfx) {
 		gfx.pushStyle();
 		if (!(decoratedObject instanceof ActiveMimo)) {
-			gfx.colorMode(PApplet.HSB, 255);
+			gfx.colorMode(PConstants.HSB, 255);
 			int c = getDrawingData().getColor();
 			c = gfx.color(gfx.hue(c), gfx.saturation(c),Configurator.getIntegerSetting("ancestorBrightness"));
 			gfx.fill(c);

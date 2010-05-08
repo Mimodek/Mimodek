@@ -4,6 +4,7 @@ import mimodek.MimodekObject;
 import mimodek.configuration.Configurator;
 import mimodek.decorator.ActiveMimo;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 
@@ -40,13 +41,13 @@ public class ImageDrawer extends MimodekObjectGraphicsDecorator {
 		gfx.pushStyle();
 		gfx.translate(getPosX(),getPosY());
 		if (!(decoratedObject instanceof ActiveMimo)) {
-			gfx.colorMode(PApplet.HSB,255);
+			gfx.colorMode(PConstants.HSB,255);
 			int c = getDrawingData().getColor();
 			c = gfx.color(gfx.hue(c), gfx.saturation(c),Configurator.getIntegerSetting("ancestorBrightness"));
 			//c = gfx.color(0, 0,Configurator.getIntegerSetting("ancestorBrightness"));
 			gfx.tint(c);			
 			image.draw(getDiameter() / Configurator.getFloatSetting("mimosMaxRadius"));
-			gfx.colorMode(PApplet.RGB, 255);
+			gfx.colorMode(PConstants.RGB, 255);
 		}else{
 			gfx.tint(getDrawingData().getColor());
 			

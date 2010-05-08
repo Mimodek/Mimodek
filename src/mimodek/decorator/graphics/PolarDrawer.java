@@ -3,6 +3,7 @@ package mimodek.decorator.graphics;
 import mimodek.MimodekObject;
 import mimodek.configuration.Configurator;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 
@@ -47,7 +48,7 @@ public class PolarDrawer extends MimodekObjectGraphicsDecorator {
 		if (renderer == null) {
 			renderer = app.createGraphics((int) Configurator
 					.getFloatSetting("mimosMaxRadius"), (int) Configurator
-					.getFloatSetting("mimosMaxRadius"), PApplet.JAVA2D);
+					.getFloatSetting("mimosMaxRadius"), PConstants.JAVA2D);
 			renderer.smooth();
 			renderer.beginDraw();
 			renderer.endDraw();
@@ -128,7 +129,7 @@ public class PolarDrawer extends MimodekObjectGraphicsDecorator {
 		if (renderer == null) {
 			renderer = app.createGraphics((int) Configurator
 					.getFloatSetting("mimosMaxRadius"), (int) Configurator
-					.getFloatSetting("mimosMaxRadius"), PApplet.JAVA2D);
+					.getFloatSetting("mimosMaxRadius"), PConstants.JAVA2D);
 			renderer.smooth();
 			renderer.beginDraw();
 			renderer.endDraw();

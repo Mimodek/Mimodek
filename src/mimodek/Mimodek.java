@@ -7,11 +7,13 @@ import controlP5.ControlListener;
 
 import mimodek.configuration.Colors;
 import mimodek.configuration.Configurator;
+import mimodek.data.DataHandler;
 import mimodek.decorator.graphics.TextureCollection;
 //import mimodek.controls.GUI;
 import mimodek.facade.FacadeFactory;
 import mimodek.utils.Verbose;
 
+import p5wp.XMLReceiver;
 import processing.core.PApplet;
 
 /**
@@ -33,6 +35,11 @@ public class Mimodek implements ControlListener {
 	public MimosManager mimosManager;
 
 	/**
+	 * 
+	 */
+	public DataHandler dataHandler;
+	
+	/**
 	 * If true, a PNG file of Mimodek will be saved to document the growth of
 	 * the organism
 	 */
@@ -41,7 +48,12 @@ public class Mimodek implements ControlListener {
 	/**
 	 * If true, makes Mimodek talkative
 	 */
-	public static boolean verbose = true;
+	public static boolean verbose = false;
+	
+	/**
+	 * If true, saves the configuration of Mimodek when the app is closed.
+	 */
+	private boolean saveOnQuit = false;
 
 	/**
 	 * True when Mimodek is ready to run
@@ -71,7 +83,7 @@ public class Mimodek implements ControlListener {
 		app.registerPost(this);
 		app.registerDraw(this);
 		app.registerKeyEvent(this);
-		Verbose.speak = false;
+		Verbose.speak = verbose;
 		Verbose.say("Hi! Wait a moment I'm setting up...");
 	}
 
@@ -83,6 +95,8 @@ public class Mimodek implements ControlListener {
 	 * 
 	 */
 	public void dispose() {
+		if(saveOnQuit)
+			Configurator.saveToFile("Configurator.xml");
 		Verbose.say("Bye bye!");
 	}
 
@@ -135,18 +149,24 @@ public class Mimodek implements ControlListener {
 			mimosManager = new MimosManager(this,activeMimosColors);
 		}
 		TextureCollection.loadTextures(app);
-
 		
-		// load color palette from XML (singleton)
-		//Colors.createColors(app, "MimodekColourRanges.xml");
+		
+		Colors tempColors = new Colors(app);
+		try {
+			tempColors.loadFromXML("MimodekColourRanges.xml",app);
+		} catch (Exception e) {
+			Verbose.overRule(e.getMessage());
+		}finally{
 		// define the range of values to map thes colros to
-		//Colors.getColor(-10);
-		//Colors.getColor(40);
+		tempColors.getColorFromRange(-10);
+		tempColors.getColorFromRange(40);
+		}
+		dataHandler = new DataHandler(tempColors,  new XMLReceiver(app, "http://goldenapple.es/chamanismohorizontal/"));
 	}
 
 	
 
-	/*
+	/**
 	 * Called by the GUI module when events of controllers occurs.
 	 * 
 	 * @see controlP5.ControlListener#controlEvent(controlP5.ControlEvent)

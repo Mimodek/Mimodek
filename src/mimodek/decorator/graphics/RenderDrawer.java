@@ -2,8 +2,6 @@ package mimodek.decorator.graphics;
 
 import processing.core.PApplet;
 import mimodek.MimodekObject;
-import mimodek.configuration.Colors;
-import mimodek.configuration.Configurator;
 
 public class RenderDrawer extends ImageDrawer {
 	
@@ -19,6 +17,7 @@ public class RenderDrawer extends ImageDrawer {
 		gfxDecorator.decoratedObject = decoratedObject;
 	}
 	
+	@Override
 	public String toXMLString(String prefix){
 		return gfxDecorator.toXMLString(prefix);
 	}

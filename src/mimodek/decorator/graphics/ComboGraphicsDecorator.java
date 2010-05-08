@@ -21,6 +21,7 @@ public class ComboGraphicsDecorator extends MimodekObjectGraphicsDecorator {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
 	public void update(){
 		secondaryDecorator.update();
 		primaryDecorator.update();
