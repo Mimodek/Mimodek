@@ -101,6 +101,8 @@ public class MimosManager implements TrackingListener {
 	 * Update every objects currently in Mimodek. Thread safe.
 	 */
 	public synchronized void update() {
+		if (seed != null) 
+			seed.fixed = Configurator.getBooleanSetting("seedFixed");
 		// update Active Mimos
 		Enumeration<Long> e = activeMimos.keys();
 		while (e.hasMoreElements()) {
@@ -108,7 +110,7 @@ public class MimosManager implements TrackingListener {
 			MimodekObjectGraphicsDecorator m = activeMimos.get(i);
 			m.update();
 			if (seed != null) {
-				seed.repel(null, m.getPosX(), m.getPosY(), m.getDiameter());// *turbulence
+				seed.repel(null, m.getPosX(), m.getPosY(), m.getDiameter()*Configurator.getFloatSetting("activeMimoRepel"));// *turbulence
 			}
 			ActiveMimo aM = (ActiveMimo) m.decoratedObject;
 			if (mimodek.app.millis() - aM.lastActiveMovement > Configurator
@@ -177,7 +179,7 @@ public class MimosManager implements TrackingListener {
 					}
 				} else {
 					seed.attract(null, m.getPosX(), m.getPosY(), m
-							.getDiameter() * 3);// *turbulence
+							.getDiameter()*2);// *turbulence
 				}
 
 			}

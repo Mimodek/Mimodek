@@ -21,7 +21,7 @@ public static final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss";
 
 
 XMLReceiver xmlReceiver;
-
+//http://
 	public DataHandler(Colors temperatureColors, XMLReceiver xmlReceiver){
 		this.temperatureColors = temperatureColors;
 		this.xmlReceiver = xmlReceiver;

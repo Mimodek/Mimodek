@@ -25,15 +25,15 @@ import processing.xml.XMLElement;
 public class Colors {
 	public static final int redIndex = 2;
 	// default range
-	private static float MIN = -10;
-	private static float MAX = 40;
+	public float MIN = -10;
+	public float MAX = 40;
 	private ArrayList<Integer> colorRanges;
 	protected PApplet app;
 
 	public Colors(PApplet app) {
 		this.app = app;
 		colorRanges = new ArrayList<Integer>();
-		app.colorMode(PConstants.HSB, 1f);
+		/*app.colorMode(PConstants.HSB, 1f);
 		colorRanges.add(app.color(0f, 1f, 0.502f));
 
 		colorRanges.add(app.color(0.333f, 1f, 0.804f));
@@ -49,7 +49,7 @@ public class Colors {
 		colorRanges.add(app.color(0.564f, 1f, 0.98f));
 
 		colorRanges.add(app.color(0.667f, 0.395f, 0.933f));
-		app.colorMode(PConstants.RGB, 255);
+		app.colorMode(PConstants.RGB, 255);*/
 	}
 
 	// load colors from an XML file
@@ -124,10 +124,15 @@ public class Colors {
 	public int getRandomColorFromRange() {
 		return getColorFromRange((float) (MIN + Math.random() * (MAX - MIN)));
 	}
+	
+	public void setRange(float min, float max){
+		MIN = min;
+		MAX = max;
+	}
 
 	public int getColorFromRange(float value) {
-		MIN = Math.min(MIN, value);
-		MAX = Math.max(MAX, value);
+		/*MIN = Math.min(MIN, value);
+		MAX = Math.max(MAX, value);*/
 		// to animate colors
 		// _temperature = (app.frameCount/app.frameRate)/60;
 		float size = Math.abs(MAX - MIN);
@@ -143,7 +148,6 @@ public class Colors {
 			i++;
 		}
 		t = PApplet.map(t, (i - 1) * step, i * step, 0, 1);
-		return app.lerpColor(colorRanges.get((i - 1) * 2), colorRanges
-				.get((i - 1) * 2 + 1), t);
+		return app.lerpColor(colorRanges.get((i - 1) * 2), colorRanges.get((i - 1) * 2 + 1), t);
 	}
 }

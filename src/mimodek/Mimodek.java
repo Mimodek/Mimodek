@@ -116,7 +116,7 @@ public class Mimodek implements ControlListener {
 
 			prepare(); // do some more initialization
 
-			Verbose.say("MIMODEK ready to run!");
+			Verbose.overRule("MIMODEK ready to run!");
 			ready = true; // told you!
 		} catch (Exception e) {
 			e.printStackTrace(); // useful for debugging, but no really
@@ -158,8 +158,7 @@ public class Mimodek implements ControlListener {
 			Verbose.overRule(e.getMessage());
 		}finally{
 		// define the range of values to map thes colros to
-		tempColors.getColorFromRange(-10);
-		tempColors.getColorFromRange(40);
+		tempColors.setRange(-10.0f,40.0f);
 		}
 		dataHandler = new DataHandler(tempColors,  new XMLReceiver(app, "http://goldenapple.es/chamanismohorizontal/"));
 	}

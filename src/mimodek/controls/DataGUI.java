@@ -31,7 +31,8 @@ public class DataGUI extends GUIModule {
 		int y = getY();
 		
 		// slider to change temperature
-		s = GUI.gui().controlP5.addSlider("Temperature", -10, 40,12, x + controlPositionX, y+ controlPositionY, controlWidth, controlHeight);
+		Configurator.setSetting("temperatureColor",GUI.temperatureColors.getColorFromRange(12));
+		s = GUI.gui().controlP5.addSlider("Temperature", -10.0f, 40.0f,12, x + controlPositionX, y+ controlPositionY, controlWidth, controlHeight);
 		addController(s);
 		GUI.registerEventHandler("Temperature", this);
 		

@@ -53,7 +53,7 @@ public class Cell extends ImageDrawer {
 	 * @return true if the cell is a leaf
 	 */
 	public boolean isLeaf() {
-		return neighbours.size() == 1;
+		return neighbours.size() <= 1;
 	}
 
 	/**
@@ -89,6 +89,7 @@ public class Cell extends ImageDrawer {
 	 *            The calling cell
 	 */
 	protected void update(Cell up) {
+		
 		float d = 0;
 		if (!fixed && up != null) { // calculate the distance between the
 									// calling cell and this one
@@ -258,7 +259,7 @@ public class Cell extends ImageDrawer {
 			/*
 			 * if (neighbours.size() > 0) d = (2 / neighbours.size()); else
 			 */
-			d = 2;
+			d = (d / (getDiameter() / 2))/neighbours.size()+1;
 			PVector nuPos = new PVector(getPosX() + PApplet.cos(a) * d,
 					getPosY() + PApplet.sin(a) * d);
 			if (FacadeFactory.getFacade().isInTheScreen(nuPos,

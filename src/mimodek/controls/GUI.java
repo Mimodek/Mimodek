@@ -42,6 +42,7 @@ public class GUI implements ControlListener, FacadeEventListener {
 	public static GUI createGui(PApplet app, Colors temperatureColors) {
 		if (gui == null)
 			gui = new GUI(app);
+		GUI.temperatureColors = temperatureColors;
 		int controlOffsetY = 30;
 		// create some GUI modules and add them to the GUI manager
 		// GUI.addModule(new PhysicsGUI(350, controlOffsetY + 270, 310, 250));
@@ -49,7 +50,7 @@ public class GUI implements ControlListener, FacadeEventListener {
 		GUI.addModule(new DataGUI(350, controlOffsetY, 310, 250));
 		//GUI.addModule(new TrackingGUI(700, controlOffsetY, 310, 250));
 		GUI.addModule(new ActiveMimoGUI(700, controlOffsetY + 270, 310, 250));
-		GUI.temperatureColors = temperatureColors;
+		
 		return gui;
 	}
 	

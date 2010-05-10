@@ -3,6 +3,7 @@ package mimodek.controls;
 import controlP5.ControlEvent;
 import controlP5.ListBox;
 import controlP5.RadioButton;
+import controlP5.Toggle;
 import mimodek.configuration.Configurator;
 
 public class ActiveMimoGUI extends GUIModule {
@@ -35,10 +36,18 @@ public class ActiveMimoGUI extends GUIModule {
 		addController(GUI.gui().controlP5.addSlider("Easing", 0.01f, 1.0f,Configurator.getFloatSetting("mimosEasing"), x + controlPositionX, y+ controlPositionY*3, controlWidth, 12));
 		GUI.registerEventHandler("Easing", this);
 		
-		addController(GUI.gui().controlP5.addSlider("Homeostasis threshold", 100,
-				1000,  Configurator.getIntegerSetting("maxCells"), x + controlPositionX, y + controlPositionY*4,
+		addController(GUI.gui().controlP5.addSlider("Active Mimo Repel", 0,
+				4,  Configurator.getFloatSetting("activeMimoRepel"), x + controlPositionX, y + controlPositionY*4,
 				controlWidth, controlHeight));
-		GUI.registerEventHandler("Homeostasis threshold", this);
+		GUI.registerEventHandler("Active Mimo Repel", this);
+		
+		// Toggle smoothing
+		Toggle t = GUI.gui().controlP5.addToggle("Seed Fixed", true, x
+				+ controlPositionX, y + controlPositionY * 5 + 5, 10, 10);
+		t.captionLabel().style().marginLeft = 12;
+		t.captionLabel().style().marginTop = -12;
+		addController(t);
+		GUI.registerEventHandler("Seed Fixed", this);
 		
 	}
 
@@ -59,10 +68,13 @@ public class ActiveMimoGUI extends GUIModule {
 			Configurator.setSetting("mimosEasing", cEvent.value());
 			return;
 		}
-		if (crtlName == "Homeostasis threshold") {
+		if (crtlName == "Active Mimo Repel") {
 			float val = cEvent.value();
-			Configurator.setSetting("maxCells", (int) val);
+			Configurator.setSetting("activeMimoRepel", val);
 			return;
+		}
+		if (crtlName == "Seed Fixed") {
+			Configurator.setSetting("seedFixed", cEvent.value() > 0);
 		}
 		
 	}

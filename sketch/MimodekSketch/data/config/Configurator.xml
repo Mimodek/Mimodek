@@ -25,7 +25,7 @@
 <setting name="mimosMinLifeTime">0</setting>
 <setting name="maxSpeed">10.0</setting>
 <setting name="Weather_GUI_height">250</setting>
-<setting name="temperatureColor">-1441075</setting>
+<setting name="temperatureColor">-14434064</setting>
 <setting name="mimosMinRadius">20.0</setting>
 <setting name="Behaviour_GUI_open">true</setting>
 <setting name="Weather_GUI_width">310</setting>
@@ -57,6 +57,7 @@
 <setting name="Simulation_GUI_width">310</setting>
 <setting name="maxCells">200</setting>
 <setting name="ancestorScale">3.9333334</setting>
+<setting name="activeMimoRepel">1.0</setting>
 <setting name="tuioActivity">false</setting>
 <setting name="mimosMaxLifeTime">90000</setting>
 <setting name="Behaviour_GUI_y">300</setting>
