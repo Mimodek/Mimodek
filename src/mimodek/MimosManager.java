@@ -154,7 +154,7 @@ public class MimosManager implements TrackingListener {
 				// gfx.decorator.decorato
 				try {
 					seed = new Cell((DeadMimo2) m.decoratedObject, mimodek.app);
-					seed.fixed = true; // it will stay anchored at its current
+					//seed.fixed = true; // it will stay anchored at its current
 										// position
 				} catch (NoImageException e1) {
 					seed = null;
@@ -318,18 +318,30 @@ public class MimosManager implements TrackingListener {
 		GraphicsDecoratorEnum chosenDecorator = null;
 		float paramA = 0;
 		float paramB = 0;
+		int iteration = 0;
+		chosenDecorator = GraphicsDecoratorEnum.COMBO;
+		MimodekObjectGraphicsDecorator primaryDecorator = null;
 		switch(pollutionLevel){
 		case GOOD:
-			chosenDecorator = GraphicsDecoratorEnum.GENERATED;
+			primaryDecorator =  new SeedGradientDrawer(aM, colour);
 			break;
-		case OK:
-			
+		case ACCEPTABLE:
+			paramA = 20;
+			paramB = 0;
+			iteration = 427;
+			primaryDecorator = new PolarDrawer(aM, colour, paramA, paramB,iteration);
+			break;
 		case BAD:
-
+			paramA = 220;
+			paramB = 0;
+			iteration = 296;
+			primaryDecorator = new PolarDrawer(aM, colour, paramA, paramB,iteration);
+			break;
 		case VERY_BAD:
-			chosenDecorator = GraphicsDecoratorEnum.COMBO;
-			paramA = -50+mimodek.app.noise(aM.getPosX(),aM.getPosY())*100;
-			paramB = -100+mimodek.app.noise(aM.getPosY(),aM.getPosX())*200;
+			paramA = 240;
+			paramB = 0;
+			iteration = 482;
+			primaryDecorator = new PolarDrawer(aM, colour, paramA, paramB,iteration);
 			break;
 		}
 		
@@ -341,9 +353,8 @@ public class MimosManager implements TrackingListener {
 		case METABALL:
 			return new MetaBall(aM, colour);
 		case POLAR:
-			return new PolarDrawer(aM, colour, paramA, paramB);
+			return new PolarDrawer(aM, colour, paramA, paramB, iteration);
 		case COMBO:
-			MimodekObjectGraphicsDecorator primaryDecorator = new PolarDrawer(aM, colour, paramA, paramB);
 			MimodekObjectGraphicsDecorator secondaryDecorator = new MetaBall(
 					aM, colour);
 			return new ComboGraphicsDecorator(primaryDecorator,

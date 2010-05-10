@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import mimodek.configuration.Colors;
 import mimodek.configuration.Configurator;
 import mimodek.facade.FacadeEventListener;
 import mimodek.utils.Verbose;
@@ -12,6 +13,7 @@ import mimodek.utils.Verbose;
 import processing.core.PApplet;
 
 import controlP5.ControlEvent;
+import controlP5.ControlGroup;
 import controlP5.ControlListener;
 import controlP5.ControlP5;
 import controlP5.Controller;
@@ -24,6 +26,7 @@ public class GUI implements ControlListener, FacadeEventListener {
 	public PApplet app;
 	protected static GUI gui = null;
 	public ControlP5 controlP5;
+	public static Colors temperatureColors;
 
 	protected GUI(PApplet app) {
 		this.app = app;
@@ -33,21 +36,23 @@ public class GUI implements ControlListener, FacadeEventListener {
 		app.registerKeyEvent(this);
 		modules = new ArrayList<GUIModule>();
 		eventHandlers = new Hashtable<String, ControlListener>();
+		
 	}
 
-	public static GUI createGui(PApplet app) {
+	public static GUI createGui(PApplet app, Colors temperatureColors) {
 		if (gui == null)
 			gui = new GUI(app);
 		int controlOffsetY = 30;
 		// create some GUI modules and add them to the GUI manager
 		// GUI.addModule(new PhysicsGUI(350, controlOffsetY + 270, 310, 250));
 		GUI.addModule(new StyleGUI(15, controlOffsetY + 270, 310, 250));
-		GUI.addModule(new WeatherGUI(350, controlOffsetY, 310, 250));
+		GUI.addModule(new DataGUI(350, controlOffsetY, 310, 250));
 		//GUI.addModule(new TrackingGUI(700, controlOffsetY, 310, 250));
 		GUI.addModule(new ActiveMimoGUI(700, controlOffsetY + 270, 310, 250));
+		GUI.temperatureColors = temperatureColors;
 		return gui;
 	}
-
+	
 	public static GUI gui() {
 		return gui;
 	}
@@ -67,17 +72,19 @@ public class GUI implements ControlListener, FacadeEventListener {
 
 	protected void regEvtHandler(String event, ControlListener handler) {
 		eventHandlers.put(event, handler);
+		/*
 		try {
 			controlP5.controller(event).addListener(this);
 			Controller c = controlP5.controller(event);
 			if (c != null) {
-				/*controlP5.group(event).addListener(this);
-			} else {*/
+				controlP5.group(event).addListener(this);
+			} else {
 				c.addListener(this);
 			}
 		} catch (Exception e) {
 			Verbose.debug("Unknown event: " + event);
 		}
+		*/
 	}
 
 	public static void setBoxStyle() {

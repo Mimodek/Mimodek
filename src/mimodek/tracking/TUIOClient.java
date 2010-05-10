@@ -12,7 +12,7 @@ public class TUIOClient implements TuioListener,Tracker{
 	TrackingListener listener;
 	
 	public TUIOClient(int port, PApplet app){
-		TrackingInfo.FLIP_HORIZONTAL = false;
+		TrackingInfo.FLIP_HORIZONTAL = true;
 		TrackingInfo.FLIP_VERTICAL = false;
 		tuioClient  = new TuioClient(port);
 		tuioClient.addTuioListener(this);

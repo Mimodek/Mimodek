@@ -117,7 +117,7 @@ public class Configurator {
 	
 	protected String getStringSettng(String name){
 		if(settings.containsKey(name))
-			return (String)settings.get(name);
+			return settings.get(name).toString();
 		return "";
 	}
 	
@@ -160,7 +160,7 @@ public class Configurator {
 				setSetting(name, Long.parseLong(value));
 			}else if(isFloat(value)){
 					setSetting(name, Float.parseFloat(value)); 
-			}else if(isBoolean(value)){
+			}else if(isBoolean(value) && (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false") )){
 				setSetting(name, Boolean.parseBoolean(value));
 			}else{
 				//it is a String after all

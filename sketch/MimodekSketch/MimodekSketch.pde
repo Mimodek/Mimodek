@@ -22,7 +22,7 @@ Mimodek mimodek;
 
 int TUIO = 1;
 int SIMULATOR = 0;
-int tracker = 0;
+int tracker = 1
 
 boolean SHOW_ID = false;
 
@@ -65,7 +65,7 @@ void setup(){
  * corresponding line in the method body.
  */
 public void setupGUI() {
-  GUI.createGui(this);
+  GUI.createGui(this,mimodek.getTemperaturesColors());
   // Register Mimodek to handle some events coming from the GUI
   GUI.registerEventHandler("RESET", mimodek);
   GUI.registerEventHandler("Mimos' size", mimodek);
@@ -87,6 +87,12 @@ void keyPressed(){
     FacadeFactory.getFacade().togglePreview();
   }
 }
+
+/*call back for controlP5 event*/
+void controlEvent(ControlEvent theEvent) {
+   GUI.gui().controlEvent(theEvent);
+}
+
 
 
 

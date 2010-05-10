@@ -283,5 +283,9 @@ public class Mimodek implements ControlListener {
 		}
 
 	}
+	
+	public Colors getTemperaturesColors(){
+		return dataHandler.getTemperatureColors();
+	}
 
 }

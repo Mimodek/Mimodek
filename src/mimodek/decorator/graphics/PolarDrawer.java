@@ -14,11 +14,12 @@ import processing.core.PImage;
  * 
  */
 public class PolarDrawer extends MimodekObjectGraphicsDecorator {
-	public static int maxPoint = 200;
+	public int maxPoint = 200;
 	public static int scaleFactor = 8;
 	public static float strokeWeight = 0.8f;
 	float paramA = 1;
 	float paramB = 1;
+	
 	public PGraphics renderer = null;
 	private PGraphics alphaMask = null;
 
@@ -27,11 +28,12 @@ public class PolarDrawer extends MimodekObjectGraphicsDecorator {
 	}
 
 	public PolarDrawer(MimodekObject decoratedObject, int color, float paramA,
-			float paramB) {
+			float paramB, int iteration) {
 		super(decoratedObject);
 		setDrawingData(new SimpleDrawingData(color));
 		this.paramA = paramA;
 		this.paramB = paramB;
+		this.maxPoint = iteration;
 	}
 
 	public float getParamA() {
@@ -191,8 +193,8 @@ public class PolarDrawer extends MimodekObjectGraphicsDecorator {
 	public PImage toImage(PApplet app) {
 		if(renderer == null)
 			return null;
-		int w = PApplet.round((2 * getDiameter() / (scaleFactor)) * 2);
-		int h = PApplet.round((2 * getDiameter() / (scaleFactor)) * 2);
+		int w = PApplet.round((2*getDiameter() / (scaleFactor)) * 2);
+		int h = PApplet.round((2*getDiameter() / (scaleFactor)) * 2);
 		int tLX = PApplet.round(renderer.width / 2 - w / 2);
 		int tLY = PApplet.round(renderer.height / 2 - h / 2);
 		PImage imgGray = renderer.get(tLX, tLY, w, h);//alphaMask.get(tLX, tLY, w, h);
@@ -222,6 +224,24 @@ public class PolarDrawer extends MimodekObjectGraphicsDecorator {
 			gfx.stroke(0, 0, 0, 0);
 			gfx.point(xB, yB);
 		}
+		/*
+		a = -a;
+		r = rose(a, paramA) * getDiameter() / scaleFactor;
+		x = r * PApplet.cos(a);
+		y = r * PApplet.sin(a);
+
+		rB = rose(a, paramB) * getDiameter() / scaleFactor;
+		xB = rB * PApplet.cos(a);
+		yB = rB * PApplet.sin(a);
+
+		if (r <= getDiameter()) {
+			gfx.stroke(255);
+			gfx.point(x, y);
+		}
+		if (rB <= getDiameter()) {
+			gfx.stroke(0, 0, 0, 0);
+			gfx.point(xB, yB);
+		}*/
 /*
 		// draw the alpha channel
 		alphaMask.stroke(255);
@@ -246,6 +266,8 @@ public class PolarDrawer extends MimodekObjectGraphicsDecorator {
 				+ Float.class.getName() + "\" value=\"" + paramA + "\"/>\n";
 		XMLString += prefix + "<param position=\"4\" type=\""
 				+ Float.class.getName() + "\" value=\"" + paramB + "\"/>\n";
+		XMLString += prefix + "<param position=\"5\" type=\""
+		+ Integer.class.getName() + "\" value=\"" + maxPoint + "\"/>\n";
 		return XMLString;
 	}
 

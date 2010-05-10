@@ -10,6 +10,7 @@ import controlP5.Toggle;
 import mimodek.MimodekObject;
 import mimodek.SimpleMimo;
 import mimodek.configuration.Configurator;
+import mimodek.decorator.graphics.GradientData;
 import mimodek.decorator.graphics.TextureCollection;
 
 public class StyleGUI extends GUIModule {
@@ -78,15 +79,15 @@ public class StyleGUI extends GUIModule {
 		GUI.registerEventHandler("Smoothing", this);
 
 		// display type toggle
-		/*
+		
 		r = GUI.gui().controlP5.addRadioButton("Graphics", x + controlPositionX,
 				y + controlPositionY * 3);
 		r.setColorForeground(GUI.gui().app.color(120));
 		r.setItemsPerRow(3);
 		r.setSpacingColumn(50);
-		r.addItem("Circles", Texturizer.CIRCLE);
-		r.addItem("Image", Texturizer.IMAGE).absolutePosition().set(20, -10);
-		r.addItem("Generated", Texturizer.GENERATED);
+		r.addItem("Circles", 0);
+		r.addItem("Image", 1).absolutePosition().set(20, -10);
+		r.addItem("Generated", 2);
 		if (r.getItem(0).value() == Configurator
 				.getIntegerSetting("textureMode"))
 			r.getItem(0).setState(true);
@@ -96,8 +97,9 @@ public class StyleGUI extends GUIModule {
 		else
 			r.getItem(2).setState(true);
 		r.update();
+	
 		GUI.registerEventHandler("Graphics", this);
-*/
+
 		/*
 		 * addController(MainHandler.controlP5.addSlider(" size", 0f, 4.0f,
 		 * 2.86f, x+controlPositionX, y+controlPositionY+145, controlWidth,
@@ -128,14 +130,14 @@ public class StyleGUI extends GUIModule {
 		GUI.registerEventHandler("Black to color", this);
 		
 		// gradient type toggle
-		/*
+		
 		rG = GUI.gui().controlP5.addRadioButton("Gradient", x + controlPositionX,
 				y + controlPositionY + 140);
 		rG.setColorForeground(GUI.gui().app.color(120));
 		rG.setItemsPerRow(2);
 		rG.setSpacingColumn(50);
-		rG.addItem("Linear", Texturizer.LINEAR);
-		rG.addItem("Sin", Texturizer.SIN);
+		rG.addItem("Linear", GradientData.LINEAR);
+		rG.addItem("Sin", GradientData.SIN);
 		if (rG.getItem(0).value() == Configurator
 				.getIntegerSetting("gradientFunction"))
 			rG.getItem(0).setState(true);
@@ -143,7 +145,7 @@ public class StyleGUI extends GUIModule {
 			rG.getItem(1).setState(true);
 		rG.update();
 		GUI.registerEventHandler("Gradient", this);
-		*/
+		
 		listA = GUI.gui().controlP5.addListBox("Ancestor Texture", x
 				+ controlPositionX, y + controlPositionY + 100, 120, 120);
 		listB = GUI.gui().controlP5.addListBox("Mimo Texture", x
@@ -173,7 +175,7 @@ public class StyleGUI extends GUIModule {
 		space.hide();
 		dotSize.hide();
 		blackToColor.hide();
-//		rG.hide();
+		rG.hide();
 		// the size range
 		// brightness control
 	}
@@ -208,13 +210,13 @@ public class StyleGUI extends GUIModule {
 		if (on) {
 			listA.show();
 			listB.show();
-//			r.show();
-//			rG.show();
+			r.show();
+			rG.show();
 		} else {
 			listA.hide();
 			listB.hide();
-//			r.hide();
-//			rG.hide();
+			r.hide();
+			rG.hide();
 		}
 	}
 
@@ -248,14 +250,14 @@ public class StyleGUI extends GUIModule {
 		if (!Configurator.getBooleanSetting(name + "_GUI_open"))
 			return;
 		basic();
-		/*switch ((int) r.value()) {
-		case Texturizer.IMAGE:
+		switch ((int) r.value()) {
+		case 1:
 			image();
 			break;
-		case Texturizer.GENERATED:
+		case 2:
 			generated();
 			break;
-		}*/
+		}
 		//ancestor.pos = new PVector(getX() + controlPositionX + 60, getY() + controlPositionY * 6 + 35);
 		//active.pos = new PVector(getX() + controlPositionX+ 220, getY() + controlPositionY * 6 + 35);
 		GUI.gui().app.fill(10, 10, 10, 255);

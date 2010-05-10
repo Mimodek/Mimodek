@@ -12,8 +12,10 @@ public class DataHandler  implements WPMessageListener, Runnable{
 	Thread runner = null;
 	boolean run = true;
 	Colors temperatureColors;
+
+
 float lastTemperature = 0;
-PollutionLevelsEnum lastPollutionScore = PollutionLevelsEnum.OK;
+PollutionLevelsEnum lastPollutionScore = PollutionLevelsEnum.ACCEPTABLE;
 
 public static final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss";
 
@@ -45,18 +47,6 @@ XMLReceiver xmlReceiver;
 		Configurator.setSetting("temperatureColor", temperatureColors.getColorFromRange(lastTemperature));
 	}
 	
-	private PollutionLevelsEnum calculatePollutionScore(PollutionLevelsEnum[] pollutionLevels){
-		int p = 0;
-		for(int i=0;i<pollutionLevels.length;i++)
-			p+=pollutionLevels[i].getScore();
-		if(p<6)
-			return PollutionLevelsEnum.GOOD;
-		if(p<11)
-			return PollutionLevelsEnum.OK;
-		if(p<21)
-			return PollutionLevelsEnum.BAD;
-		return PollutionLevelsEnum.VERY_BAD;
-	}
 
 	public void onResponse(HashMap messages) {
 		Verbose.overRule("Last data received at : "+Verbose.now());
@@ -78,5 +68,9 @@ XMLReceiver xmlReceiver;
 			}
 		}
 		
+	}
+	
+	public Colors getTemperatureColors() {
+		return temperatureColors;
 	}
 }
