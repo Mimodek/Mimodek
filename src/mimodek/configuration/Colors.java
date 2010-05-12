@@ -29,6 +29,7 @@ public class Colors {
 	public float MAX = 40;
 	private ArrayList<Integer> colorRanges;
 	protected PApplet app;
+	
 
 	public Colors(PApplet app) {
 		this.app = app;
@@ -112,7 +113,6 @@ public class Colors {
 
 	public int getRandomIndividualColor() {
 		int value = (int) Math.floor(Math.random() * colorRanges.size());
-		Verbose.overRule("Colors, random individual "+value);
 		return getIndividualColor(value);
 	}
 

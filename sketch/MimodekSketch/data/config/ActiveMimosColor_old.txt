@@ -17,12 +17,14 @@ orange 1 (orange)  ,#FFA500  ,255  ,165  ,0  ,42495
 darkgoldenrod 1  ,#FFB90F  ,255  ,185  ,15  ,1030655
 goldenrod 1  ,#FFC125  ,255  ,193  ,37  ,2474495
 gold 1 (gold)  ,#FFD700  ,255  ,215  ,0  ,55295
+yellow 1 (yellow*)  ,#FFFF00  ,255  ,255  ,0  ,65535
 olivedrab 3 (yellowgreen)  ,#9ACD32  ,154  ,205  ,50  ,3329434
 olivedrab 1  ,#C0FF3E  ,192  ,255  ,62  ,4128704
 darkolivegreen 3  ,#A2CD5A  ,162  ,205  ,90  ,5950882
 darkolivegreen 2  ,#BCEE68  ,188  ,238  ,104  ,6876860
 darkolivegreen 1  ,#CAFF70  ,202  ,255  ,112  ,7405514
 chartreuse 2  ,#76EE00  ,118  ,238  ,0  ,61046
+green 2  ,#00EE00  ,0  ,238  ,0  ,60928
 palegreen 1  ,#9AFF9A  ,154  ,255  ,154  ,10157978
 palegreen 2 (lightgreen)  ,#90EE90  ,144  ,238  ,144  ,9498256
 mint  ,#BDFCC9  ,189  ,252  ,201  ,13237437
@@ -56,6 +58,7 @@ steelblue 1  ,#63B8FF  ,99  ,184  ,255  ,16758883
 dodgerblue 3  ,#1874CD  ,24  ,116  ,205  ,13464600
 dodgerblue 2  ,#1C86EE  ,28  ,134  ,238  ,15631900
 dodgerblue 1 (dodgerblue)  ,#1E90FF  ,30  ,144  ,255  ,16748574
+slategray 2  ,#B9D3EE  ,185  ,211  ,238  ,15651769
 cornflowerblue  ,#6495ED  ,100  ,149  ,237  ,15570276
 royalblue 3  ,#3A5FCD  ,58  ,95  ,205  ,13459258
 royalblue 2  ,#436EEE  ,67  ,110  ,238  ,15625795
@@ -80,8 +83,15 @@ darkorchid 1  ,#BF3EFF  ,191  ,62  ,255  ,16727743
 darkviolet  ,#9400D3  ,148  ,0  ,211  ,13828244
 mediumorchid 3  ,#B452CD  ,180  ,82  ,205  ,13456052
 mediumorchid 2  ,#D15FEE  ,209  ,95  ,238  ,15622097
+mediumorchid 1  ,#E066FF  ,224  ,102  ,255  ,16738016
 magenta 4 (darkmagenta)  ,#8B008B  ,139  ,0  ,139  ,9109643
 magenta 3  ,#CD00CD  ,205  ,0  ,205  ,13435085
+orchid 3  ,#CD69C9  ,205  ,105  ,201  ,13199821
+orchid  ,#DA70D6  ,218  ,112  ,214  ,14053594
+violetred  ,#D02090  ,208  ,32  ,144  ,9445584
+mediumvioletred  ,#C71585  ,199  ,21  ,133  ,8721863
+maroon 3  ,#CD2990  ,205  ,41  ,144  ,9447885
+maroon 2  ,#EE30A7  ,238  ,48  ,167  ,10957038
 deeppink 3  ,#CD1076  ,205  ,16  ,118  ,7737549
 deeppink 2  ,#EE1289  ,238  ,18  ,137  ,8983278
 violetred 3  ,#CD3278  ,205  ,50  ,120  ,7877325

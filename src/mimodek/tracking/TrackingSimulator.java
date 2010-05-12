@@ -104,6 +104,7 @@ public class TrackingSimulator extends Thread implements Tracker{
 					listener.trackingEvent(createTrackingInfo(TrackingInfo.REMOVE,p.oldKey));
 					p.toRemove = false;
 					particles.remove(p.oldKey);
+					particles.put(counter++,p);
 				}
 			}
 		}
@@ -126,16 +127,16 @@ public class TrackingSimulator extends Thread implements Tracker{
 		
 	}
 	
-	private boolean isInTrackingArea(float x, float y){
+	protected boolean isInTrackingArea(float x, float y){
 		return x>=left && x<=left+facade.width && y>=top && y<=top+facade.height;
 	}
 	
-	private TrackingInfo createTrackingInfo(int infoType,int key){
+	protected TrackingInfo createTrackingInfo(int infoType,int key){
 		Particle p = particles.get(key);
 		return new TrackingInfo(infoType,key,p.pos.x-left,p.pos.y-top);
 	}
 	
-	private int findParticleAtPos(int x, int y){
+	protected int findParticleAtPos(int x, int y){
 		Enumeration<Integer> e = particles.keys();
 		while (e.hasMoreElements()) {
 			int i = e.nextElement();
@@ -172,7 +173,7 @@ public class TrackingSimulator extends Thread implements Tracker{
 		}
 	}
 	
-	private void doubleClick() {
+	protected void doubleClick() {
 		int key = findParticleAtPos(app.mouseX,app.mouseY);
 		if(key<0){
 			particles.put(counter++,new Particle(new PVector(app.mouseX,app.mouseY)));
@@ -187,14 +188,14 @@ public class TrackingSimulator extends Thread implements Tracker{
 		}
 	}
 
-	private void mouseClicked() {
+	protected void mouseClicked() {
 		int key = findParticleAtPos(app.mouseX,app.mouseY);
 		if(key<0)
 			return;
 		particles.get(key).changeState();
 	}
 
-	private void mouseDragged() {
+	protected void mouseDragged() {
 		if(dragged < 0){
 			int key = findParticleAtPos(app.mouseX,app.mouseY);
 			if(key<0)
@@ -206,9 +207,9 @@ public class TrackingSimulator extends Thread implements Tracker{
 			if(!particles.get(dragged).out && listener != null){
 				particles.get(dragged).oldKey = dragged;
 				particles.get(dragged).toRemove = true;
-				particles.put(counter,particles.get(dragged));
+				//particles.put(counter,particles.get(dragged));
 				
-				dragged = counter++;
+				dragged = counter+1;
 			}
 			particles.get(dragged).out = true;
 		}else{

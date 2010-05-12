@@ -41,6 +41,7 @@ public class DeadMimo2 extends MimodekObjectDecorator {
 
 	@Override
 	public float getDiameter(){
+		currentScale = Configurator.getFloatSetting("ancestorScale");
 		if(Math.abs(currentScale-Configurator.getFloatSetting("ancestorScale"))>0.1)
 			currentScale += currentScale<Configurator.getFloatSetting("ancestorScale")?0.05:-0.05;
 		return decoratedObject.getDiameter()*(1.0f/currentScale);

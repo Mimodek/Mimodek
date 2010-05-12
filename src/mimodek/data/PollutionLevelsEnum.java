@@ -2,7 +2,7 @@ package mimodek.data;
 
 public enum PollutionLevelsEnum {
 	GOOD (new String[]{"good","buena","bueno"}, 1,0),
-	ACCEPTABLE (new String[]{"ok","admissible"}, 2,6),
+	ACCEPTABLE (new String[]{"ok","admissible","admisible","Admisible"}, 2,6),
 	BAD (new String[]{"bad","malo"}, 4,11),
 	VERY_BAD (new String[]{"very bad","muy malo"}, 7,21);
 	

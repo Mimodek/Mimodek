@@ -1,6 +1,7 @@
 package mimodek.decorator.graphics;
 
 import mimodek.MimodekObject;
+import mimodek.configuration.Configurator;
 import mimodek.facade.FacadeFactory;
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -21,7 +22,7 @@ public class MetaBall extends MimodekObjectGraphicsDecorator {
 	public MetaBall(MimodekObject decoratedObject, int color) {
 		super(decoratedObject);
 		setDrawingData(new SimpleDrawingData(addAlpha(color)));
-		strength = 1f;
+		strength = Configurator.getFloatSetting("haloStrength");
 		reset();
 	}
 	
@@ -38,11 +39,24 @@ public class MetaBall extends MimodekObjectGraphicsDecorator {
 	
 	@Override
 	public void update(){
+		if(strength>Configurator.getFloatSetting("haloStrength")){
+			strength-=Configurator.getFloatSetting("haloFadeOff");
+		}
+		if(strength<Configurator.getFloatSetting("haloStrength"))
+			strength = Configurator.getFloatSetting("haloStrength");
 		reset();
 	}
 
 	@Override
 	public void draw(PApplet app) {
+		/*app.pushStyle();
+		app.noFill();
+		app.stroke(255);
+		app.strokeWeight(2);
+		app.ellipse(getPosX(),getPosY(),diameter,diameter);
+		
+		app.popStyle();
+		/*/
 		QTree.getInstance().addBlob(this);
 	}
 
@@ -73,10 +87,10 @@ public class MetaBall extends MimodekObjectGraphicsDecorator {
 		if(i<0||i>=FacadeFactory.getFacade().width||j<0||j>=FacadeFactory.getFacade().height)
 			return 0;
 		float d = MetaBallRenderer.distlookup[i][j];
-		if (d > (getDiameter()/2)) {
+		if (d > (halfRadius/*getDiameter()/2/*/)) {
 			return 0;
 		}
-		return (1 - (d / (getDiameter()/2))) * strength;
+		return (1 - (d / halfRadius/*(getDiameter()/2)/*/)) * strength;
 		// return map(d,0,actualRadius,strength,0);
 
 	}

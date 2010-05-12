@@ -48,8 +48,8 @@ public class GUI implements ControlListener, FacadeEventListener {
 		// GUI.addModule(new PhysicsGUI(350, controlOffsetY + 270, 310, 250));
 		GUI.addModule(new StyleGUI(15, controlOffsetY + 270, 310, 250));
 		GUI.addModule(new DataGUI(350, controlOffsetY, 310, 250));
-		//GUI.addModule(new TrackingGUI(700, controlOffsetY, 310, 250));
-		GUI.addModule(new ActiveMimoGUI(700, controlOffsetY + 270, 310, 250));
+		GUI.addModule(new StateGUI(700, controlOffsetY, 310, 250));
+		GUI.addModule(new ActiveMimoGUI(700, controlOffsetY + 270, 310, 300));
 		
 		return gui;
 	}

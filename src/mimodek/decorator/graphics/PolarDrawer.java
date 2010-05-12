@@ -19,6 +19,7 @@ public class PolarDrawer extends MimodekObjectGraphicsDecorator {
 	public static float strokeWeight = 0.8f;
 	float paramA = 1;
 	float paramB = 1;
+	float angle = 0;
 	
 	public PGraphics renderer = null;
 	private PGraphics alphaMask = null;
@@ -34,6 +35,7 @@ public class PolarDrawer extends MimodekObjectGraphicsDecorator {
 		this.paramA = paramA;
 		this.paramB = paramB;
 		this.maxPoint = iteration;
+		this.angle = (float)Math.random()*PApplet.TWO_PI;
 	}
 
 	public float getParamA() {
@@ -106,6 +108,7 @@ public class PolarDrawer extends MimodekObjectGraphicsDecorator {
 			alphaMask.endDraw();*/
 			renderer.beginDraw();
 			renderer.translate(renderer.width / 2, renderer.height / 2);
+			renderer.rotate(angle);
 			draw(renderer);
 			renderer.endDraw();
 			data.incIteration(1);

@@ -41,9 +41,25 @@ public class ActiveMimoGUI extends GUIModule {
 				controlWidth, controlHeight));
 		GUI.registerEventHandler("Active Mimo Repel", this);
 		
+		addController(GUI.gui().controlP5.addSlider("Dead Mimo Attraction", 0,
+				20,  Configurator.getFloatSetting("ancestorMimoAttract"), x + controlPositionX, y + controlPositionY*5,
+				controlWidth, controlHeight));
+		GUI.registerEventHandler("Dead Mimo Attraction", this);
+		
+		addController(GUI.gui().controlP5.addSlider("Halo Strength", 0f,
+				1f,  Configurator.getFloatSetting("haloStrength"), x + controlPositionX, y + controlPositionY*6,
+				controlWidth, controlHeight));
+		GUI.registerEventHandler("Halo Strength", this);
+		
+		addController(GUI.gui().controlP5.addSlider("Dead Mimo 1 NRJ",0f,1f,Configurator.getFloatSetting("deadMimo1Energy"),x + controlPositionX, y + controlPositionY * 7,controlWidth, controlHeight));
+		GUI.registerEventHandler("Dead Mimo 1 NRJ", this);
+		
+		addController(GUI.gui().controlP5.addSlider("Halo Fadeoff",0f,1f,Configurator.getFloatSetting("haloFadeOff"),x + controlPositionX, y + controlPositionY * 8,controlWidth, controlHeight));
+		GUI.registerEventHandler("Halo Fadeoff", this);
+		
 		// Toggle smoothing
 		Toggle t = GUI.gui().controlP5.addToggle("Seed Fixed", true, x
-				+ controlPositionX, y + controlPositionY * 5 + 5, 10, 10);
+				+ controlPositionX, y + controlPositionY * 8 + 15, 10, 10);
 		t.captionLabel().style().marginLeft = 12;
 		t.captionLabel().style().marginTop = -12;
 		addController(t);
@@ -76,6 +92,21 @@ public class ActiveMimoGUI extends GUIModule {
 		if (crtlName == "Seed Fixed") {
 			Configurator.setSetting("seedFixed", cEvent.value() > 0);
 		}
-		
+		if (crtlName == "Dead Mimo Attraction"){
+			float val = cEvent.value();
+			Configurator.setSetting("ancestorMimoAttract",val);
+		}
+		if(crtlName == "Halo Strength"){
+			float val = cEvent.value();
+			Configurator.setSetting("haloStrength",val);
+		}
+		if(crtlName == "Dead Mimo 1 NRJ"){
+			float val = cEvent.value();
+			Configurator.setSetting("deadMimo1Energy",val);
+		}
+		if(crtlName == "Halo Fadeoff"){
+			float val = cEvent.value();
+			Configurator.setSetting("haloFadeOff",val);
+		}
 	}
 }

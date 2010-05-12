@@ -115,6 +115,7 @@ public class Cell extends ImageDrawer {
 						getDiameter() / 2))
 					setPos(nuPos);
 			}
+		}
 			// pass the message to neighbours cells
 			for (int i = 0; i < neighbours.size(); i++) {
 				Cell c = (neighbours.get(i));
@@ -131,7 +132,7 @@ public class Cell extends ImageDrawer {
 			 * (FacadeFactory.getFacade().isInTheScreen(nuPos, getRadius() / 2))
 			 * setPos(nuPos); }
 			 */
-		}
+		
 
 	}
 
@@ -214,9 +215,9 @@ public class Cell extends ImageDrawer {
 	 */
 	public void attract(Cell up, float x, float y, float threshold) {
 		float d = threshold + 1;
-		if (!fixed)
+		if (!fixed || isLeaf()){
 			d = PApplet.dist(x, y, getPosX(), getPosY());
-		if (!fixed && d <= threshold /* && d >= getRadius()/2 */) {
+		if (d <= threshold /* && d >= getRadius()/2 */) {
 			float a = PApplet.atan2(y - getPosY(), x - getPosX());
 			/*
 			 * if (neighbours.size() > 0) d = (2 / neighbours.size()); else
@@ -227,7 +228,8 @@ public class Cell extends ImageDrawer {
 			if (FacadeFactory.getFacade().isInTheScreen(nuPos,
 					getDiameter() / 2))
 				setPos(nuPos);
-			update(null);
+			//update(null);
+		}
 		}
 		for (int i = 0; i < neighbours.size(); i++) {
 			Cell c = neighbours.get(i);

@@ -20,6 +20,14 @@ public class ComboGraphicsDecorator extends MimodekObjectGraphicsDecorator {
 		this.secondaryDecorator = secondaryDecorator;
 		// TODO Auto-generated constructor stub
 	}
+	
+	public MimodekObjectGraphicsDecorator getPrimaryDecorator(){
+		return primaryDecorator;
+	}
+	
+	public MimodekObjectGraphicsDecorator getSecondaryDecorator(){
+		return secondaryDecorator;
+	}
 
 	@Override
 	public void update(){

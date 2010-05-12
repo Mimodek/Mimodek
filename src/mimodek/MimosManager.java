@@ -12,6 +12,7 @@ import mimodek.configuration.Configurator;
 import mimodek.data.PollutionLevelsEnum;
 import mimodek.decorator.ActiveMimo;
 import mimodek.decorator.Cell;
+import mimodek.decorator.CellV2;
 import mimodek.decorator.DeadMimo1;
 import mimodek.decorator.DeadMimo2;
 import mimodek.decorator.RandomWalker;
@@ -62,7 +63,7 @@ public class MimosManager implements TrackingListener {
 	/**
 	 * The first cell (or seed) of the DLA
 	 */
-	Cell seed = null;
+	CellV2 seed = null;
 
 	/**
 	 * A pool of colors to choose from when creating ActiveMimos
@@ -86,6 +87,7 @@ public class MimosManager implements TrackingListener {
 		deadMimos1 = new Hashtable<Long, MimodekObjectGraphicsDecorator>();
 		deadMimos2 = new Hashtable<Long, MimodekObjectGraphicsDecorator>();
 
+		Configurator.setSetting("ancestorCellCount",0);
 		// Initialize a metaball renderer
 		MetaBallRenderer.createInstance(mimodek.app);
 	}
@@ -101,8 +103,10 @@ public class MimosManager implements TrackingListener {
 	 * Update every objects currently in Mimodek. Thread safe.
 	 */
 	public synchronized void update() {
-		if (seed != null) 
+		if (seed != null){
 			seed.fixed = Configurator.getBooleanSetting("seedFixed");
+			
+		}
 		// update Active Mimos
 		Enumeration<Long> e = activeMimos.keys();
 		while (e.hasMoreElements()) {
@@ -110,7 +114,8 @@ public class MimosManager implements TrackingListener {
 			MimodekObjectGraphicsDecorator m = activeMimos.get(i);
 			m.update();
 			if (seed != null) {
-				seed.repel(null, m.getPosX(), m.getPosY(), m.getDiameter()*Configurator.getFloatSetting("activeMimoRepel"));// *turbulence
+				seed.retract(m.getPosX(), m.getPosY(), m.getDiameter()*Configurator.getFloatSetting("activeMimoRepel"));
+				//seed.repel(null, m.getPosX(), m.getPosY(), m.getDiameter()*Configurator.getFloatSetting("activeMimoRepel"));// *turbulence
 			}
 			ActiveMimo aM = (ActiveMimo) m.decoratedObject;
 			if (mimodek.app.millis() - aM.lastActiveMovement > Configurator
@@ -123,8 +128,9 @@ public class MimosManager implements TrackingListener {
 				Verbose.debug("Active Mimos -> Dead Mimo 1.");
 			} else {
 				// check collision and energy transfer with dead mimos 1
-				for (int j = 0; j < deadMimos1.size(); j++) {
-
+				Enumeration<Long> ee = deadMimos1.keys();
+				while (ee.hasMoreElements()) {
+					long j = ee.nextElement();
 					DeadMimo1 dM1 = (DeadMimo1) deadMimos1.get(j).decoratedObject;
 					dM1.nourrish(aM);
 					// no more energy, remove it
@@ -151,11 +157,15 @@ public class MimosManager implements TrackingListener {
 			if (seed == null
 					&& FacadeFactory.getFacade().isInTheScreen(m.getPos(),
 							m.getDiameter() / 2)) {
+				
 				// the seed is null and this ancestor is on the edge of the
 				// screen
 				// gfx.decorator.decorato
 				try {
-					seed = new Cell((DeadMimo2) m.decoratedObject, mimodek.app);
+					seed = new CellV2((DeadMimo2) m.decoratedObject, mimodek.app);
+					seed.fixed = Configurator.getBooleanSetting("seedFixed");
+					seed.tagOnLastBranch();
+					Configurator.setSetting("ancestorCellCount",1);
 					//seed.fixed = true; // it will stay anchored at its current
 										// position
 				} catch (NoImageException e1) {
@@ -165,6 +175,21 @@ public class MimosManager implements TrackingListener {
 				}
 			} else if (seed != null) {
 				// test if it touches the DLA
+				try {
+					if(seed.attach((DeadMimo2) m.decoratedObject,mimodek.app)){
+						Configurator.setSetting("ancestorCellCount",Configurator.getIntegerSetting("ancestorCellCount")+1);
+						seed.tagOnLastBranch();
+						deadMimos2.remove(i);
+					} else {
+						seed.attract(m.getPosX(), m.getPosY(), m
+								.getDiameter()*2*Configurator.getFloatSetting("ancestorMimoAttract"));// *turbulence
+					}
+				} catch (NoImageException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+					
+				/*
 				Cell c = seed.attachTest(null, m);
 				if (c != null) { // yes, the ancestor becomes a cell of the DLA
 					Cell nC;
@@ -172,17 +197,16 @@ public class MimosManager implements TrackingListener {
 						nC = new Cell((DeadMimo2) m.decoratedObject,
 								mimodek.app);
 						c.attach(nC);
+						Configurator.setSetting("ancestorCellCount",Configurator.getIntegerSetting("ancestorCellCount")+1);
 					} catch (NoImageException e1) {
 						// do nothing
 					} finally {
 						deadMimos2.remove(i);
-					}
-				} else {
-					seed.attract(null, m.getPosX(), m.getPosY(), m
-							.getDiameter()*2);// *turbulence
-				}
+					}/*/
+				
 
 			}
+			
 		}
 
 		// update dead mimos 1
@@ -194,9 +218,9 @@ public class MimosManager implements TrackingListener {
 			// remove it if it wanders of screen or doesn't have any energy left
 			if (!dm1.isInScreen() || dm1.getEnergy() <= 0) {
 				deadMimos1.remove(j);
-				continue;
+				//continue;
 			}
-
+			/*
 			// check if it collides with an ActiveMimo
 			Enumeration<Long> e2 = activeMimos.keys();
 			while (e2.hasMoreElements()) {
@@ -207,19 +231,27 @@ public class MimosManager implements TrackingListener {
 						/ 2) {
 					// on collision increase the strength of the metaball using
 					// the remaining energy
-					((MetaBall) aM).increaseStrength(dm1.getEnergy() / 10);
+					((MetaBall)((ComboGraphicsDecorator) aM).getSecondaryDecorator()).increaseStrength(dm1.getEnergy()*Configurator.getFloatSetting("deadMimo1Energy"));
 					// remove it
 					deadMimos1.remove(j);
 					continue;
 				}
 			}
+			/*/
 
 		}
 
 		// update the ancestors (DLA), if any
-		if (seed != null)
+		if (seed != null){
+			
+			seed.expand();
 			seed.update();
-
+		}
+		
+		Configurator.setSetting("activeMimoCount",activeMimoCount());
+		Configurator.setSetting("deadMimo1Count",deadMimos1.size());
+		Configurator.setSetting("deadMimo2Count",deadMimos2.size());
+		
 	}
 
 	/**
@@ -228,12 +260,14 @@ public class MimosManager implements TrackingListener {
 	public synchronized void draw() {
 
 		// render dead mimos 1
-		for (int j = 0; j < deadMimos1.size(); j++) {
+		Enumeration<Long>e = deadMimos1.keys();
+		while (e.hasMoreElements()) {
+			long j = e.nextElement();
 			deadMimos1.get(j).draw(mimodek.app);
 		}
 
 		// render dead mimos 2
-		Enumeration<Long> e = deadMimos2.keys();
+		 e = deadMimos2.keys();
 		while (e.hasMoreElements()) {
 			long i = e.nextElement();
 			deadMimos2.get(i).draw(mimodek.app);
@@ -299,6 +333,7 @@ public class MimosManager implements TrackingListener {
 	private void createActiveMimo(TrackingInfo info) {
 		ActiveMimo aM = new ActiveMimo(new SimpleMimo(new PVector(info.x,
 				info.y)),info.id);
+		aM.createdAt = mimodek.app.millis();
 		aM.setDiameter(Configurator.getFloatSetting("mimosMinRadius"));
 		aM.targetPos.x = info.x;
 		aM.targetPos.y = info.y;
@@ -380,7 +415,7 @@ public class MimosManager implements TrackingListener {
 		DeadMimo1 dM1 = new DeadMimo1(new RandomWalker(aM.getDecoratedObject(),
 				0.5f, true));
 		MimodekObjectGraphicsDecorator decorated = null;
-		int c = mimodek.app.color(0, 0, 255);
+		int c = mimodek.app.color(255, 218, 3);
 		switch (GraphicsDecoratorEnum.LIGHT) { // Configurator.getIntegerSetting("textureMode")
 		case TEXTURE:
 			decorated = new TextureDrawer(dM1, c);
@@ -492,7 +527,8 @@ public class MimosManager implements TrackingListener {
 	public synchronized void trackingEvent(TrackingInfo info) {
 		if (!Configurator.getBooleanSetting("trackingOn") || info == null)
 			return;
-		// Verbose.debug(info);
+		
+		//Verbose.overRule(info);
 		if (info.type == TrackingInfo.UPDATE) {
 			if (activeMimos.containsKey(info.id)) { // existing active mimo
 				ActiveMimo aM = (ActiveMimo) activeMimos.get(info.id).decoratedObject;

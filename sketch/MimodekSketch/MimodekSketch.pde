@@ -1,3 +1,5 @@
+import processing.opengl.*;
+
 //The mimodek code
 import mimodek.facade.*;
 import mimodek.tracking.*;
@@ -22,7 +24,8 @@ Mimodek mimodek;
 
 int TUIO = 1;
 int SIMULATOR = 0;
-int tracker = 0;
+int OVERLOAD = -1;
+int tracker = -1;
 
 boolean SHOW_ID = false;
 
@@ -31,9 +34,10 @@ Tracker tracking;
 void setup(){
 
   //use only this resolution for the presentation PC's screen
-  size(1024, 768);
+  size(1024, 768,OPENGL);
   PFont f = loadFont("Courier-48.vlw");
   textFont(f);
+  //frameRate(24);
   //The order of initialization is important
   mimodek = new Mimodek(this); //Create Mimodek first so that it can setup the context
   mimodek.size(1024, 768); //set the size
@@ -41,18 +45,22 @@ void setup(){
   setupGUI(); //Create a GUI using controlP5
   if(tracker == TUIO)
     tracking = new TUIOClient(this);
-  else
-    tracking = new TrackingSimulator(this, FacadeFactory.getFacade().leftOffset,FacadeFactory.getFacade().topOffset*2+FacadeFactory.getFacade().height); //Create a Tracking simulator
+  else{
+    if(tracker == SIMULATOR)
+      tracking = new TrackingSimulator(this, FacadeFactory.getFacade().leftOffset,FacadeFactory.getFacade().topOffset*2+FacadeFactory.getFacade().height); //Create a Tracking simulator
+    else
+      tracking = new OverloadTrackingSimulator(this, FacadeFactory.getFacade().leftOffset,FacadeFactory.getFacade().topOffset*2+FacadeFactory.getFacade().height,10);
+  }
     
    tracking.setListener(mimodek.mimosManager); //set the Mimos Manager as a listener for trakcing data
    
-  if(tracker == SIMULATOR)
+  if(tracker == SIMULATOR || tracker == OVERLOAD)
    ((TrackingSimulator)tracking).start(); //Start the simulator (Threaded)
   
   if(SHOW_ID)
     Configurator.setSetting("activeMimoDecorator", GraphicsDecoratorEnum.TEXT.toString());
   smooth();
-  frameRate(24);
+  //frameRate(24);
   PFont font = createFont("Verdana", 10, false);
   hint(PApplet.ENABLE_NATIVE_FONTS);
   textFont(font);
@@ -78,7 +86,7 @@ public void setupGUI() {
 void draw(){
   background(0);
   FacadeFactory.getFacade().showDrawingArea();
-  if(tracker == SIMULATOR)
+  if(tracker == SIMULATOR || tracker == OVERLOAD)
    ((TrackingSimulator)tracking).draw();
 }
 

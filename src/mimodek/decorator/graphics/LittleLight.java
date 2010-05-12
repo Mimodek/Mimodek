@@ -39,10 +39,12 @@ public class LittleLight extends MimodekObjectGraphicsDecorator {
 			
 		}
 		app.pushMatrix();
+		app.pushStyle();
 		app.translate(getPosX(),getPosY());
 		app.tint(getDrawingData().getColor());
 		//app.ellipse(0, 0, ((DeadMimo2)decoratedObject).getEnergy(), ((DeadMimo2)decoratedObject).getEnergy());
 		TextureCollection.get(littleLightGfx).draw(((DeadMimo2)decoratedObject).getEnergy()/Configurator.getFloatSetting("mimosMaxRadius"));
+		app.popStyle();
 		app.popMatrix();
 		 //strength = Strength;//*(map(dist(pos.x,pos.y,facade.mouseX,facade.mouseY),0,dist(0,0,facade.width,facade.height),1,0));
 		/*float r = ((DeadMimo2)decoratedObject).getEnergy();

@@ -16,7 +16,8 @@ public class DataGUI extends GUIModule {
 	int controlHeight = 10;
 	
 	RadioButton r, rG;
-	Slider s;
+	Slider sTemp;
+	Slider sPol;
 
 	public DataGUI(int x, int y, int width, int height) {
 		super(x, y, width, height, "Data");
@@ -32,12 +33,12 @@ public class DataGUI extends GUIModule {
 		
 		// slider to change temperature
 		Configurator.setSetting("temperatureColor",GUI.temperatureColors.getColorFromRange(12));
-		s = GUI.gui().controlP5.addSlider("Temperature", -10.0f, 40.0f,12, x + controlPositionX, y+ controlPositionY, controlWidth, controlHeight);
-		addController(s);
+		sTemp = GUI.gui().controlP5.addSlider("Temperature", -10.0f, 40.0f,12, x + controlPositionX, y+ controlPositionY, controlWidth, controlHeight);
+		addController(sTemp);
 		GUI.registerEventHandler("Temperature", this);
 		
-		s = GUI.gui().controlP5.addSlider("Pollution", 5, 35,PollutionLevelsEnum.valueOf(Configurator.getStringSetting("pollutionScore")).getScoreForPollutionLevel(), x + controlPositionX, y+ controlPositionY*3, controlWidth, controlHeight);
-		addController(s);
+		sPol = GUI.gui().controlP5.addSlider("Pollution", 5, 35,PollutionLevelsEnum.valueOf(Configurator.getStringSetting("pollutionScore")).getScoreForPollutionLevel(), x + controlPositionX, y+ controlPositionY*3, controlWidth, controlHeight);
+		addController(sPol);
 		GUI.registerEventHandler("Pollution", this);
 
 		toggleControllers(Configurator.getBooleanSetting(name + "_GUI_open"));
@@ -56,6 +57,8 @@ public class DataGUI extends GUIModule {
 		
 		GUI.gui().app.fill(255);
 		GUI.gui().app.text(Configurator.getStringSetting("pollutionScore") , getX() + controlPositionX, getY()+ controlPositionY*3+controlHeight+10);
+		sTemp.setValue(Configurator.getFloatSetting("lastTemperature"));
+		sPol.setValue(PollutionLevelsEnum.valueOf(Configurator.getStringSetting("pollutionScore")).getScoreForPollutionLevel());
 		//GUI.gui().app.text("Reading temperature from the web: " + (Mimodek.weather.readingOK?"YES":"!!!NO!!!") , getX() + controlPositionX, getY()+ controlPositionY);
 		//GUI.gui().app.text("Current temperature: " + Mimodek.weather.get() , getX() + controlPositionX, getY()+ controlPositionY+15);
 		//s.setValue(Mimodek.weather.get());

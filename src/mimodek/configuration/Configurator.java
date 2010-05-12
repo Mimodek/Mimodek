@@ -49,6 +49,7 @@ public class Configurator {
 		Configurator.setSetting("ancestorTexture", 0);
 		Configurator.setSetting("activeTexture", 1);
 		
+		Configurator.setSetting("tuioActivity",false);
 		Configurator.setSetting("activeMimoDecorator", GraphicsDecoratorEnum.COMBO.toString());
 	}
 	

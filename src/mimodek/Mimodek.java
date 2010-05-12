@@ -160,7 +160,7 @@ public class Mimodek implements ControlListener {
 		// define the range of values to map thes colros to
 		tempColors.setRange(-10.0f,40.0f);
 		}
-		dataHandler = new DataHandler(tempColors,  new XMLReceiver(app, "http://goldenapple.es/chamanismohorizontal/"));
+		dataHandler = new DataHandler(tempColors,  new XMLReceiver(app, "http://servidor.medialab-prado.es/~mimodek/blog/"/*"http://goldenapple.es/chamanismohorizontal/"*/));
 	}
 
 	

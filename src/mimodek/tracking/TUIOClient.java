@@ -1,6 +1,7 @@
 package mimodek.tracking;
 
 import processing.core.PApplet;
+import mimodek.configuration.Configurator;
 import mimodek.facade.FacadeFactory;
 import mimodek.utils.Verbose;
 import TUIO.*;
@@ -52,7 +53,7 @@ public class TUIOClient implements TuioListener,Tracker{
 	}
 
 	public void refresh(TuioTime tobj) {
-		//Verbose.debug("TUIO: Refresh");
+		Configurator.setSetting("tuioActivity",!Configurator.getBooleanSetting("tuioActivity"));
 	}
 
 	public void removeTuioCursor(TuioCursor tobj) {

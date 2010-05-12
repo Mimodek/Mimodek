@@ -24,6 +24,7 @@ public class MetaBallRenderer {
 	QTree root;
 	
 	protected static MetaBallRenderer renderer = null;
+	protected boolean odd = true;
 	
 	public static void createInstance(PApplet app){
 		renderer = new MetaBallRenderer(app);
@@ -50,6 +51,7 @@ public class MetaBallRenderer {
 	}
 	
 	public void reset(){
+		odd = !odd;
 		root.reset();
 	}
 	
@@ -63,7 +65,8 @@ public class MetaBallRenderer {
 		  buffer.loadPixels();
 		  ArrayList<MetaBall> blobs = root.getObjects();
 		  for(int bl=0;bl<blobs.size();bl++){
-			  renderMetaBall(blobs.get(bl));
+			  if(!blobs.get(bl).used)
+				  renderMetaBall(blobs.get(bl));
 		  } 
 		  buffer.updatePixels();
 		  buffer.endDraw();
@@ -113,6 +116,8 @@ public class MetaBallRenderer {
 		          b_tmp.used = true; //flag as used
 		          PVector tl = b_tmp.getTopLeft();
 		          ArrayList<QTree> tmp_cells = root.getCellsThatContainRect(tl.x, tl.y, b_tmp.diameter, b_tmp.diameter);
+		          if(tmp_cells == null)
+		        	  continue;
 		          for(int k=0;k<tmp_cells.size();k++) // add the cells of this blob to the cells' list
 		            cells.add(tmp_cells.get(k));
 		        }
@@ -128,8 +133,15 @@ public class MetaBallRenderer {
 		    */
 		    int[] colors = new int[bbs.size()];
 		    float[] strength = new float[bbs.size()];
+		    int col = buffer.color(0,0,0,0);
 		    for (float x=start.x-1;++x<stop.x;){
+		    //	odd = !odd;
 		      for (float y=start.y-1;++y<stop.y;){
+		    	  int pos = (int)x+(int)y*buffer.width;
+		    	/* if((odd && (pos)%2==0) || (!odd && (pos)%2!=0)){
+		    		 buffer.pixels[pos] = col;
+		    		 continue; 
+		    	 }*/
 		        float sum = 0;
 		        for(int i=0;i<bbs.size();i++){
 		          MetaBall blob = bbs.get(i);
@@ -140,9 +152,9 @@ public class MetaBallRenderer {
 		        }
 
 		        //float col = sum>1 ? 1 : (sum<MetaBall.MIN_THRESHOLD ? 0: sum);
-		        int col =  sum<MetaBall.MIN_THRESHOLD ? buffer.color(0,0,0,0) : blendColor(colors, strength);
+		        col =  sum<MetaBall.MIN_THRESHOLD ? buffer.color(0,0,0,0) : blendColor(colors, strength);
 		        //float col = sum<MIN_THRESHOLD ? 0: sum;
-		        int pos = (int)x+(int)y*buffer.width;
+		        
 		        if(/*col!=0 || */buffer.pixels[pos] == buffer.color(0,0,0,0))
 		          buffer.pixels[pos] = col;//buffer.lerpColor(buffer.color(0,0,0,0),buffer.color(255),col); //b.getDrawingData().getColor()
 		      }
