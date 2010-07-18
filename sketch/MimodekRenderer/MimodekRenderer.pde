@@ -3,7 +3,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import mimodek.Mimodek;
 import mimodek.MimodekObject;
-import mimodek.decorator.Cell;
+import mimodek.decorator.CellV2;
 import mimodek.decorator.MimodekObjectDecorator;
 import mimodek.decorator.graphics.DrawingData;
 import mimodek.decorator.graphics.MimodekObjectGraphicsDecorator;
@@ -13,7 +13,7 @@ import mimodek.renderer.Renderer;
 //Dependencies
 import controlP5.*;
 
-Cell seed;
+CellV2 seed;
 Mimodek mimodek;
 
 void setup(){
@@ -26,14 +26,14 @@ void setup(){
     XMLElement xml;
     xml = new XMLElement(this, "dla.xml");
 
-    seed = Renderer.parseDLACell(xml,this);
+    seed = Renderer.parseDLACell(xml,this,null);
     //print(seed.toXMLString(null, ""));
   } 
   catch (Exception e) {
     e.printStackTrace();
     exit();
   }
-  noLoop();
+  //noLoop();
 }
 
 void draw(){

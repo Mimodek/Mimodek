@@ -37,6 +37,8 @@ public class TUIOClient implements TuioListener,Tracker{
 	
 	private TrackingInfo createTrackingInfo(int infoType,int key){
 		TuioObject tobj = tuioClient.getTuioObject(key);
+		if(tobj==null)
+			return null;
 		return new TrackingInfo(infoType,key,tobj.getScreenX(FacadeFactory.getFacade().width),tobj.getScreenY(FacadeFactory.getFacade().height));
 	}
 	

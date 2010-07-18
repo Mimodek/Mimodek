@@ -1,7 +1,10 @@
 package mimodek.decorator.graphics;
 
 public interface DrawingData {
+	
 	public int getColor();
+	
+	public void setColor(int c);
 	
 	public int getIteration();
 	

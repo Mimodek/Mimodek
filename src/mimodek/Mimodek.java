@@ -28,6 +28,11 @@ public class Mimodek implements ControlListener {
 	 * A reference to the parent Processing sketch
 	 */
 	public PApplet app;
+	
+	/**
+	 * The url to the wordpress XML plugin
+	 */
+	public String wpc4p5URL;
 
 	/**
 	 * The mimos (active/ancestor/DLA) manager
@@ -77,12 +82,13 @@ public class Mimodek implements ControlListener {
 	 * @param app
 	 *            The parent sketch
 	 */
-	public Mimodek(PApplet app) {
+	public Mimodek(PApplet app, String url) {
 		this.app = app;
 		app.registerDispose(this);
 		app.registerPost(this);
 		app.registerDraw(this);
 		app.registerKeyEvent(this);
+		wpc4p5URL = url;
 		Verbose.speak = verbose;
 		Verbose.say("Hi! Wait a moment I'm setting up...");
 	}
@@ -160,7 +166,7 @@ public class Mimodek implements ControlListener {
 		// define the range of values to map thes colros to
 		tempColors.setRange(-10.0f,40.0f);
 		}
-		dataHandler = new DataHandler(tempColors,  new XMLReceiver(app, "http://servidor.medialab-prado.es/~mimodek/blog/"/*"http://goldenapple.es/chamanismohorizontal/"*/));
+		dataHandler = new DataHandler(tempColors,  new XMLReceiver(app, wpc4p5URL));
 	}
 
 	

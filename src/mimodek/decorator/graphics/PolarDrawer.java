@@ -15,11 +15,13 @@ import processing.core.PImage;
  */
 public class PolarDrawer extends MimodekObjectGraphicsDecorator {
 	public int maxPoint = 200;
+	public float paramA = 1;
+	public float paramB = 1;
+	public float angle = 0;
+	
 	public static int scaleFactor = 8;
 	public static float strokeWeight = 0.8f;
-	float paramA = 1;
-	float paramB = 1;
-	float angle = 0;
+	
 	
 	public PGraphics renderer = null;
 	private PGraphics alphaMask = null;
@@ -151,9 +153,11 @@ public class PolarDrawer extends MimodekObjectGraphicsDecorator {
 		}
 		renderer.beginDraw();
 		renderer.translate(renderer.width / 2, renderer.height / 2);
+		renderer.rotate(angle);
 		while (it >= data.getIteration()) {
 			draw(renderer);
 			data.incIteration(1);
+			
 		}
 		renderer.endDraw();
 		/*

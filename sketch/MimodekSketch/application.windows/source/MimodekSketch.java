@@ -1,16 +1,42 @@
-import processing.opengl.*;
+import processing.core.*; 
+import processing.xml.*; 
+
+import processing.opengl.*; 
+import mimodek.facade.*; 
+import mimodek.tracking.*; 
+import mimodek.configuration.*; 
+import mimodek.decorator.graphics.*; 
+import mimodek.controls.*; 
+import mimodek.*; 
+import controlP5.*; 
+import TUIO.*; 
+
+import java.applet.*; 
+import java.awt.*; 
+import java.awt.image.*; 
+import java.awt.event.*; 
+import java.io.*; 
+import java.net.*; 
+import java.text.*; 
+import java.util.*; 
+import java.util.zip.*; 
+import java.util.regex.*; 
+
+public class MimodekSketch extends PApplet {
+
+
 
 //The mimodek code
-import mimodek.facade.*;
-import mimodek.tracking.*;
-import mimodek.configuration.*;
-import mimodek.decorator.graphics.*;
-import mimodek.controls.*;
-import mimodek.*;
+
+
+
+
+
+
 
 //Dependencies
-import controlP5.*;
-import TUIO.*;
+
+
 
 /*
  * MIMODEK,
@@ -32,7 +58,7 @@ boolean SHOW_ID = false;
 
 Tracker tracking;
 
-void setup(){
+public void setup(){
 
   //use only this resolution for the presentation PC's screen
   size(1024, 768,OPENGL);
@@ -84,21 +110,21 @@ public void setupGUI() {
   // GUI.registerEventHandler("Spring Damping", this);
 }
 
-void draw(){
+public void draw(){
   background(0);
   FacadeFactory.getFacade().showDrawingArea();
   if(tracker == SIMULATOR || tracker == OVERLOAD)
    ((TrackingSimulator)tracking).draw();
 }
 
-void keyPressed(){
+public void keyPressed(){
   if(key == 'o'){
     FacadeFactory.getFacade().togglePreview();
   }
 }
 
 /*call back for controlP5 event*/
-void controlEvent(ControlEvent theEvent) {
+public void controlEvent(ControlEvent theEvent) {
    GUI.gui().controlEvent(theEvent);
 }
 
@@ -108,3 +134,8 @@ void controlEvent(ControlEvent theEvent) {
 
 
 
+
+  static public void main(String args[]) {
+    PApplet.main(new String[] { "--present", "--bgcolor=#666666", "--hide-stop", "MimodekSketch" });
+  }
+}

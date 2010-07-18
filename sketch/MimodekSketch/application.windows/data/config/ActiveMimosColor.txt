@@ -1,0 +1,88 @@
+sgi chartreuse  ,#71C671  ,113  ,198  ,113  ,7456369
+sgi teal  ,#388E8E  ,56  ,142  ,142  ,9342520
+sgi lightblue  ,#7D9EC0  ,125  ,158  ,192  ,12623485
+sgi slateblue  ,#7171C6  ,113  ,113  ,198  ,13005169
+sgi beet  ,#8E388E  ,142  ,56  ,142  ,9320590
+maroon*  ,#800000  ,128  ,0  ,0  ,128
+red 3  ,#CD0000  ,205  ,0  ,0  ,205
+red 2  ,#EE0000  ,238  ,0  ,0  ,238
+red 1 (red*)  ,#FF0000  ,255  ,0  ,0  ,255
+firebrick 1  ,#FF3030  ,255  ,48  ,48  ,3158271
+tomato 1 (tomato)  ,#FF6347  ,255  ,99  ,71  ,4678655
+orangered 1 (orangered)  ,#FF4500  ,255  ,69  ,0  ,17919
+chocolate 1  ,#FF7F24  ,255  ,127  ,36  ,2392063
+something,#FF8000  ,255  ,128  ,0  ,33023
+cadmiumyellow  ,#FF9912  ,255  ,153  ,18  ,1219071
+orange 1 (orange)  ,#FFA500  ,255  ,165  ,0  ,42495
+darkgoldenrod 1  ,#FFB90F  ,255  ,185  ,15  ,1030655
+goldenrod 1  ,#FFC125  ,255  ,193  ,37  ,2474495
+gold 1 (gold)  ,#FFD700  ,255  ,215  ,0  ,55295
+olivedrab 3 (yellowgreen)  ,#9ACD32  ,154  ,205  ,50  ,3329434
+olivedrab 1  ,#C0FF3E  ,192  ,255  ,62  ,4128704
+darkolivegreen 3  ,#A2CD5A  ,162  ,205  ,90  ,5950882
+darkolivegreen 2  ,#BCEE68  ,188  ,238  ,104  ,6876860
+darkolivegreen 1  ,#CAFF70  ,202  ,255  ,112  ,7405514
+chartreuse 2  ,#76EE00  ,118  ,238  ,0  ,61046
+palegreen 1  ,#9AFF9A  ,154  ,255  ,154  ,10157978
+palegreen 2 (lightgreen)  ,#90EE90  ,144  ,238  ,144  ,9498256
+mint  ,#BDFCC9  ,189  ,252  ,201  ,13237437
+seagreen 3  ,#43CD80  ,67  ,205  ,128  ,8441155
+seagreen 1  ,#54FF9F  ,84  ,255  ,159  ,10485588
+aquamarine 3 (mediumaquamarine)  ,#66CDAA  ,102  ,205  ,170  ,11193702
+aquamarine 2  ,#76EEC6  ,118  ,238  ,198  ,13037174
+aquamarine 1 (aquamarine)  ,#7FFFD4  ,127  ,255  ,212  ,13959039
+turquoiseblue  ,#00C78C  ,0  ,199  ,140  ,9225984
+turquoise  ,#40E0D0  ,64  ,224  ,208  ,13688896
+manganeseblue  ,#03A89E  ,3  ,168  ,158  ,10397699
+lightseagreen  ,#20B2AA  ,32  ,178  ,170  ,11186720
+mediumturquoise  ,#48D1CC  ,72  ,209  ,204  ,13422920
+cyan 4 (darkcyan)  ,#008B8B  ,0  ,139  ,139  ,9145088
+cyan 3  ,#00CDCD  ,0  ,205  ,205  ,13487360
+cyan 2  ,#00EEEE  ,0  ,238  ,238  ,15658496
+cyan / aqua*  ,#00FFFF  ,0  ,255  ,255  ,16776960
+darkslategray 3  ,#79CDCD  ,121  ,205  ,205  ,13487481
+darkslategray 2  ,#8DEEEE  ,141  ,238  ,238  ,15658637
+darkslategray 1  ,#97FFFF  ,151  ,255  ,255  ,16777111
+peacock  ,#33A1C9  ,51  ,161  ,201  ,13214003
+deepskyblue 4  ,#00688B  ,0  ,104  ,139  ,9136128
+deepskyblue 2  ,#00B2EE  ,0  ,178  ,238  ,15643136
+deepskyblue 1 (deepskyblue)  ,#00BFFF  ,0  ,191  ,255  ,16760576
+skyblue 3  ,#6CA6CD  ,108  ,166  ,205  ,13477484
+skyblue 2  ,#7EC0EE  ,126  ,192  ,238  ,15646846
+skyblue 1  ,#87CEFF  ,135  ,206  ,255  ,16764551
+steelblue 3  ,#4F94CD  ,79  ,148  ,205  ,13472847
+steelblue 2  ,#5CACEE  ,92  ,172  ,238  ,15641692
+steelblue 1  ,#63B8FF  ,99  ,184  ,255  ,16758883
+dodgerblue 3  ,#1874CD  ,24  ,116  ,205  ,13464600
+dodgerblue 2  ,#1C86EE  ,28  ,134  ,238  ,15631900
+dodgerblue 1 (dodgerblue)  ,#1E90FF  ,30  ,144  ,255  ,16748574
+cornflowerblue  ,#6495ED  ,100  ,149  ,237  ,15570276
+royalblue 3  ,#3A5FCD  ,58  ,95  ,205  ,13459258
+royalblue 2  ,#436EEE  ,67  ,110  ,238  ,15625795
+royalblue 1  ,#4876FF  ,72  ,118  ,255  ,16741960
+cobalt  ,#3D59AB  ,61  ,89  ,171  ,11229501
+blue 3 (mediumblue)  ,#0000CD  ,0  ,0  ,205  ,13434880
+blue 2  ,#0000EE  ,0  ,0  ,238  ,15597568
+blue*  ,#0000FF  ,0  ,0  ,255  ,16711680
+slateblue 3  ,#6959CD  ,105  ,89  ,205  ,13457769
+slateblue 2  ,#7A67EE  ,122  ,103  ,238  ,15624058
+slateblue 1  ,#836FFF  ,131  ,111  ,255  ,16740227
+mediumpurple 3  ,#8968CD  ,137  ,104  ,205  ,13461641
+mediumpurple 2  ,#9F79EE  ,159  ,121  ,238  ,15628703
+mediumpurple 1  ,#AB82FF  ,171  ,130  ,255  ,16745131
+purple 3  ,#7D26CD  ,125  ,38  ,205  ,13444733
+purple 2  ,#912CEE  ,145  ,44  ,238  ,15608977
+purple 1  ,#9B30FF  ,155  ,48  ,255  ,16724123
+darkorchid 4  ,#68228B  ,104  ,34  ,139  ,9118312
+darkorchid 3  ,#9A32CD  ,154  ,50  ,205  ,13447834
+darkorchid 2  ,#B23AEE  ,178  ,58  ,238  ,15612594
+darkorchid 1  ,#BF3EFF  ,191  ,62  ,255  ,16727743
+darkviolet  ,#9400D3  ,148  ,0  ,211  ,13828244
+mediumorchid 3  ,#B452CD  ,180  ,82  ,205  ,13456052
+mediumorchid 2  ,#D15FEE  ,209  ,95  ,238  ,15622097
+magenta 4 (darkmagenta)  ,#8B008B  ,139  ,0  ,139  ,9109643
+magenta 3  ,#CD00CD  ,205  ,0  ,205  ,13435085
+deeppink 3  ,#CD1076  ,205  ,16  ,118  ,7737549
+deeppink 2  ,#EE1289  ,238  ,18  ,137  ,8983278
+violetred 3  ,#CD3278  ,205  ,50  ,120  ,7877325
+crimson  ,#DC143C  ,220  ,20  ,60  ,3937500

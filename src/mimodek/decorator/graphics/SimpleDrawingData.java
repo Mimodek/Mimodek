@@ -26,6 +26,10 @@ public class SimpleDrawingData implements DrawingData{
 		public String toXMLString(String prefix){
 			return prefix+"<DrawingData className=\""+this.getClass().getName()+"\" iteration=\""+iteration+"\" color=\""+color+"\"/>\n";
 		}
+		
+		public void setColor(int c) {
+			color = c;
+		}
 
 
 

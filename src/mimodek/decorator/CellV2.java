@@ -34,12 +34,12 @@ public class CellV2 extends ImageDrawer {
 
 	public boolean fixed = false;
 
-	ArrayList<CellV2> attachedCells;
+	public ArrayList<CellV2> attachedCells;
 	  float angle = 0;
 	  float cosAngle = 0;
 	  float sinAngle = 0;
 	  float distanceToParent = 0;
-	  CellV2 parent;
+	  public CellV2 parent;
 	  PVector inPlace;
 	  PVector whereToGo;
 
@@ -101,20 +101,25 @@ public class CellV2 extends ImageDrawer {
 
 
 	  boolean move(){
-	    float d = isInPlace();
-	    if(d==0){
+		  if(angle<0)
+			  return false;
+		  PVector target = new PVector(getPosX()+distanceToParent*PApplet.cos(angle),getPosY()+distanceToParent*PApplet.sin(angle));
+	    float d = getPos().dist(target);
+	    System.out.println(d);
+	    if(d<6){
 	    	angle = -1;
 	      return false;
 	    }
 	    else{
-	      d = PApplet.map(d,0,distanceToParent,1,2);
+	      d = PApplet.map(d,0,distanceToParent,5,10);
 	      //float a = PApplet.atan2(whereToGo.y-getPosY(),whereToGo.x-getPosX());
 	      getPos().add(new PVector(d*PApplet.cos(angle),d*PApplet.sin(angle)));
 	      moveChildToSamePosition();
 	      return true;
 	    }
 	  }
-	  public void moveBacktoPlace(){
+	  
+	 /* public void moveBacktoPlace(){
 	    getPos().add(new PVector( distanceToParent*cosAngle,distanceToParent*sinAngle));
 	    inPosition = true;
 	    /*    float d = getPos().dist(PVector.sub(getPos(),toPlace()));
@@ -123,7 +128,7 @@ public class CellV2 extends ImageDrawer {
 	     }else{
 	     inPosition = true;
 	     }*/
-	  }
+	  //}
 
 	  public int retractBranch(int i){
 	    if(i<0 || i>=attachedCells.size())
@@ -131,7 +136,7 @@ public class CellV2 extends ImageDrawer {
 	    return ((CellV2)attachedCells.get(i)).retract();
 	  }
 
-	  public float isInPlace(){
+	  /*public float isInPlace(){
 	    float d = getPos().dist(whereToGo);
 	    if(d>2){
 	      return d;
@@ -141,7 +146,7 @@ public class CellV2 extends ImageDrawer {
 	      moveChildToSamePosition();
 	      return 0;
 	    }
-	  }
+	  }*/
 
 	  public boolean isReadyToExpand(){
 	    return retractedChild == 0;
@@ -181,65 +186,63 @@ public class CellV2 extends ImageDrawer {
 	  }
 
 	  int retract(){
-	    if(!isReadyToRetract()){
-	      if(parent!=null && parent.isOnLastBranch){
-	        return 0;
-	      }
-	      boolean childrenReady = true;
-	      for(int i=0;i<attachedCells.size();i++){
-	        CellV2 c = (CellV2)attachedCells.get(i);
-	        if (!c.isReadyToRetract()){
-	          childrenReady = false;
-	          break;
-	        }
-	      }
-	      if(childrenReady){
-	        boolean done = true;
-	        for(int i=0;i<attachedCells.size();i++){
-	          CellV2 c = (CellV2)attachedCells.get(i);
-	          if(c.angle<0)
-		    		c.angle = PApplet.atan2(getPosY()-c.getPosY(),getPosX()-c.getPosX());
-	          if(c.move()){
-	            done = false;
-	          }
-	        }
-	        if(done){
-	          moveChildToSamePosition();
-	          retractedChild=attachedCells.size();
-	          return 1;
-	        }
-	        else{
-	          return 0;
-	        }
-	      }
-	      else{
-	        int count = 0;
-	        for(int i=0;i<attachedCells.size();i++){
-	          CellV2 c = (CellV2)attachedCells.get(i);
-	          if (!c.isReadyToRetract()){
-	            count+=c.retract();
-	          }
-	        }
-	        return count;
-	      }
-	    }
-	    else{
-	      int count = 0;
-	      for(int i=0;i<attachedCells.size();i++){
-	        CellV2 c = (CellV2)attachedCells.get(i);
-	        if (!c.isReadyToRetract()){
-	          count+=c.retract();
-	        }
-	      }/*
-	      if(parent!=null && count==0){
-	          if(move()){
-	        	  return 1;
-	          }else{
-	        	  return 0;
-	          }
-	      }*/
-	      return count;
-	    }
+		  if(!isReadyToRetract()){
+		      /*if(parent!= null){
+		    	 Verbose.overRule("exit 1");
+		        return 0;
+		      }*/
+		      boolean childrenReady = true;
+		      for(int i=0;i<attachedCells.size();i++){
+		        CellV2 c = (CellV2)attachedCells.get(i);
+		        if (!c.isReadyToRetract()){
+		          childrenReady = false;
+		          break;
+		        }
+		      }
+		      if(childrenReady){
+		        boolean done = true;
+		        for(int i=0;i<attachedCells.size();i++){
+		          CellV2 c = (CellV2)attachedCells.get(i);
+		          if(c.angle<0)
+		        	  c.angle = PApplet.atan2(getPosY()-c.getPosY(),getPosX()-c.getPosX());
+			       if(c.move()){
+			          done = false;
+			       }
+		        }
+		        if(done){
+		          moveChildToSamePosition();
+		          retractedChild=attachedCells.size();
+		          Verbose.overRule("exit 2");
+		          return 1;
+		        }
+		        else{
+		        	Verbose.overRule("exit 3");
+		          return 0;
+		        }
+		      }
+		      else{
+		        int count = 0;
+		        for(int i=0;i<attachedCells.size();i++){
+		          CellV2 c = (CellV2)attachedCells.get(i);
+		          if (!c.isReadyToRetract()){
+		            count+=c.retract();
+		          }
+		        }
+		        Verbose.overRule("exit 4");
+		        return count;
+		      }
+		    }
+		    else{
+		      int count = 0;
+		      for(int i=0;i<attachedCells.size();i++){
+		        CellV2 c = (CellV2)attachedCells.get(i);
+		        if (!c.isReadyToRetract()){
+		          count+=c.retract();
+		        }
+		      }
+		      Verbose.overRule("exit 5");
+		      return count;
+		    }
 	  }
 
 	  void randomRetract(float proba, int time){
@@ -457,18 +460,15 @@ public class CellV2 extends ImageDrawer {
 	 * ((MimodekObjectGraphicsDecorator)decoratedObject).toImage(app); }
 	 */
 
-	public String toXMLString(CellV2 up, String prefix) {
+	public String toXMLString(String prefix) {
 
 		Verbose.debug(prefix + this);
-		String XMLString = prefix + "<DLACell className=\""
-				+ this.getClass().getName() + "\" fixed=\"" + fixed + "\">\n";
-		XMLString += decoratedObject.toXMLString(prefix + "\t");
+		String XMLString = prefix + "<DLACell fixed=\"" + fixed + "\" color=\""+getDrawingData().getColor()+"\">\n";
+		XMLString += ((DeadMimo2)decoratedObject).toXMLString(prefix + "\t");
 		XMLString += prefix + "\t<neighbours>\n";
 		for (int i = 0; i < attachedCells.size(); i++) {
 			CellV2 c = attachedCells.get(i);
-			if (c != up) {
-				XMLString += c.toXMLString(this, prefix + "\t\t");
-			}
+				XMLString += c.toXMLString(prefix + "\t\t");
 		}
 		XMLString += prefix + "\t</neighbours>\n";
 		XMLString += prefix + "</DLACell>\n";

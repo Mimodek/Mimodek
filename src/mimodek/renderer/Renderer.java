@@ -1,63 +1,110 @@
 package mimodek.renderer;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import mimodek.MimodekObject;
+import mimodek.SimpleMimo;
+import mimodek.configuration.Configurator;
 import mimodek.decorator.Cell;
+import mimodek.decorator.CellV2;
 import mimodek.decorator.DeadMimo2;
 import mimodek.decorator.MimodekObjectDecorator;
+import mimodek.decorator.graphics.ComboGraphicsDecorator;
 import mimodek.decorator.graphics.DrawingData;
 import mimodek.decorator.graphics.MimodekObjectGraphicsDecorator;
 import mimodek.decorator.graphics.NoImageException;
+import mimodek.decorator.graphics.PolarDrawer;
 import mimodek.decorator.graphics.RenderDrawer;
+import mimodek.decorator.graphics.SeedGradientDrawer;
 import mimodek.utils.Verbose;
 import processing.core.PApplet;
+import processing.core.PImage;
 import processing.core.PVector;
 import processing.xml.XMLElement;
 
 public class Renderer {
 
-	public static Cell parseDLACell(XMLElement xmlElement, PApplet app)
+	public static CellV2 parseDLACell(XMLElement xmlElement, PApplet app, CellV2 parent)
 			throws SecurityException, IllegalArgumentException,
 			ClassNotFoundException, NoSuchMethodException,
 			InstantiationException, IllegalAccessException,
 			InvocationTargetException {
 		boolean fixed = new Boolean(xmlElement.getAttribute("fixed"));
-		MimodekObjectGraphicsDecorator gfxDecorator = parseGfxDecorator(
-				xmlElement.getChild("GraphicDecorator"), app);
-		DeadMimo2 deadMimo2 = new DeadMimo2(gfxDecorator.decoratedObject,null);
+		int color = new Integer(xmlElement.getAttribute("color"));
+		XMLElement mimoElement = xmlElement.getChild("mimo");
+		//x="172.4207" y="89.47441" diameter="8.5932255" iteration="427" paramA="20.0" paramB="0.0" angle="2.7437181"
+		float posX = new Float(mimoElement.getAttribute("x"));
+		float posY = new Float(mimoElement.getAttribute("y"));
+		int iteration = new Integer(mimoElement.getAttribute("iteration"));
+		float diameter = new Float(mimoElement.getAttribute("diameter"));
+		float paramA = new Float(mimoElement.getAttribute("paramA"));
+		float paramB = new Float(mimoElement.getAttribute("paramB"));
 		
-		try {
-			RenderDrawer render = new RenderDrawer(deadMimo2,
-					gfxDecorator, app);
-		} catch (NoImageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		float angle = new Float(mimoElement.getAttribute("angle"));
+		
+		SimpleMimo sMimo = new SimpleMimo(new PVector(posX,posY));
+		
+		sMimo.setDiameter(diameter);
+		
+		MimodekObjectGraphicsDecorator renderingInstance = null;
+		DeadMimo2 dm2 = null;
+		if(new Boolean(mimoElement.getAttribute("seedGradient"))){
+			renderingInstance = new SeedGradientDrawer(sMimo,color);
+		}else{
+			
+			
+			app.println(iteration+","+paramA+","+paramB+","+diameter+","+angle);
+			
+			
+			renderingInstance = new PolarDrawer(sMimo,color, paramA,paramB,iteration);
+			((PolarDrawer)renderingInstance).angle = angle;
+			
+			
+			
 		}
-		deadMimo2.render();
-		//((MimodekObjectDecorator)gfxDecorator.decoratedObject).render();
-		//Cell cell = new Cell(render);
-		Cell cell;
+		renderingInstance.getDrawingData().setIteration(iteration);
+		renderingInstance.render(app);
+		PImage img = renderingInstance.toImage(app);
+		System.out.println(img.width+";"+img.height);
+		
+		dm2 = new DeadMimo2(sMimo, img);
+		dm2.maxPoint = iteration;
+		if(renderingInstance instanceof SeedGradientDrawer){
+			dm2.seedGradient = true;
+		}else{
+			dm2.angle = angle;
+			dm2.paramA = paramA;
+			dm2.paramB = paramB;
+		}
+		
+		CellV2 cell = null;
 		try {
-			cell = new Cell(deadMimo2,app);
+			if(parent == null){
+				cell = new CellV2(dm2, app);
+				cell.fixed = fixed;
+			}else{
+			 cell = new CellV2(dm2, app, parent);
+			}
+			cell.getDrawingData().setColor(color);
+		
+			//cell = new Cell(deadMimo2,app);
 			cell.fixed = fixed;
 			XMLElement neighboursElem = xmlElement.getChild("neighbours");
 			int neighboursCount = neighboursElem.getChildCount();
 			for (int i = 0; i < neighboursCount; i++) {
-				Cell neighbour = parseDLACell(neighboursElem.getChild(i), app);
-				cell.attach(neighbour);
+				CellV2 neighbour = parseDLACell(neighboursElem.getChild(i), app, cell);
+				cell.attachedCells.add(neighbour);
 			}
-			Verbose.debug(cell);
+			Verbose.overRule(cell);
 			return cell;
 		} catch (NoImageException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
 			return null;
 		}
-		
-
 	}
 
+	/*
 	public static MimodekObjectGraphicsDecorator parseGfxDecorator(
 			XMLElement xmlElement, PApplet app) throws SecurityException,
 			IllegalArgumentException, ClassNotFoundException,
@@ -180,5 +227,5 @@ public class Renderer {
 		MimodekObjectDecorator decorator = (MimodekObjectDecorator) decoratorConstructor
 				.newInstance(new Object[] { mimodekObject });
 		return decorator;
-	}
+	}*/
 }

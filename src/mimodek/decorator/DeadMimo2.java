@@ -8,7 +8,15 @@ import mimodek.utils.Verbose;
 public class DeadMimo2 extends MimodekObjectDecorator {
 	float currentScale = 1;
 	PImage activeMimosShape;
+	
 	float energy = 0;
+	
+	public int maxPoint = 200;
+	public float paramA = 1;
+	public float paramB = 1;
+	public float angle = 0;
+	
+	public boolean seedGradient = false;
 	
 
 
@@ -45,5 +53,10 @@ public class DeadMimo2 extends MimodekObjectDecorator {
 		if(Math.abs(currentScale-Configurator.getFloatSetting("ancestorScale"))>0.1)
 			currentScale += currentScale<Configurator.getFloatSetting("ancestorScale")?0.05:-0.05;
 		return decoratedObject.getDiameter()*(1.0f/currentScale);
+	}
+	
+	public String toXMLString(String prefix){
+		String XML = prefix+"<mimo seedGradient=\""+seedGradient+"\" x=\""+getPosX()+"\" y=\""+getPosY()+"\" diameter=\""+decoratedObject.getDiameter()+"\" iteration=\""+maxPoint+"\" paramA=\""+paramA+"\" paramB=\""+paramB+"\" angle=\""+angle+"\"/>\n";
+		return XML;
 	}
 }
