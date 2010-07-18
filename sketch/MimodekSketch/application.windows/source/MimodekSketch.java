@@ -52,7 +52,7 @@ int TUIO = 1;
 int SIMULATOR = 0;
 int OVERLOAD = -1;
 
-int tracker = TUIO;
+int tracker = OVERLOAD;
 
 boolean SHOW_ID = false;
 
@@ -66,7 +66,7 @@ public void setup(){
   textFont(f);
   //frameRate(24);
   //The order of initialization is important
-  mimodek = new Mimodek(this,"http://servidor.medialab-prado.es/~mimodek/blog/"); //Create Mimodek first so that it can setup the context
+  mimodek = new Mimodek(this,"http://mimodek.medialab-prado.es/"); //Create Mimodek first so that it can setup the context
   mimodek.size(1024, 768); //set the size
   //THE FOLLOWING IS OPTIONAL BUT USEFUL FOR DEBUG/DEMO
   setupGUI(); //Create a GUI using controlP5
