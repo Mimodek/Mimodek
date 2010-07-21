@@ -108,11 +108,6 @@ public class QTree{
 	  }
 
 	  public void addObject(float x, float y, MetaBall o){
-	   /* if(!isInCell(x,y))
-	      return null;*/
-
-
-
 	    if(isLeaf()){
 	      objects.add(o);
 	      //return this;
@@ -150,8 +145,6 @@ public class QTree{
 	    if(isInCell(x,y,w,h)){
 	      ArrayList<QTree> cells = new ArrayList<QTree>();
 	      if(isLeaf()){
-	        
-	        //if(!objects.isEmpty()){
 	          if(!marked){
 	            cells.add(this);
 	            marked = true;
@@ -159,9 +152,6 @@ public class QTree{
 	          }else{
 	            return null;
 	          }
-	        //}else{
-	        //  return null;
-	        //}
 	      }
 	      if(topLeft.isInCell(x,y,w,h)){
 	    	  ArrayList<QTree> t = topLeft.getCellsThatContainRect(x,y,w,h);
@@ -209,10 +199,6 @@ public class QTree{
 	        app.stroke(0,0,255);
 	        app.rect(x,y,w,h);
 	      }
-	      /*}else{
-	         app.stroke(255);
-	      }*/
-	      
 	    }
 	    else if(!isLeaf()){
 	      topLeft.draw(app);
@@ -231,8 +217,6 @@ public class QTree{
 	  }
 
 	  public boolean isInCell(float x, float y, float w, float h){
-
-	    //boolean b = x>=this.x && w<= this.w && y>=this.y && y+h<= this.y+this.h
 	    return !(x>=this.x+this.w || y>=this.y+this.h || x+w <= this.x || y+h<=this.y);
 	  }
 

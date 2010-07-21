@@ -35,6 +35,16 @@ public class ComboGraphicsDecorator extends MimodekObjectGraphicsDecorator {
 		primaryDecorator.update();
 	}
 	
+	public void renderOne(PApplet app){
+		 primaryDecorator.renderOne(app);
+		 secondaryDecorator.renderOne(app);
+	}
+	
+	public void drawRender(PApplet app){
+		primaryDecorator.drawRender(app);
+		 secondaryDecorator.drawRender(app);
+	}
+	
 	@Override
 	public void draw(PApplet app) {
 		secondaryDecorator.draw(app);

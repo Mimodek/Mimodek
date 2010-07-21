@@ -86,7 +86,7 @@ public void setupGUI() {
 
 void draw(){
   background(0);
-  FacadeFactory.getFacade().showDrawingArea();
+ // FacadeFactory.getFacade().showDrawingArea();
   if(tracker == SIMULATOR || tracker == OVERLOAD)
    ((TrackingSimulator)tracking).draw();
 }

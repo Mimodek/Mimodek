@@ -57,7 +57,7 @@ public class DataHandler implements WPMessageListener, Runnable {
 		 * name='03'>Admisible</item> <item name='temperature'>17.4</item> <item
 		 * name='rain'>0.0</item>
 		 */
-		Verbose.overRule("Last data received at : " + Verbose.now());
+		//Verbose.overRule("Last data received at : " + Verbose.now());
 		PollutionLevelsEnum[] pollutionData = new PollutionLevelsEnum[5];
 		int c = 0;
 
@@ -86,7 +86,7 @@ public class DataHandler implements WPMessageListener, Runnable {
 									.get(keys[i]));
 				} else if (keys[i].equalsIgnoreCase("temperature")) {
 					setTemperature(new Float((String) messages.get(keys[i])));
-					Verbose.overRule("Temperature color set.");
+					//Verbose.overRule("Temperature color set.");
 				} else if (keys[i].equalsIgnoreCase("rain")) {
 					//
 				}
@@ -94,12 +94,12 @@ public class DataHandler implements WPMessageListener, Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			Verbose.overRule(keys[i] + ": " + messages.get(keys[i]));
+			//Verbose.overRule(keys[i] + ": " + messages.get(keys[i]));
 		}
-		if (c == 5) {
+		if (c == pollutionData.length) {
 			setPollutionScore(PollutionLevelsEnum
 					.calculatePollutionScore(pollutionData));
-			Verbose.overRule("Pollution level set.");
+			//Verbose.overRule("Pollution level set.");
 		}
 
 	}

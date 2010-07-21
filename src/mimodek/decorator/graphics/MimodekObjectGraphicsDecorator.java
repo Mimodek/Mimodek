@@ -35,6 +35,14 @@ public abstract class MimodekObjectGraphicsDecorator extends MimodekObjectDecora
 		return drawingData;
 	}
 	
+	public void renderOne(PApplet app){
+		render(app);
+	}
+	
+	public void drawRender(PApplet app){
+		draw(app);
+	}
+	
 	public abstract void draw(PApplet app);
 	
 	protected abstract void draw(PGraphics gfx);

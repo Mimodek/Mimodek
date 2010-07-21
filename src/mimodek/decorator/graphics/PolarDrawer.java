@@ -24,7 +24,6 @@ public class PolarDrawer extends MimodekObjectGraphicsDecorator {
 	
 	
 	public PGraphics renderer = null;
-	private PGraphics alphaMask = null;
 
 	public PolarDrawer(MimodekObject decoratedObject) {
 		super(decoratedObject);
@@ -47,6 +46,39 @@ public class PolarDrawer extends MimodekObjectGraphicsDecorator {
 	public void setParamA(float paramA) {
 		this.paramA = paramA;
 	}
+	
+	public void renderOne(PApplet app){
+		DrawingData data = getDrawingData();
+		if (renderer == null) {
+			renderer = app.createGraphics((int) Configurator
+					.getFloatSetting("mimosMaxRadius"), (int) Configurator
+					.getFloatSetting("mimosMaxRadius"), PConstants.JAVA2D);
+			renderer.smooth();
+			renderer.beginDraw();
+			renderer.endDraw();
+		}
+
+		if (data.getIteration() < maxPoint) {
+			
+			renderer.beginDraw();
+			renderer.translate(renderer.width / 2, renderer.height / 2);
+			renderer.rotate(angle);
+			draw(renderer);
+			renderer.endDraw();
+			data.incIteration(1);
+		}
+	}
+	
+	public void drawRender(PApplet app){
+		if (renderer == null) {
+			renderOne(app);
+		}
+		app.pushStyle();
+		app.tint(getDrawingData().getColor());
+		app.image(renderer, getPosX() - renderer.width / 2, getPosY()
+				- renderer.height / 2);
+		app.popStyle();
+	}
 
 	@Override
 	public void draw(PApplet app) {
@@ -58,56 +90,10 @@ public class PolarDrawer extends MimodekObjectGraphicsDecorator {
 			renderer.smooth();
 			renderer.beginDraw();
 			renderer.endDraw();
-			// creates the alpha channel
-			/*
-			alphaMask = app.createGraphics((int) Configurator
-					.getFloatSetting("mimosMaxRadius"), (int) Configurator
-					.getFloatSetting("mimosMaxRadius"), PApplet.JAVA2D);
-			alphaMask.smooth();
-			alphaMask.beginDraw();
-			alphaMask.background(0);
-			alphaMask.endDraw();
-			*/
 		}
 
 		if (data.getIteration() < maxPoint) {
-			/*float a = data.getIteration() * 0.08f;
-			float r = rose(a, paramA) * getDiameter() / scaleFactor;
-			float x = r * PApplet.cos(a);
-			float y = r * PApplet.sin(a);
-
-			float rB = rose(a, paramB) * getDiameter() / scaleFactor;
-			float xB = rB * PApplet.cos(a);
-			float yB = rB * PApplet.sin(a);
-
-			PGraphics gfx = (PGraphics) renderer;
-			gfx.beginDraw();
-			gfx.translate(gfx.width / 2, gfx.height / 2);
-			gfx.strokeWeight(strokeWeight);
-			if (r <= getDiameter()) {
-				gfx.stroke(data.getColor());
-				gfx.point(x, y);
-			}
-			// gfx.strokeWeight(1+app.noise(data.getIteration()));
-			if (rB <= getDiameter()) {
-				gfx.stroke(0, 0, 0, 0);
-				gfx.point(xB, yB);
-			}
-			gfx.endDraw();
-			// draw the alpha channel
-			alphaMask.beginDraw();
-			alphaMask.translate(alphaMask.width / 2, alphaMask.height / 2);
-			alphaMask.strokeWeight(strokeWeight);
-			if (r <= getDiameter()) {
-				alphaMask.stroke(255);
-				alphaMask.point(x, y);
-			}
-			// alphaMask.strokeWeight(1+app.noise(data.getIteration()));
-			if (rB <= getDiameter()) {
-				alphaMask.stroke(0);
-				alphaMask.point(xB, yB);
-			}
-			alphaMask.endDraw();*/
+			
 			renderer.beginDraw();
 			renderer.translate(renderer.width / 2, renderer.height / 2);
 			renderer.rotate(angle);
@@ -120,11 +106,6 @@ public class PolarDrawer extends MimodekObjectGraphicsDecorator {
 		app.image(renderer, getPosX() - renderer.width / 2, getPosY()
 				- renderer.height / 2);
 		app.popStyle();
-		/*
-		 * app.noFill(); app.stroke(255); app.ellipse(getPosX(),
-		 * getPosY(),(2*getRadius
-		 * ()/(scaleFactor))*2,(2*getRadius()/(scaleFactor))*2);
-		 */
 	}
 
 	@Override
@@ -140,16 +121,6 @@ public class PolarDrawer extends MimodekObjectGraphicsDecorator {
 			renderer.smooth();
 			renderer.beginDraw();
 			renderer.endDraw();
-			// creates the alpha channel
-			/*
-			alphaMask = app.createGraphics((int) Configurator
-					.getFloatSetting("mimosMaxRadius"), (int) Configurator
-					.getFloatSetting("mimosMaxRadius"), PApplet.JAVA2D);
-			alphaMask.smooth();
-			alphaMask.beginDraw();
-			alphaMask.background(0);
-			alphaMask.endDraw();
-			*/
 		}
 		renderer.beginDraw();
 		renderer.translate(renderer.width / 2, renderer.height / 2);
@@ -160,40 +131,6 @@ public class PolarDrawer extends MimodekObjectGraphicsDecorator {
 			
 		}
 		renderer.endDraw();
-		/*
-		alphaMask.beginDraw();
-		alphaMask.translate(alphaMask.width / 2, alphaMask.height / 2);
-		alphaMask.strokeWeight(strokeWeight);
-		*/
-		/*
-		while (it >= data.getIteration()) {
-			float a = it * 0.005f;
-			float r = rose(a, paramA) * getDiameter() / scaleFactor;
-			float x = r * PApplet.cos(a);
-			float y = r * PApplet.sin(a);
-
-			float rB = rose(a, paramB) * getDiameter() / scaleFactor;
-			float xB = rB * PApplet.cos(a);
-			float yB = rB * PApplet.sin(a);
-
-			gfx.stroke(data.getColor());
-			gfx.point(x, y);
-			gfx.stroke(0);
-			gfx.point(xB, yB);
-
-			// draw the alpha channel
-			alphaMask.stroke(255);
-			alphaMask.point(x, y);
-			alphaMask.stroke(0);
-			alphaMask.point(xB, yB);
-
-			it++;
-		}
-		
-
-		alphaMask.endDraw();
-		gfx.endDraw();
-		*/
 	}
 
 	@Override
@@ -231,31 +168,6 @@ public class PolarDrawer extends MimodekObjectGraphicsDecorator {
 			gfx.stroke(0, 0, 0, 0);
 			gfx.point(xB, yB);
 		}
-		/*
-		a = -a;
-		r = rose(a, paramA) * getDiameter() / scaleFactor;
-		x = r * PApplet.cos(a);
-		y = r * PApplet.sin(a);
-
-		rB = rose(a, paramB) * getDiameter() / scaleFactor;
-		xB = rB * PApplet.cos(a);
-		yB = rB * PApplet.sin(a);
-
-		if (r <= getDiameter()) {
-			gfx.stroke(255);
-			gfx.point(x, y);
-		}
-		if (rB <= getDiameter()) {
-			gfx.stroke(0, 0, 0, 0);
-			gfx.point(xB, yB);
-		}*/
-/*
-		// draw the alpha channel
-		alphaMask.stroke(255);
-		alphaMask.point(x, y);
-		alphaMask.stroke(0);
-		alphaMask.point(xB, yB);
-*/
 		
 	}
 
