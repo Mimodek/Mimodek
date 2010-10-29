@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry kind="lib" path="core.jar"/>
-	<classpathentry kind="lib" path="TUIO.jar"/>
-	<classpathentry kind="lib" path="controlP5.jar"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="libTUIO.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="lib" path="/Users/Jonsku/Documents/Processing/libraries/mimodek/library/jsch-20101026.jar"/>
+	<classpathentry kind="lib" path="/Users/Jonsku/Documents/Processing/libraries/mimodek/third_party/controlP5.jar"/>
+	<classpathentry kind="lib" path="/Users/Jonsku/Documents/Processing/libraries/mimodek/third_party/core.jar"/>
+	<classpathentry kind="lib" path="/Users/Jonsku/Documents/Processing/libraries/mimodek/third_party/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="/Users/Jonsku/Documents/Processing/libraries/mimodek/third_party/jogl.jar"/>
+	<classpathentry kind="lib" path="/Users/Jonsku/Documents/Processing/libraries/MimodekV2/third_party/libTuio/libTUIO.jar"/>
+	<classpathentry kind="lib" path="/Users/Jonsku/Documents/Processing/libraries/mimodek/third_party/opengl.jar"/>
+	<classpathentry kind="lib" path="/Users/Jonsku/Documents/Processing/libraries/mimodek/library/sanselan-0.97-incubator.jar" sourcepath="third_party/sanselan-0.97-incubator/sanselan-0.97-incubator-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/MimodekV2/third_party/sanselan-0.97-incubator/sanselan-0.97-incubator-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

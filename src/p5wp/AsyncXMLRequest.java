@@ -1,23 +1,50 @@
 package p5wp;
 
+/*
+This is the code source of Mimodek. When not stated otherwise,
+it was written by Jonathan 'Jonsku' Cremieux<jonathan.cremieux@aalto.fi> in 2010. 
+Copyright (C) yyyy  name of author
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+*/
+
 import processing.core.PApplet;
 import processing.xml.XMLElement;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.*;
 import java.net.URLEncoder;
 import java.util.HashMap;
+
+import MimodekV2.debug.Verbose;
+
+/*
+ * Originally written by Massimo.
+ * Modified by Jonsku <jonathan.cremieux@aalto.fi>.
+ */
 
 public class AsyncXMLRequest extends Thread
 {
   PApplet parent;
   String searchTerm;
-  Object callback;
+  WPMessageListener callback;
 
   //public static final String SEARCH_URI = "http://search.twitter.com/search.atom?q=";
   String hostURL;
-  AsyncXMLRequest(PApplet _parent, String _searchTerm, String _hostURL, Object _callback) {
-    System.out.println("AsyncTwitter");
+  AsyncXMLRequest(PApplet _parent, String _searchTerm, String _hostURL, WPMessageListener _callback) {
+    Verbose.debug("AsyncTwitter");
     parent = _parent;
     callback = _callback;
     searchTerm = _searchTerm;
@@ -39,7 +66,6 @@ public void run() {
 		// TODO Auto-generated catch block
 		e1.printStackTrace();
 	}
-    //    System.out.println("\nProcessingWP:\n" + u);
 
     try {
       xml = new XMLElement(parent, u);
@@ -49,45 +75,15 @@ public void run() {
     }
     if (xml != null) {
       XMLElement[] entries = xml.getChildren("group");
-      //ArrayList listOfValues = new ArrayList();
-      //String[] messages = new String[entries.length];
-      
-      HashMap messages = new HashMap();
+      HashMap<String,String> messages = new HashMap<String,String>();
       
       for (int i=0; i<entries.length; i++) {
     	  for (int j=0; j<entries[i].getChildren("item").length; j++) {
-    		  //messages[i] = entries[i].getChildren("item")[0].getContent();
-    		  messages.put(entries[i].getChildren("item")[j].getAttribute("name"), entries[i].getChildren("item")[j].getContent());
-    		  //listOfValues.add(entries[i].getChildren("item")[j].getContent());
-    		  //System.out.println(entries[i].getChildren("item")[j].getAttribute("name"));
-    		  
+    		  messages.put(entries[i].getChildren("item")[j].getAttribute("name"), entries[i].getChildren("item")[j].getContent());  
     	  }
-//        System.out.println(messages[i]);
       }
-/*
-      String[] messages = new String[listOfValues.size()];
-      for (int count=0; count < listOfValues.size(); count++) {
-    	  messages[count] = (String) listOfValues.get(count);
-      }
-  //*/    
-      
-      
       // call the callback
-      try {
-        Class[] argTypes = { 
-          HashMap.class                       };
-        Method method = callback.getClass().getDeclaredMethod("onMessages", argTypes);
-        method.invoke(callback, new Object[] {
-          messages                      }
-        );
-
-      } 
-      catch(NoSuchMethodException e) {
-        System.out.println("You need to define onMessages(String[] messages)");
-      } 
-      catch(Exception e) {
-        System.out.println("Something ain't right: "+e);
-      }
+        callback.onResponse(messages);
     }
 
 

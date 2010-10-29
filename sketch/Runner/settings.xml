@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<mimodeksettings>
+<setting name="CLEAR_CACHE_FLAG" description="If true, the screen shot cache will be cleared after every post. This must be false only when debugging.">true</setting>
+<setting name="CREATURE_MAXSPEED" description="Maximum speed of a creature.">1.1</setting>
+<setting name="DATA_TEMPERATURE" description="The current temperature. This is set at runtime, but you can specify a default value.">19.9</setting>
+<setting name="CELLB_ALPHA" description="Range between 0f and 1f. The alpha component of the soft cells color.">0.71999997</setting>
+<setting name="DATA_HUMIDITY" description="The current relative humidity. This is set at runtime, but you can specify a default value.">48.0</setting>
+<setting name="CELLA_ALPHA" description="Range between 0f and 1f. The alpha component of the hard cells color.">0.63</setting>
+<setting name="CELLB_ALPHA_VARIATION" description="Range between 0f and 1f. The amount the soft cells alpha value is allowed to vary. 1f : from CELLB_ALPHA to 0, 0f: disabled, values in between: CELLB_ALPHA to CELLB_ALPHA*CELLB_ALPHA_VARIATION.">0.47</setting>
+<setting name="CELLA_RADIUS" description="The maximum radius of hard cells, that is to say the radiu of the seed.">7.0</setting>
+<setting name="CELLA_TEXTURE" description="The name of the image used as texture for the hard cells.">hardcell</setting>
+<setting name="CREATURE_ALPHA" description="Range between 0f and 1f. The alpha component of the creature color.">0.63</setting>
+<setting name="FOOD_SCENT_EVAPORATION" description="How fast the creatures pheromones evaporate.">0.1</setting>
+<setting name="CREATURE_DIM_THRESHOLD" description="When the number of creatures reach this threshold, their alpha is divided by 2.">5</setting>
+<setting name="FOOD_R" description="Range between 0f and 1f. The red component of the food color.">1.0</setting>
+<setting name="CELLB_RADIUS" description="The maximum radius of the soft cells.">5.5</setting>
+<setting name="CELLA_MASK" description="The name of the image used as a mask for the hard cells.">hardcell_mask</setting>
+<setting name="CELLB_MAX_DISTANCE_TO_A" description="Defines the maximum distance between a softcell and a hard cell when the softcell is created.">16.0</setting>
+<setting name="LOCATION_CITY" description="City where Mimodek is running.">Madrid</setting>
+<setting name="LOCATION_COUNTRY" description="Country where Mimodek is running.">Spain</setting>
+<setting name="GLOBAL_SCALING" description="Useful to magnify/shrink the image, leave to 1 when Mimodek is on display">4.3</setting>
+<setting name="FOOD_G" description="Range between 0f and 1f. The green component of the food color.">1.0</setting>
+<setting name="CREATURE_STEER_FORCE" description="Controls how sharp the creatures turn.">0.04</setting>
+<setting name="CREATURE_R" description="Range between 0f and 1f. The red component of the creatures color.">1.0</setting>
+<setting name="FOOD_B" description="Range between 0f and 1f. The blue component of the food color.">1.0</setting>
+<setting name="DATA_POLLUTION" description="The current air quality score. This is set at runtime, but you can specify a default value.">2.0</setting>
+<setting name="GL_TEXTURE_MIN_FILTER" description="Define the texture filtering. Might or might not do anything depending on the hardware">2</setting>
+<setting name="GALLERY_FOLDER" description="Path to the folder on SFTP_HOST where screen shots will be delivered.">/home/mimodek/public_html/blog/test</setting>
+<setting name="MESSAGE_BOARD_FREQUENCY" description="How often should the board be shown in minutes. O disables message board.">0.0</setting>
+<setting name="CREATURE_G" description="Range between 0f and 1f. The green component of the creatures color.">1.0</setting>
+<setting name="MESSAGE_BOARD_FADE_SPEED" description="How fast the board fades in / out.">0.01</setting>
+<setting name="MESSAGE_BOARD_TEXTURE" description="The name of the image to use as a board">facade-en-text</setting>
+<setting name="POST_PICTURES_FLAG" description="If true, a screen shot of Mimodek will be posted to the blog every UPLOAD_RATE minutes.">false</setting>
+<setting name="MESSAGE_BOARD_NUMBER" description="How many images to show.">2</setting>
+<setting name="CELLA_MAX_TRY" description="How many times the organism should try to find space for a new hardcell. High values might stop the animation alltogether">50</setting>
+<setting name="CREATURE_B" description="Range between 0f and 1f. The blue component of the creatures color.">1.0</setting>
+<setting name="CREATURE_FULL_R" description="Range between 0f and 1f. The red component of the creatures color when it is bringing food to the organism.">0.0</setting>
+<setting name="CELLA_DISTORTION" description="Range between 0f and 1f. Controls the distortion of the circle that makes the shape of the hard cells.">0.5</setting>
+<setting name="CELLA_DISTANCE_BETWEEN" description="Range between 0f and 1f. Controls of far appart the hard cells should be of each others. 0f means that they all share the same center, 1f and the distance between them is the sum of their radius.">0.5</setting>
+<setting name="UPLOAD_RATE" description="Frequency of screen shot post in minutes.">0.5</setting>
+<setting name="CELLB_TEXTURE" description="The name of the image used as texture for the soft cells.">softcell</setting>
+<setting name="CREATURE_SIZE" description="The diameter of a creature.">9.108749</setting>
+<setting name="HIGH_RESOLUTION_SCALE" description="Define the scaling factor for high resolution rendering.">4.5</setting>
+<setting name="DEBUG" description="Toggle debug message.">true</setting>
+<setting name="CREATURE_FULL_G" description="Range between 0f and 1f. The green component of the creatures color when it is bringing food to the organism.">0.0</setting>
+<setting name="CREATURE_FULL_B" description="Range between 0f and 1f. The blue component of the creatures color when it is bringing food to the organism.">1.0</setting>
+<setting name="CELLB_R" description="Range between 0f and 1f. The red component of the soft cells color.">0.0</setting>
+<setting name="UPLOAD_FORMAT" description="Extension of the image format used for automatic posting. WARNING: Because Mimodek is currently using Exif metadata, only jpg is allowed, any other value is untested and will most certainly cause problems.">jpg</setting>
+<setting name="CELLB_MASK" description="The name of the image used as a mask for the soft cells.">softcell_mask</setting>
+<setting name="SFTP_HOST" description="Host name of the ftp server.">servidor.medialab-prado.es</setting>
+<setting name="CREATURE_ALPHA_VARIATION" description="Range between 0f and 1f. The amount the soft cells alpha value is allowed to vary. 1f : from CREATURE_ALPHA to 0, 0f: disabled, values in between: CREATURE_ALPHA to CREATURE_ALPHA*CREATURE_ALPHA_VARIATION.">0.25</setting>
+<setting name="CELLA_R" description="Range between 0f and 1f. The red component of the hard cells color.">0.0</setting>
+<setting name="CELLB_G" description="Range between 0f and 1f. The green component of the soft cells color.">0.0</setting>
+<setting name="FOOD_SIZE" description="Size of a piece of food.">1.0</setting>
+<setting name="CELLB_MIN_DISTANCE_TO_A" description="Defines the minimum distance between a softcell and a hard cell when the softcell is created.">10.0</setting>
+<setting name="CELLB_B" description="Range between 0f and 1f. The blue component of the soft cells color.">1.0</setting>
+<setting name="WORDPRESS_URL" description="URL of the blog.">http://mimodek.medialab-prado.es/</setting>
+<setting name="CELLA_G" description="Range between 0f and 1f. The green component of the hard cells color.">1.0</setting>
+<setting name="MESSAGE_BOARD_DURATION" description="How long should the board be shown. In minutes.">0.25</setting>
+<setting name="CREATURE_DISTANCE_BETWEEN" description="The distance creatures try to keep between each others.">15.0</setting>
+<setting name="CELLA_B" description="Range between 0f and 1f. The blue component of the hard cells color.">0.0</setting>
+<setting name="DATA_REFRESH_RATE" description="Frequency of data query in minutes.">0.39699998</setting>
+</mimodeksettings>
